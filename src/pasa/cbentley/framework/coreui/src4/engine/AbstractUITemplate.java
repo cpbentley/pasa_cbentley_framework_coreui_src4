@@ -7,15 +7,15 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 
 public class AbstractUITemplate implements IStringable {
-   
-   protected final CoreUiCtx fc;
 
-   protected AbstractUITemplate(CoreUiCtx fc) {
-      this.fc = fc;
+   protected final CoreUiCtx cuc;
+
+   protected AbstractUITemplate(CoreUiCtx cuc) {
+      this.cuc = cuc;
    }
-   
-   public CoreUiCtx getFC() {
-      return fc;
+
+   public CoreUiCtx getCUC() {
+      return cuc;
    }
 
    //#mdebug
@@ -23,9 +23,12 @@ public class AbstractUITemplate implements IStringable {
       return Dctx.toString(this);
    }
 
- 
    public IDLog toLog() {
-      return fc.toDLog();
+      return cuc.toDLog();
+   }
+
+   public IDLog toDLog() {
+      return cuc.toDLog();
    }
 
    public void toString(Dctx dc) {
@@ -33,7 +36,7 @@ public class AbstractUITemplate implements IStringable {
    }
 
    public UCtx toStringGetUCtx() {
-      return fc.getUCtx();
+      return cuc.getUCtx();
    }
 
    public String toString1Line() {
