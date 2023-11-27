@@ -3,7 +3,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.utils.StringUtils;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.IExternalDevice;
 import pasa.cbentley.framework.coreui.src4.interfaces.ISenses;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
@@ -91,7 +91,7 @@ public class SenseEvent extends DeviceEvent {
          }
          return padName;
       }
-      return "Sense " + BCodes.getStringSense(sensorType);
+      return "Sense " + ToStringStaticCoreUi.getStringSense(sensorType);
    }
 
    public float getValue() {
@@ -113,7 +113,7 @@ public class SenseEvent extends DeviceEvent {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, "SenseEvent");
-      dc.appendVarWithSpace("Sub", BCodes.getStringSense(sensorType));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringSense(sensorType));
       if (values != null) {
          for (int i = 0; i < values.length; i++) {
             dc.nl();
@@ -124,7 +124,7 @@ public class SenseEvent extends DeviceEvent {
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, "SenseEvent");
-      dc.appendVarWithSpace("Sub", BCodes.getStringSense(sensorType));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringSense(sensorType));
    }
    //#enddebug
 

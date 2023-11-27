@@ -1,16 +1,18 @@
 package pasa.cbentley.framework.coreui.src4.engine;
 
-import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
-import pasa.cbentley.core.src4.logging.IDLog;
 import pasa.cbentley.core.src4.logging.IStringable;
+import pasa.cbentley.core.src4.stator.IStatorable;
+import pasa.cbentley.core.src4.stator.StatorReader;
+import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasWrapperManager;
+import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasOwner;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
 
 /**
- * A Wrapper controls only 1 {@link AbstractCanvasHost}
+ * A Wrapper controls only 1 {@link CanvasHostAbstract}
  * <br>
- * Appli is unaware of this class. It wraps the {@link AbstractCanvasHost} in a host specific GUI
+ * Appli is unaware of this class. It wraps the {@link CanvasHostAbstract} in a host specific GUI
  * Host gui may uses several wrappers in the same layout.
  * <br>
  * In which case the {@link WrapperAbstract#isContained()} return true.
@@ -28,38 +30,84 @@ import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasWrapperManager;
  * @author Charles Bentley
  *
  */
-public abstract class WrapperAbstract extends AbstractUITemplate implements IStringable {
+public abstract class WrapperAbstract extends AbstractUITemplate implements IStringable, ITechFeaturesUI, IStatorable {
 
    /**
     * The create
     */
-   private ICanvasWrapperManager manager;
+   private ICanvasOwner manager;
 
    protected WrapperAbstract(CoreUiCtx cac) {
       super(cac);
    }
 
+   /**
+    * Hide the wrapped canvas to the user.
+    * 
+    * <li>If wrapper is a frame, hide the frame
+    * <li>If wrapper is a tab, hide the tab
+    * <li>etc.
+    */
+   public abstract void canvasHide();
+
+   /**
+    * Show the wrapped canvas to the user
+    */
+   public abstract void canvasShow();
+
+   /**
+    * {@link ICanvasOwner} of this wrapper. Basically the object that created it and knows
+    *  its true nature.
+    * @return
+    */
+   public ICanvasOwner getWrapperManager() {
+      return manager;
+   }
+
+   /**
+    * 
+    * @param feature
+    * @return
+    */
+   public boolean hasFeatureSupport(int feature) {
+      return false;
+   }
+
+   /**
+    * 
+    * @return
+    */
    public abstract boolean isContained();
+
+   public boolean isFeatureEnabled(int feature) {
+      return false;
+   }
 
    /** 
     * Initialize the wrapper with the Canvas.
     * <br><br>
     * The {@link SwingManager} when requested to create a new canvas does the following
-    * <li> Asks its {@link ICanvasWrapperManager} which wrapper to create.
+    * <li> Asks its {@link ICanvasOwner} which wrapper to create.
     * <li> Creates a {@link CanvasAbstractSwing} with requested capabilities (OpenGL, Active Rendering etc)
     * <li> Link the Wrapper with the {@link CanvasAbstractSwing}
     * <li> Link the {@link CanvasAbstractSwing} with the wrapper.
     * <br>
     * The method is responsible to "add" the Canvas to the wrapper structure.
-    * @param can
+    * @param canvas the host implementation of a canvas. 
     */
-   public abstract void setCanvasHost(AbstractCanvasHost can);
-
-   public ICanvasWrapperManager getWrapperManager() {
-      return manager;
-   }
+   public abstract void setCanvasHost(CanvasHostAbstract canvas);
 
    public abstract void setDefaultStartPosition();
+
+   public boolean setFeature(int feature, boolean mode) {
+      return false;
+   }
+
+   /**
+    * 
+    * @param mode
+    */
+   public abstract void setFullScreenMode(boolean mode);
 
    /**
     * Sets the tab based on the application manifest
@@ -67,50 +115,60 @@ public abstract class WrapperAbstract extends AbstractUITemplate implements IStr
     */
    public abstract void setIcon(String str);
 
-   public abstract void setTitle(String str);
-
-   public abstract void setFullScreenMode(boolean mode);
-
-   public abstract void setSize(int w, int h);
-
+   /**
+    * Sets the size of the Wrapper containing the {@link CanvasHostAbstract} so that
+    * the {@link CanvasHostAbstract} is 
+    * @param x
+    * @param y
+    */
    public abstract void setPosition(int x, int y);
 
    /**
-    * Show the wrapped canvas to the user
+    * 
+    * @param w
+    * @param h
     */
-   public abstract void canvasShow();
+   public abstract void setSize(int w, int h);
 
-   public abstract void canvasHide();
+   /**
+    * 
+    * @param str
+    */
+   public abstract void setTitle(String str);
 
-   public boolean hasFeatureSupport(int feature) {
-      return false;
+   /**
+    * 
+    * @return
+    */
+   public String getTitle() {
+      throw new RuntimeException();
    }
 
-   public boolean isFeatureEnabled(int feature) {
-      return false;
+   public void stateReadFrom(StatorReader state) {
+
    }
 
-   public boolean setFeature(int feature, boolean mode) {
-      return false;
+   public void stateWriteTo(StatorWriter state) {
+
    }
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, "WrapperAbstract");
+      dc.root(this, AbstractUITemplate.class);
       toStringPrivate(dc);
       super.toString(dc.sup());
 
-      dc.nlLvl(manager, ICanvasWrapperManager.class);
+      dc.nlLvl(manager, ICanvasOwner.class);
+   }
+
+   public void toString1Line(Dctx dc) {
+      dc.root1Line(this, AbstractUITemplate.class);
+      toStringPrivate(dc);
+      super.toString1Line(dc.sup1Line());
    }
 
    private void toStringPrivate(Dctx dc) {
 
-   }
-
-   public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "WrapperAbstract");
-      toStringPrivate(dc);
-      super.toString1Line(dc.sup1Line());
    }
 
    //#enddebug

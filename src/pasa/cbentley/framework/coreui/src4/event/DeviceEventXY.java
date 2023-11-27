@@ -2,7 +2,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
@@ -82,10 +82,10 @@ public class DeviceEventXY extends DeviceEvent {
                str = "Mouse wheeled down "+ x;
             }
          } else {
-            str = "Mouse " + BCodes.getStringButtonShort(deviceButton) + " " + BCodes.getStringMod(mode);
+            str = "Mouse " + ToStringStaticCoreUi.getStringButtonShort(deviceButton) + " " + ToStringStaticCoreUi.getStringMod(mode);
          }
       } else if (deviceType == IInput.DEVICE_3_FINGER) {
-         str = "Finger#" + +deviceButton + " " + BCodes.getStringMod(mode);
+         str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.getStringMod(mode);
       }
       str += " " + getX() + "," + getY();
       return str;

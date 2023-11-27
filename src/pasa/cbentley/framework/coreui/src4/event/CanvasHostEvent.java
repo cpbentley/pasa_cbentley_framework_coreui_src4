@@ -4,7 +4,7 @@ import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coreui.src4.interfaces.IHostEvents;
+import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -14,7 +14,9 @@ import pasa.cbentley.framework.coreui.src4.tech.IInput;
  *
  */
 public class CanvasHostEvent extends BEvent {
-
+   /**
+    * 
+    */
    private int         actionType;
 
    private ICanvasHost canvasHot;
@@ -29,8 +31,16 @@ public class CanvasHostEvent extends BEvent {
 
    private int         y;
 
-   public CanvasHostEvent(CoreUiCtx fc, int actionType, ICanvasHost canvasHot) {
-      super(fc);
+   /**
+    * {@link ITechEventHost#ACTION_1_CLOSE}
+    * {@link ITechEventHost#ACTION_2_MOVED}
+    * {@link ITechEventHost#ACTION_10_DRAG_DROP}
+    * @param cuc
+    * @param actionType
+    * @param canvasHot
+    */
+   public CanvasHostEvent(CoreUiCtx cuc, int actionType, ICanvasHost canvasHot) {
+      super(cuc);
       this.type = IInput.TYPE_3_CANVAS;
       this.actionType = actionType;
       this.canvasHot = canvasHot;
@@ -54,9 +64,9 @@ public class CanvasHostEvent extends BEvent {
 
    public String getUserLineString() {
       String str = "";
-      if (actionType == IHostEvents.ACTION_3_RESIZED) {
+      if (actionType == ITechEventHost.ACTION_3_RESIZED) {
          str = "Canvas resized to " + w + " " + h;
-      } else if (actionType == IHostEvents.ACTION_2_MOVED) {
+      } else if (actionType == ITechEventHost.ACTION_2_MOVED) {
          str = "Canvas moved to " + x + " " + y;
       } else {
          str = "canvas " + actionType;

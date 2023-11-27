@@ -1,23 +1,27 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
 import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
-import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesFrameworkUI;
+import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesCoreUI;
+import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
 
 /**
- * Define Frame/Windows positioning in Host environment.
+ * Defines a Frame/Windows positioning in Host environment.
  * <br>
  * <br>
  * 
- * Every {@link ICanvasHost} is located somewhere. This object encapsulates this information for the framework. 
+ * Every {@link ICanvasHost} is located somewhere. 
+ * 
+ * This {@link ITechFramePos} encapsulates this information for the framework's {@link WrapperAbstract}. 
+ * 
  * It requests an update with {@link ICanvasHost#updateSettings(mordan.memory.ByteObject)}.
  * <br>
  * <br>
- * When {@link IAppli} changes the {@link IFramePos} of one of its {@link ICanvasHost},
+ * When {@link IAppli} changes the {@link ITechFramePos} of one of its {@link ICanvasHost},
  * <br>
  * <br>
  * The {@link IAppli} can thus change the screen on which the {@link ICanvasHost} is being shown.
  * <br>
- * Only feasible when {@link ITechHost#SUP_ID_24_MULTIPLE_WINDOWS} feature is supported by host.
+ * Only feasible when {@link ITechFeaturesUI#SUP_ID_24_MULTIPLE_WINDOWS} feature is supported by host.
  * <br>
  * We want to be able to send a ICanvas to another screen. Query screen.
  * Screens are conveniences. when screen is not available, a Virtual Screen is used.
@@ -27,14 +31,14 @@ import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesFrameworkUI;
  * @author Charles Bentley
  *
  */
-public interface IFramePos extends ITechByteObject {
+public interface ITechFramePos extends ITechByteObject {
 
    public static final int FPOS_BASIC_SIZE             = A_OBJECT_BASIC_SIZE + 13;
 
    /**
     * One of the 256 framework types
     */
-   public static final int FPOS_TYPE                   = IBOTypesFrameworkUI.FTYPE_8_FRAME_POS;
+   public static final int FPOS_TYPE                   = IBOTypesCoreUI.TYPE_8_FRAME_POS;
 
    /**
     * Is the Frame in a full screen configuration

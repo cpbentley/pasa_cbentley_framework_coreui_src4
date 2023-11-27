@@ -3,15 +3,19 @@ package pasa.cbentley.framework.coreui.src4.interfaces;
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
 
 /**
- * Represents the Wrapper Manager.
+ * Class that knows how to handle the canvas wrappers
  * 
  * Could be the Frame that controls 3 cells wrappers
+ * 
+ * 
+ * 
  * @author Charles Bentley
  *
  */
-public interface ICanvasWrapperManager extends IStringable {
+public interface ICanvasOwner extends IStringable {
 
    /**
     * When the wrapper is not able to set its title, the wrapper delegates the job to its manager.
@@ -41,8 +45,11 @@ public interface ICanvasWrapperManager extends IStringable {
    /**
     * Create wrapper according to tech.
     * 
+    * Depending on the implementation interpretation of {@link ITechCanvasHost},
+    * it will create a Canvas within its own window, a panel, a new tab inside tabbed pane.
+    * etc etc. 
     * <li> 
-    * @param tech
+    * @param tech {@link ITechCanvasHost}
     * @return
     */
    public WrapperAbstract createNewWrapper(ByteObject tech);

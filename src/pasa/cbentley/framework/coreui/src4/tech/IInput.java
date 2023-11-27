@@ -4,7 +4,7 @@ import pasa.cbentley.core.src4.interfaces.C;
 import pasa.cbentley.framework.coreui.src4.event.DeviceEvent;
 import pasa.cbentley.framework.coreui.src4.event.GestureEvent;
 import pasa.cbentley.framework.coreui.src4.event.RepeatEvent;
-import pasa.cbentley.framework.coreui.src4.interfaces.IHostEvents;
+import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
 
 /**
  * defines static constants valid across the whole Bentley's Framework.
@@ -116,6 +116,8 @@ public interface IInput {
     */
    public static final int MOD_5_WHEELED           = 5;
 
+   public static final int MOD_6_FLOAT             = 6;
+
    public static final int MOD_8_RESIZED           = 8;
 
    public static final int MOVE_0_MOVE             = 0;
@@ -208,10 +210,10 @@ public interface IInput {
     * <br>
     * <br>
     * Key id is
-    * <li> {@link C#DIR_0TOP}
-    * <li> {@link C#DIR_1BOTTOM}
-    * <li> {@link C#DIR_2LEFT}
-    * <li> {@link C#DIR_3RIGHT}
+    * <li> {@link C#DIR_0_TOP}
+    * <li> {@link C#DIR_1_BOTTOM}
+    * <li> {@link C#DIR_2_LEFT}
+    * <li> {@link C#DIR_3_RIGHT}
     * <br>
     * <br>
     * Long Press starts, Key is Press, Long Press Preset Event, Key is Released.
@@ -245,7 +247,7 @@ public interface IInput {
 
    /**
     * Mods for those appli actions.
-    * {@link IHostEvents#ACTION_1_CLOSE}
+    * {@link ITechEventHost#ACTION_1_CLOSE}
     */
    public static final int TYPE_6_APPLI            = 6;
 

@@ -8,11 +8,11 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.utils.BitUtils;
 import pasa.cbentley.core.src4.utils.DateUtils;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
-import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
+import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 
 /**
  * Used by {@link ICanvasAppli#event(BEvent)}
@@ -37,6 +37,9 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
    public static final int   EVENT_FLAG_2_POOLED     = 1 << 1;
 
    public static final int   EVENT_FLAG_3_HISTORICAL = 1 << 3;
+
+   //#debug
+   protected String          debugName;
 
    protected final CoreUiCtx fc;
 
@@ -73,15 +76,15 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
     */
    protected int             type;
 
-   public BEvent(CoreUiCtx fc, IEventCreator ec) {
-      super(fc.getUCtx(), fc.getEventBus(), 0, 0);
-      this.fc = fc;
-   }
-
    public BEvent(CoreUiCtx fc) {
       super(fc.getUCtx(), fc.getEventBus(), 0, 0);
       if (fc == null)
          throw new NullPointerException();
+      this.fc = fc;
+   }
+
+   public BEvent(CoreUiCtx fc, IEventCreator ec) {
+      super(fc.getUCtx(), fc.getEventBus(), 0, 0);
       this.fc = fc;
    }
 
@@ -137,12 +140,12 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
       timeStamp = time;
    }
 
-   //#mdebug
-   public IDLog toLog() {
+   public IDLog toDLog() {
       return fc.toDLog();
    }
 
-   public IDLog toDLog() {
+   //#mdebug
+   public IDLog toLog() {
       return fc.toDLog();
    }
 
@@ -151,9 +154,14 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
    }
 
    public void toString(Dctx dc) {
-      dc.root(this, "BEvent");
+      dc.root(this, BEvent.class, 154);
+      if(debugName != null) {
+         dc.append("'");
+         dc.append(debugName);
+         dc.append("'");
+      }
       dc.appendVarWithSpace("#", id);
-      dc.appendVarWithSpace("Type", BCodes.getStringEventType(type));
+      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.getStringEventType(type));
       dc.appendVarWithSpace("Flags", flags);
       dc.appendVarWithSpace("Time", DateUtils.getDslashMslashYslashHourslashMin(timeStamp));
       super.toString(dc.sup());
@@ -164,17 +172,26 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "BEvent");
-      dc.append("#" + id);
-      dc.appendVarWithSpace("Type", BCodes.getStringEventType(type));
+      dc.root1Line(this, BEvent.class);
+      if(debugName != null) {
+         dc.append("'");
+         dc.append(debugName);
+         dc.append("'");
+      }
+      dc.appendVarWithSpace("#", id);
+      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.getStringEventType(type));
       if (flags != 0) {
          dc.appendVarWithSpace("Flags", flags);
       }
       dc.appendVarWithSpace("Time", DateUtils.getDslashMslashYslashHourslashMin(timeStamp));
    }
-   //#enddebug
 
    public UCtx toStringGetUCtx() {
       return fc.getUCtx();
    }
+
+   public void toStringSetDebugName(String str) {
+      this.debugName = str;
+   }
+   //#enddebug
 }

@@ -1,7 +1,7 @@
 package pasa.cbentley.framework.coreui.src4.interfaces;
 
 import pasa.cbentley.core.src4.logging.IStringable;
-import pasa.cbentley.framework.coreui.src4.tech.ITechUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
 
 /**
  * Interface towards Gesture Services/
@@ -25,7 +25,7 @@ public interface IHostGestures extends IStringable {
    /**
     * Ask the Host listeners to start listening to the given Gestures
     * 
-    * <li> {@link ITechUI#HOST_FLAGY_1_LONGPRESS}
+    * <li> {@link ITechFeaturesUI#HOST_FLAGY_1_LONGPRESS}
     * <li> {@link ISenses#GESTURE_TYPE_09_VOICE}
     * <br>
     * <br>

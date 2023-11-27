@@ -4,11 +4,13 @@ import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.core.ByteObjectManaged;
 import pasa.cbentley.byteobjects.src4.ctx.BOCtx;
 import pasa.cbentley.byteobjects.src4.ctx.IBOTypesBOC;
+import pasa.cbentley.core.src4.ctx.ACtx;
 import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.io.BADataIS;
 import pasa.cbentley.core.src4.io.BADataOS;
 import pasa.cbentley.core.src4.structs.IntBuffer;
 import pasa.cbentley.core.src4.structs.IntToObjects;
+import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.interfaces.IBentleyFwSerial;
 
 /**
@@ -19,7 +21,7 @@ import pasa.cbentley.framework.coreui.src4.interfaces.IBentleyFwSerial;
  * The Bentley Serialization framework is platform independant. Therefore it cannot use
  * <li>No Class info is used because that's not compatible with
  * unknown Host class model
- * <li>No reflexion. No optimization possible
+ * <li>No reflexion because then no optimization possible. 
  * <br>
  * <br>
  * Therefore, every {@link IBentleyFwSerial} must create objects type and call the S
@@ -49,8 +51,8 @@ import pasa.cbentley.framework.coreui.src4.interfaces.IBentleyFwSerial;
  * Backward compatible? Yes. Using a VersionID
  * <br>  differences and possible optimizations.
  * <br>
- * Application singletons like {@link GuiContext} are not serialized. They are
- * fetched upon deserialization.
+ * {@link ACtx} state ?  {@link UCtx}, {@link BOCtx}, {@link CoreUiCtx} etc.
+ * 
  * <br>
  * What about TBLR relationships between Drawables ? serialUID is used
  * <br>
@@ -106,11 +108,13 @@ import pasa.cbentley.framework.coreui.src4.interfaces.IBentleyFwSerial;
  * .. upon deserialization, how do you get the reference to that shared object which may have changed
  * content! For example Page Input. with Listener X. Help page is shown and Page Input serialized because live
  * memory is out. Page Help needs Listener X and create it.
- * When doing back back we go back to the Page Input. Which Listener X? We say Listener is not local.
+ * 
+ * When doing back, back we go back to the Page Input. Which Listener X? We say Listener is not local.
  * Content is unknown. So we need a special process.
  * <br>
  * TODO Agents with instance {@link ByteObjectManaged}
  * we have to match it with live Objects how?
+ * 
  * Every object that is serialized must be reachable. we don't have weak references... :(
  * You can implement Object Pool host side.
  * in J2ME, none and partial deserialization is not possible
@@ -122,8 +126,9 @@ import pasa.cbentley.framework.coreui.src4.interfaces.IBentleyFwSerial;
  * only serialize its UUID. model knows that it will not be serialized.
  * <br>
  * <br>
- *  //TODO this an example of start up code that when unserialized.. does not need a UIID
-   // this code must be run during deserialize... as in 
+ * TODO this an example of start up code that when unserialized.. does not need a UIID
+ *  this code must be run during deserialize... as in 
+   
    figDrwTop.setIPActor(this); //to compute width
     Some kind of Connect to Framework method<br>
     <br>

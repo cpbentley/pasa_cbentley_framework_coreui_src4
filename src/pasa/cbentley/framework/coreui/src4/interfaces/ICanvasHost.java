@@ -2,8 +2,9 @@ package pasa.cbentley.framework.coreui.src4.interfaces;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.IStringable;
+import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvas;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
 
 /**
  * This interface defines Outbound methods used by the <b>Bentley</b> framework to communicate with the <b>Outside World</b>
@@ -28,7 +29,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechCanvas;
  * @author Charles-Philip Bentley
  *
  */
-public interface ICanvasHost extends IStringable {
+public interface ICanvasHost extends IStringable, IStatorable {
    /**
     * Ask the Canvas or its wrapper to hide.
     * <br><br>
@@ -39,12 +40,36 @@ public interface ICanvasHost extends IStringable {
    public void canvasHide();
 
    /**
+    * 
+    */
+   public void titleIconComesticUpdate();
+
+   /**
+    * 
+    * @param canvasAppli
+    */
+   public void setCanvasAppli(ICanvasAppli canvasAppli);
+
+   /**
+    * 
+    * @return
+    */
+   public ICanvasAppli getCanvasAppli();
+
+   /**
     * Ask the Canvas and its wrapper to show it
     */
    public void canvasShow();
 
+   /**
+    * 
+    */
    public void flushGraphics();
 
+   /**
+    * 
+    * @return
+    */
    public IGraphics getGraphics();
 
    /**
@@ -72,13 +97,7 @@ public interface ICanvasHost extends IStringable {
    public int getICY();
 
    /**
-    * 
-    * @return
-    */
-   public ByteObject getSettings();
-
-   /**
-    * {@link ITechCanvas} 
+    * {@link ITechCanvasHost} 
     * @return
     */
    public ByteObject getTech();
@@ -177,7 +196,9 @@ public interface ICanvasHost extends IStringable {
    public void setTitle(String string);
 
    /**
-    * Sets/Resets the canvas to its default position on the screen
+    * Sets/Resets the canvas to its default position on the screen.
+    * 
+    * Values are taken from the hard coded configuration
     */
    public void setDefaultStartPosition();
 

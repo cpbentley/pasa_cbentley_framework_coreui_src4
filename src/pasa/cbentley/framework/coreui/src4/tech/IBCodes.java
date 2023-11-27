@@ -35,6 +35,17 @@ public interface IBCodes {
    public static int        AXIS_Z                         = 557;
 
    /**
+    * Some throttle have a end button
+    */
+   public static int        THROTTLE_A                     = 319;
+
+   public static int        THROTTLE_B                     = 320;
+
+   public static int        THROTTLE_C                     = 321;
+
+   public static int        THROTTLE_D                     = 322;
+
+   /**
     * Pads have buttons.
     * <br>
     * TODO pad profiles. Sega has a start button, select
@@ -50,7 +61,10 @@ public interface IBCodes {
 
    public static final int  PAD_RIGHT                      = 103;
 
-  
+   public static final int  PAD_UPZ                        = 104;
+
+   public static final int  PAD_DOWNZ                      = 105;
+
    public static final int  PAD_BUTTON_0                   = 1000;
 
    public static final int  PAD_BUTTON_1                   = 1;
@@ -183,6 +197,14 @@ public interface IBCodes {
    public static final int  KB_089_Y                       = 89;
 
    public static final int  KB_090_Z                       = 90;
+
+   public static final int  KB_221_PAGE_UP                 = 221;
+
+   public static final int  KB_222_PAGE_DOWN               = 222;
+
+   public static final int  KB_223_PAGE_HOME               = 223;
+
+   public static final int  KB_224_PAGE_END                = 224;
 
    public static final int  KEY_BACK                       = 1005;
 

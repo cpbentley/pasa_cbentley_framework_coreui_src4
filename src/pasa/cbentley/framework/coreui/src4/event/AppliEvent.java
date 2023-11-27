@@ -2,9 +2,9 @@ package pasa.cbentley.framework.coreui.src4.event;
 
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coreui.src4.interfaces.IHostEvents;
+import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -31,12 +31,12 @@ public class AppliEvent extends BEvent {
    }
    /**
     * Explicit actions made by the user
-    * <li> {@link IHostEvents#ACTION_1_CLOSE} when they use the host UI to close a {@link ICanvasHost}
-    * <li> {@link IHostEvents#ACTION_2_EXIT} when a pointer exits the {@link ICanvasHost}
-    * <li> {@link IHostEvents#ACTION_3_ENTER} when a pointer exits the {@link ICanvasHost}
-    * <li> {@link IHostEvents#ACTION_4_FOCUS_GAIN} when Host UI gives the focus to the {@link ICanvasHost}
-    * <li> {@link IHostEvents#ACTION_5_FOCUS_LOSS} when Host UI take away the focus from the {@link ICanvasHost}
-    * <li> {@link IHostEvents#ACTION_3_RESIZED} when the {@link ICanvasHost} is (user,implicitly) resized, moved, fullscreened
+    * <li> {@link ITechEventHost#ACTION_1_CLOSE} when they use the host UI to close a {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_2_EXIT} when a pointer exits the {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_3_ENTER} when a pointer exits the {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_4_FOCUS_GAIN} when Host UI gives the focus to the {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_5_FOCUS_LOSS} when Host UI take away the focus from the {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_3_RESIZED} when the {@link ICanvasHost} is (user,implicitly) resized, moved, fullscreened
     * 
     */
    public int getAction() {
@@ -46,16 +46,16 @@ public class AppliEvent extends BEvent {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, "AppliEvent");
-      dc.appendVarWithSpace("Sub", BCodes.getStringAppliAction(mode));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringAppliAction(mode));
    }
 
    public String getUserLineString() {
-      return "Appli " + BCodes.getStringAppliAction(getAction());
+      return "Appli " + ToStringStaticCoreUi.getStringAppliAction(getAction());
    }
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, "AppliEvent");
-      dc.appendVarWithSpace("Sub", BCodes.getStringAppliAction(mode));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringAppliAction(mode));
    }
    //#enddebug
 }

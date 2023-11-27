@@ -3,7 +3,10 @@ package pasa.cbentley.framework.coreui.src4.ctx;
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.ctx.ABOCtx;
 import pasa.cbentley.byteobjects.src4.ctx.BOCtx;
-import pasa.cbentley.core.src4.ctx.ACtx;
+import pasa.cbentley.byteobjects.src4.ctx.IConfigBO;
+import pasa.cbentley.byteobjects.src4.interfaces.StatorReaderBO;
+import pasa.cbentley.byteobjects.src4.interfaces.StatorWriterBO;
+import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.event.EventBusArray;
 import pasa.cbentley.core.src4.event.IEventBus;
 import pasa.cbentley.core.src4.interfaces.IExecutor;
@@ -12,27 +15,29 @@ import pasa.cbentley.core.src4.structs.IntToObjects;
 import pasa.cbentley.framework.coredraw.src4.ctx.CoreDrawCtx;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IFontFactory;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IImageFactory;
-import pasa.cbentley.framework.coreui.src4.engine.AbstractCanvasAppli;
-import pasa.cbentley.framework.coreui.src4.engine.AbstractCanvasHost;
+import pasa.cbentley.framework.coreui.src4.engine.CanvasAppliAbstract;
+import pasa.cbentley.framework.coreui.src4.engine.CanvasHostAbstract;
+import pasa.cbentley.framework.coreui.src4.engine.KeyMapAbstract;
 import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
 import pasa.cbentley.framework.coreui.src4.event.BEvent;
 import pasa.cbentley.framework.coreui.src4.event.GestureArea;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasWrapperManager;
-import pasa.cbentley.framework.coreui.src4.interfaces.IConfigUI;
+import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasOwner;
 import pasa.cbentley.framework.coreui.src4.interfaces.IHostGestures;
-import pasa.cbentley.framework.coreui.src4.tech.IFramePos;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvas;
-import pasa.cbentley.framework.coreui.src4.tech.ITechUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFramePos;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
 import pasa.cbentley.framework.coreui.src4.utils.InputSettings;
 
 /**
+ * Intermediate CoreUi context for J2Se, J2me, Android, IOS, etc.
+ * 
  * 
  * @author Charles Bentley
  *
  */
-public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI, ITechCtxSettingsCoreUI {
+public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechFeaturesUI, ITechCtxSettingsCoreUI {
 
    /**
     * Some Host configurations prevent outside windows.
@@ -44,49 +49,59 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     * <br>
     * contains {@link CanvasBridgeX} 
     * <br>
-    * @see {@link AbstractAppli#createCanvas(ICanvasAppli, ByteObject)}
+    * @see {@link AbstractAppli#createCanvas(ByteObject)}
     */
-   protected IntToObjects        canvases;
+   protected IntToObjects      canvases;
 
    /** 
     * Reference to the root Canvas of the Host
     * <br>
     * {@link ICanvasHost}
     */
-   private AbstractCanvasHost    canvasRoot;
+   private CanvasHostAbstract  canvasRoot;
 
-   protected final CoreDrawCtx   cdc;
+   protected final CoreDrawCtx cdc;
 
-   private IConfigUI             configUI;
+   private EventBusArray       eventBus;
 
-   private EventBusArray         eventBus;
+   private InputSettings       inputSettings;
 
-   private InputSettings         inputSettings;
+   protected int               pressedKeyCounter;
 
-   protected int                 pressedKeyCounter;
+   protected int[]             pressedKeys = new int[20];
 
-   protected int[]               pressedKeys = new int[20];
+   private ICanvasOwner        wrapperManager;
 
-   private ICanvasWrapperManager wrapperManager;
+   private BOModuleCoreUi      boModule;
 
-   public CoreUiCtx(CoreDrawCtx cdc, IConfigUI configUI) {
-      super(cdc.getBOC());
+   public CoreUiCtx(IConfigCoreUI configUI, CoreDrawCtx cdc) {
+      super(configUI, cdc.getBOC());
       this.cdc = cdc;
       canvases = new IntToObjects(cdc.getUCtx(), 2);
-      this.configUI = configUI;
 
-      //when settings don't exist yet. print the config to it
-      if (hasCtxData()) {
-
-      } else {
-         //create settings based on config
-         ByteObject sets = getSettingsBO();
-      }
-
+      boModule = new BOModuleCoreUi(this);
    }
 
-   public int getBOSettingsCtxSize() {
+   /**
+    * Will be called when we need to apply incoming config to {@link ITechCtxSettingsCoreUI} ByteObject.
+    * @param config
+    * @param settings
+    */
+   protected void matchConfig(IConfigBO config, ByteObject settings) {
+      IConfigCoreUI configUI = (IConfigCoreUI) config;
+      settings.setFlag(CTX_COREUI_OFFSET_01_FLAG1, CTX_COREUI_FLAG_1_FULLSCREEN, configUI.isFullscreen());
+   }
+
+   public int getBOCtxSettingSize() {
       return CTX_COREUI_BASIC_SIZE;
+   }
+
+   public ICtx[] getCtxSub() {
+      return new ICtx[] { cdc };
+   }
+
+   protected void applySettings(ByteObject settingsNew, ByteObject settingsOld) {
+
    }
 
    /**
@@ -94,7 +109,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     * <br>
     * Canvas is created according to the settings.
     * <br>
-    * The constructor of {@link AbstractCanvasAppli} get the tech param.
+    * The constructor of {@link CanvasAppliAbstract} get the tech param.
     * <br>
     * The {@link ICanvasHost} belongs to the {@link IAppli}.
     * <br>
@@ -110,25 +125,42 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     * When application is setting up from previous state, that state decides which {@link ICanvasAppli} is hosted
     * 
     * @param canvasAppli is not null. the canvas from the appli in need of a sleeve in the target host.
-    * @param canvasTech could be null. then we use a default tech provided by the ctx
+    * @param canvasTech {@link ITechCanvasHost} could be null. then we use a default tech provided by the ctx
     */
    public ICanvasHost createCanvas(ICanvasAppli canvasAppli, ByteObject canvasTech) {
+      ICanvasHost canvasHost = createCanvas(canvasTech);
+      linkCanvasAppliToHost(canvasAppli, canvasHost);
+      return canvasHost;
+   }
+
+   public void linkCanvasAppliToHost(ICanvasAppli canvasAppli, ICanvasHost canvasHost) {
+      //registers the relevant events/listeners/observers
+      canvasHost.setCanvasAppli(canvasAppli);
+   }
+
+   /**
+    * Creates a Canvas.. 
+    * <li> Wraps the Canvas in its host owner.
+    * <li> Add the canvas to this {@link CoreUiCtx} list of managed {@link CanvasHostAbstract}
+    * <li>no linking to a {@link ICanvasAppli}.
+    * @param canvasTech
+    * @return
+    */
+   public ICanvasHost createCanvas(ByteObject canvasTech) {
       if (canvasTech == null) {
-         canvasTech = createDefaultCanvasTech();
+         canvasTech = createTechCanvasHostDefault();
       }
 
-      AbstractCanvasHost canvasHost = createCanvasClass(canvasAppli, canvasTech);
       WrapperAbstract wrapper = getWrapperManager().createNewWrapper(canvasTech);
       if (wrapper == null) {
          throw new NullPointerException();
       }
-      wrapper.setCanvasHost(canvasHost);
-      canvasHost.setWrapper(wrapper);
 
-      //registers the relevant events/listeners/observers
-      canvasHost.setCanvasAppli(canvasAppli);
-      //force title after the link. afterwards when changed inside app, event will call it
-      canvasHost.titleIconComesticUpdate();
+      CanvasHostAbstract canvasHost = createCanvasClass(wrapper, canvasTech);
+      if (canvasHost.getWrapper() == null) {
+         canvasHost.setWrapper(wrapper);
+      }
+      wrapper.setCanvasHost(canvasHost);
 
       //where to host the canvas, in a new Frame?
       if (canvasRoot == null) {
@@ -140,57 +172,63 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
    }
 
    /**
-    * Create a Canvas within {@link CoreUiCtx}. 
+    * Create a Canvas within {@link CoreUiCtx}.  Wrapper may influence the Canvas type/parameters.
+    * The parent for example.
     * 
     * If we are in Swing Context, it will create a Swing Canvas.
     * 
     * Cross boundary? Swing app wants to use JX Canvas for Browser.
     * 
-    * The {@link ITechCanvas} provides some hints on what kind of canvas we want.
+    * The {@link ITechCanvasHost} provides some hints on what kind of canvas we want.
     * 
     * But the application cannot always have what it wants.
     * 
     * In the case of the launcher, the launcher decides which wrapper to use
     * 
-    * {@link ITechCanvas#TCANVAS_TYPE_0_DEFAULT}
+    * {@link ITechCanvasHost#TCANVAS_TYPE_0_DEFAULT}
+    * {@link ITechCanvasHost}
     * 
-    * @param canvasAppli
+    * Note: Canvas Icon is decided by the wrapper. (tabbed, frame)
     * @param canvasTech
-    * @return
+    * 
+    * @return linked {@link CanvasHostAbstract} with its wrapper
     */
-   public abstract AbstractCanvasHost createCanvasClass(ICanvasAppli canvasAppli, ByteObject canvasTech);
+   public abstract CanvasHostAbstract createCanvasClass(WrapperAbstract wrapper, ByteObject canvasTech);
+
+   public abstract KeyMapAbstract getKeyMap();
 
    /**
-    * {@link IBOTypesFrameworkUI#TYPE_5_CANVAS_TECH}
+    * {@link IBOTypesCoreUI#TYPE_5_TECH_CANVAS_HOST}
     * @return
     */
-   public ByteObject createDefaultCanvasTech() {
-      int type = IBOTypesFrameworkUI.TYPE_5_CANVAS_TECH;
-      int size = ITechCanvas.TCANVAS_BASIC_SIZE;
+   public ByteObject createTechCanvasHostDefault() {
+      int type = IBOTypesCoreUI.TYPE_5_TECH_CANVAS_HOST;
+      int size = ITechCanvasHost.TCANVAS_BASIC_SIZE;
       ByteObject tech = cdc.getBOC().getByteObjectFactory().createByteObject(type, size);
-      tech.set1(ITechCanvas.TCANVAS_OFFSET_02_TYPE1, ITechCanvas.TCANVAS_TYPE_1_FRAME);
-      tech.set1(ITechCanvas.TCANVAS_OFFSET_03_SCREEN_MODE1, ITechCanvas.SCREEN_0_TOP_NORMAL);
-      tech.set1(ITechCanvas.TCANVAS_OFFSET_04_DEBUG_FLAGS1, 0);
-      tech.set4(ITechCanvas.TCANVAS_OFFSET_05_BG_COLOR4, 0);
-      tech.set1(ITechCanvas.TCANVAS_OFFSET_06_THREADING_MODE1, 0); //TODO
-      tech.set2(ITechCanvas.TCANVAS_OFFSET_07_ICON_ID2, 0);
-      tech.set2(ITechCanvas.TCANVAS_OFFSET_08_TITLE_ID_ID2, 0);
-      tech.set2(ITechCanvas.TCANVAS_OFFSET_14_FRAMEPOS2, 0);
+      tech.set1(ITechCanvasHost.TCANVAS_OFFSET_02_WRAPPER_TYPE1, ITechCanvasHost.TCANVAS_TYPE_1_FRAME);
+      tech.set1(ITechCanvasHost.TCANVAS_OFFSET_03_SCREEN_MODE1, ITechCanvasHost.SCREEN_0_TOP_NORMAL);
+
+      //create a default canvas appli tech
+      tech.set1(ITechCanvasHost.TCANVAS_OFFSET_04_DEBUG_FLAGS1, 0);
+      tech.set4(ITechCanvasHost.TCANVAS_OFFSET_05_BG_COLOR4, 0);
+      tech.set2(ITechCanvasHost.TCANVAS_OFFSET_07_ICON_ID2, 0);
+      tech.set2(ITechCanvasHost.TCANVAS_OFFSET_08_TITLE_ID_ID2, 0);
+      tech.set2(ITechCanvasHost.TCANVAS_OFFSET_14_FRAMEPOS2, 0);
       return tech;
    }
 
-   public ByteObject createDefaultFrameTech() {
-      int type = IBOTypesFrameworkUI.FTYPE_8_FRAME_POS;
-      int size = IFramePos.FPOS_BASIC_SIZE;
+   public ByteObject createTechFrameDefault() {
+      int type = IBOTypesCoreUI.TYPE_8_FRAME_POS;
+      int size = ITechFramePos.FPOS_BASIC_SIZE;
       ByteObject tech = cdc.getBOC().getByteObjectFactory().createByteObject(type, size);
       return tech;
    }
 
    /**
-    * Creates
+    * Creates the {@link ICanvasOwner} if none is defined.
     * @return
     */
-   public abstract ICanvasWrapperManager createWrapperManagerDefault();
+   public abstract ICanvasOwner createCanvasOwnerDefault();
 
    /**
     * 
@@ -218,12 +256,12 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     */
    /**
     */
-   public AbstractCanvasHost[] getCanvasAt(int x, int y) {
+   public CanvasHostAbstract[] getCanvasAt(int x, int y) {
       //TODO keep track of top most canvas
       //problem is that the z cannot be determ
       IntToObjects itos = new IntToObjects(getUCtx(), canvases.nextempty);
       for (int i = 0; i < canvases.nextempty; i++) {
-         AbstractCanvasHost ch = (AbstractCanvasHost) canvases.objects[i];
+         CanvasHostAbstract ch = (CanvasHostAbstract) canvases.objects[i];
          int rx = ch.getICX();
          int ry = ch.getICY();
          int rw = ch.getICWidth();
@@ -233,7 +271,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
             itos.add(ch);
          }
       }
-      AbstractCanvasHost[] ar = new AbstractCanvasHost[itos.nextempty];
+      CanvasHostAbstract[] ar = new CanvasHostAbstract[itos.nextempty];
       itos.copyToArray(ar);
       return ar;
    }
@@ -242,21 +280,66 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     * Returns all canvases
     * @return
     */
-   public AbstractCanvasHost[] getCanvases() {
-      AbstractCanvasHost[] hosts = new AbstractCanvasHost[canvases.getLength()];
+   public CanvasHostAbstract[] getCanvases() {
+      CanvasHostAbstract[] hosts = new CanvasHostAbstract[canvases.getLength()];
       canvases.copyToArray(hosts);
       return hosts;
+   }
+
+   public int getCanvasesNumShown() {
+      int count = 0;
+      for (int i = 0; i < canvases.nextempty; i++) {
+         CanvasHostAbstract c = (CanvasHostAbstract) canvases.getObjectAtIndex(i);
+         if (c.isShown()) {
+            count++;
+         }
+      }
+      return count;
+   }
+
+   public CanvasHostAbstract[] getCanvasesShown() {
+      int numShown = getCanvasesNumShown();
+      CanvasHostAbstract[] hosts = new CanvasHostAbstract[numShown];
+      int count = 0;
+      for (int i = 0; i < canvases.nextempty; i++) {
+         CanvasHostAbstract c = (CanvasHostAbstract) canvases.getObjectAtIndex(i);
+         if (c.isShown()) {
+            hosts[count] = c;
+            count++;
+         }
+      }
+      return hosts;
+   }
+
+   public void showAllCanvases() {
+      canvasRoot.getCanvasAppli().showNotify();
+      canvasRoot.canvasShow();
+      for (int i = 0; i < canvases.nextempty; i++) {
+         if (canvases.objects[i] != canvasRoot) {
+            CanvasHostAbstract canvas = (CanvasHostAbstract) canvases.objects[i];
+            canvas.getCanvasAppli().showNotify();
+            canvas.canvasShow();
+         }
+      }
+   }
+
+   public int getCanvasesNum() {
+      return canvases.getLength();
+   }
+
+   public CanvasHostAbstract getCanvasRoot() {
+      return canvasRoot;
    }
 
    public CoreDrawCtx getCDC() {
       return cdc;
    }
 
-   public IConfigUI getConfigUI() {
-      if (configUI == null) {
+   public IConfigCoreUI getConfigUI() {
+      if (configBO == null) {
          throw new IllegalStateException("IConfigUI not initialized");
       }
-      return configUI;
+      return (IConfigCoreUI) configBO;
    }
 
    public int[] getEventBaseTopology() {
@@ -311,7 +394,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     * 
     * @return
     */
-   public AbstractCanvasHost getRootCanvas() {
+   public CanvasHostAbstract getRootCanvas() {
       return canvasRoot;
    }
 
@@ -319,15 +402,15 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     * Creates default if not set
     * @return
     */
-   public ICanvasWrapperManager getWrapperManager() {
+   public ICanvasOwner getWrapperManager() {
       if (wrapperManager == null) {
-         wrapperManager = createWrapperManagerDefault();
+         wrapperManager = createCanvasOwnerDefault();
       }
       return wrapperManager;
    }
 
    /**
-    * Does this draw context support the given draw feature id.
+    * Does this ui context support the given ui feature id.
     * 
     * @param supportID
     * @return
@@ -367,16 +450,66 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
    }
 
    /**
-    * Decided by the config, the settings
+    * Decided by the config, the settings.
+    * 
+    * {@link CoreUiCtx} assume by default that the keypad is designed like on a phone
+    * 
+    * 1 2 3 
+    * 4 5 6 
+    * 7 8 9
+    *   0  
+    *   
+    * Other devices can have a different setup like PC keyboard
+    * 7 8 9
+    * 4 5 6 
+    * 1 2 3
+    *   0  
+    *   
+    *   
     * @return
     */
    public boolean isInverseNumPad28() {
       return false;
    }
 
-   public void setMajOn(boolean b) {
-      
+   public boolean isMajOn() {
+      return false;
    }
+
+   public void setMajOn(boolean b) {
+
+   }
+
+   public void stateReadAppUi(StatorReaderBO state) {
+      //canvas have already been created
+      int numCanvases = state.getDataReader().readInt();
+      if (numCanvases == getCanvasesNum()) {
+         CanvasHostAbstract[] canvases = getCanvases();
+         for (int i = 0; i < canvases.length; i++) {
+            canvases[i].stateReadFrom(state);
+         }
+      } else if (canvasRoot == null) {
+         //no canvases at all. we have to load it but how? 
+         for (int i = 0; i < numCanvases; i++) {
+            ByteObject techCanvasHost = state.readByteObject();
+            ICanvasHost canvas = createCanvas(techCanvasHost);
+            canvas.stateReadFrom(state);
+         }
+      } else {
+         //mismatch we don't do anything
+         throw new IllegalStateException();
+      }
+   }
+
+   public void stateWriteAppUi(StatorWriterBO state) {
+      CanvasHostAbstract[] canvases = getCanvases();
+      int numCanvases = canvases.length;
+      state.getDataWriter().writeInt(numCanvases);
+      for (int i = 0; i < canvases.length; i++) {
+         canvases[i].stateWriteTo(state);
+      }
+   }
+
    /**
     * Prevent the repeating nature of keys at the framework level.
     * <br>
@@ -400,10 +533,18 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
       }
    }
 
+   /**
+    * TODO on all canvases or only the root?
+    * @param se
+    */
+   public void publishEvent(BEvent se) {
+      publishEvent(se, null);
+   }
+
    public void publishEvent(BEvent se, ICanvasAppli canvas) {
       if (canvas == null) {
          //send event with the root canvas as parameter
-         canvas = canvasRoot.getCurrentDisplayable();
+         canvas = canvasRoot.getCanvasAppli();
       }
       canvas.event(se);
    }
@@ -415,13 +556,13 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
     */
    public abstract void runGUI(Runnable run);
 
-   public void setWrapperManager(ICanvasWrapperManager wrapperManager) {
+   public void setWrapperManager(ICanvasOwner wrapperManager) {
       this.wrapperManager = wrapperManager;
    }
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, "CoreUiCtx");
+      dc.root(this, CoreUiCtx.class);
       toStringPrivate(dc);
       super.toString(dc.sup());
 
@@ -429,14 +570,16 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
       dc.nlLvl(canvasRoot, "canvasRoot");
 
       for (int i = 0; i < canvases.getLength(); i++) {
-         AbstractCanvasHost canvas = (AbstractCanvasHost) canvases.getObjectAtIndex(i);
+         CanvasHostAbstract canvas = (CanvasHostAbstract) canvases.getObjectAtIndex(i);
          dc.nlLvl(canvas, "AbstractCanvasHost");
       }
-      dc.nlLvl(eventBus);
+      dc.nlLvl(eventBus, "eventBus");
+
+      dc.nlLvl(cdc, CoreDrawCtx.class);
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "CoreUiCtx");
+      dc.root1Line(this, CoreUiCtx.class);
       toStringPrivate(dc);
       super.toString1Line(dc.sup1Line());
    }
@@ -444,7 +587,6 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechUI
    private void toStringPrivate(Dctx dc) {
 
    }
-
 
    //#enddebug
 

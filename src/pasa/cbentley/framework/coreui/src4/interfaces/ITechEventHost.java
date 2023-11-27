@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.interfaces;
 
-public interface IHostEvents {
+public interface ITechEventHost {
 
    /**
     * When a Canvas is closed. Closing while a key modifier is
@@ -19,6 +19,8 @@ public interface IHostEvents {
     * <li> Width and Height and the diff
     * <li> the Screen
     * <li> Fullscreen On/off
+    * 
+    * Event sent after the resize has been executed on the canvas
     */
    public static final int ACTION_3_RESIZED       = 3;
 
@@ -31,6 +33,7 @@ public interface IHostEvents {
 
    /**
     * Application event
+    * {@link ICanvasAppli#showNotify()} TODO remove
     */
    public static final int ACTION_6_NOTIFY_SHOW   = 6;
 
@@ -38,6 +41,8 @@ public interface IHostEvents {
     * When appli's canvases are all hidden
     */
    public static final int ACTION_7_NOTIFY_HIDE   = 7;
+
+   public static final int ACTION_10_DRAG_DROP    = 10;
 
    public static final int ACTION_8_APPLI_PAUSED  = 8;
 

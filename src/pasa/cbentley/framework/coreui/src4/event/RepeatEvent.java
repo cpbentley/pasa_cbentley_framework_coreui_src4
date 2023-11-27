@@ -5,7 +5,7 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.structs.listdoublelink.LinkedListDouble;
 import pasa.cbentley.core.src4.structs.listdoublelink.ListElementHolder;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -85,6 +85,8 @@ public class RepeatEvent extends BEvent implements IStringable {
     */
    protected LinkedListDouble cancelers;
 
+   private EventKey           cancelingKey;
+
    protected LinkedListDouble fireConditions;
 
    private boolean            isSendCancel;
@@ -115,12 +117,14 @@ public class RepeatEvent extends BEvent implements IStringable {
    /**
     * milliseconds for repetition
     */
-   public int                 periodMillis;
+   private int                periodMillis;
+
+   private int                pingAccumulation;
 
    /**
     * is a ping event done between event occurences
     */
-   public int                 pingMillis;
+   private int                pingMillis;
 
    protected int              repeatState;
 
@@ -136,13 +140,23 @@ public class RepeatEvent extends BEvent implements IStringable {
 
    private Object             source;
 
-   public int                 startMillis;
+   private int                startMillis;
 
-   private int                pingAccumulation;
+   public void setPeriodMillis(int period) {
+      this.periodMillis = period;
+   }
 
-   private String             debugName;
+   public int getPeriodMillis() {
+      return periodMillis;
+   }
 
-   private EventKey           cancelingKey;
+   /**
+    * Set the number of milliseconds before the first repetition is fired
+    * @param startMillis
+    */
+   public void setStartMillis(int startMillis) {
+      this.startMillis = startMillis;
+   }
 
    public RepeatEvent(CoreUiCtx cac) {
       super(cac);
@@ -157,27 +171,6 @@ public class RepeatEvent extends BEvent implements IStringable {
       //target is unknown
       //set starting state
 
-   }
-
-   public void setTimingLongPressMouse() {
-      startMillis = 5000;
-      periodMillis = fc.getInputSettings().getPointerLongTimeout();
-      pingMillis = 20;
-   }
-
-   public void setTimingKeyboard() {
-      startMillis = fc.getInputSettings().getKeyRepeatTimeout();
-      periodMillis = fc.getInputSettings().getKeyRepeatDelay();
-      pingMillis = 20;
-   }
-
-   /**
-    * S
-    */
-   public void setPatternTiming(int[] timing, boolean isLooping) {
-      if (timing != null && timing.length == 0)
-         timing = null;
-      pattern = timing;
    }
 
    public void addCanceler(EventKey ek) {
@@ -196,10 +189,6 @@ public class RepeatEvent extends BEvent implements IStringable {
          fireConditions = new LinkedListDouble(fc.getUCtx());
       }
       fireConditions.addFreeHolder(ek);
-   }
-
-   public void setDebugName(String str) {
-      this.debugName = str;
    }
 
    /**
@@ -231,14 +220,6 @@ public class RepeatEvent extends BEvent implements IStringable {
    }
 
    /**
-    * The {@link EventKey} that actually canceled the {@link RepeatEvent}.
-    * @return
-    */
-   public EventKey getCancelingKey() {
-      return cancelingKey;
-   }
-
-   /**
     * True when all fire conditions are met.
     * <br>
     * @param e
@@ -260,20 +241,24 @@ public class RepeatEvent extends BEvent implements IStringable {
       return true;
    }
 
-   public int getCount() {
-      return multCount;
+   /**
+    * The {@link EventKey} that actually canceled the {@link RepeatEvent}.
+    * @return
+    */
+   public EventKey getCancelingKey() {
+      return cancelingKey;
    }
 
-   public int getPingMillis() {
-      return pingMillis;
+   public int getCount() {
+      return multCount;
    }
 
    public int getPingAccumulationTime() {
       return pingAccumulation;
    }
 
-   public void setPingAccu(int time) {
-      pingAccumulation = time;
+   public int getPingMillis() {
+      return pingMillis;
    }
 
    public int getRepeatState() {
@@ -291,10 +276,6 @@ public class RepeatEvent extends BEvent implements IStringable {
     */
    public int getRepeatType() {
       return repeatType;
-   }
-
-   public boolean isPinging() {
-      return repeatState == REPEAT_STATE_2_PINGING;
    }
 
    /**
@@ -333,6 +314,28 @@ public class RepeatEvent extends BEvent implements IStringable {
       }
    }
 
+   public String getUserLineString() {
+      if (repeatState == REPEAT_STATE_3_CANCELED) {
+         if (debugName != null) {
+            return debugName + " Repeat canceled";
+         } else {
+            return "Repeat Canceled";
+         }
+      } else if (repeatState == REPEAT_STATE_2_PINGING) {
+         if (debugName != null) {
+            return debugName + " Repeat ping";
+         } else {
+            return "Repeat ping";
+         }
+      } else if (repeatState == REPEAT_STATE_1_STARTED) {
+         return "Repeat Started";
+      } else if (repeatState == REPEAT_STATE_4_FINALIZED) {
+         return "Repeat Finalized" + ToStringStaticCoreUi.getStringRepeatType(repeatType) + " " + multCount;
+      } else {
+         return "Repeat " + ToStringStaticCoreUi.getStringRepeatType(repeatType) + " " + multCount;
+      }
+   }
+
    public synchronized int incrementSyncCount() {
       //#debug
       //toLog().ptEvent1("", null, RepeatEvent.class, "incrementSyncCount");
@@ -346,6 +349,10 @@ public class RepeatEvent extends BEvent implements IStringable {
     */
    public boolean isCanceled() {
       return repeatState == REPEAT_STATE_3_CANCELED;
+   }
+
+   public boolean isPinging() {
+      return repeatState == REPEAT_STATE_2_PINGING;
    }
 
    public boolean isSendCancelEvent() {
@@ -364,12 +371,33 @@ public class RepeatEvent extends BEvent implements IStringable {
     * Any press from the same device/user/any
     */
    public void setCancelAnyPress() {
-      EventKeyAnyPress ekp = new EventKeyAnyPress(fc, EventKey.KEY_TYPE_1_CANCEL);
+      EventKeyAnyPress ekp = new EventKeyAnyPress(fc, ITechEventKey.KEY_TYPE_1_CANCEL);
       addCanceler(ekp);
    }
 
    public void setCanceled() {
       setRepeatState(REPEAT_STATE_3_CANCELED);
+   }
+
+   /**
+    * S
+    */
+   public void setPatternTiming(int[] timing, boolean isLooping) {
+      if (timing != null && timing.length == 0)
+         timing = null;
+      pattern = timing;
+   }
+
+   public void setPingAccu(int time) {
+      pingAccumulation = time;
+   }
+
+   public void setPingingTrue() {
+      setFlag(FLAG_16_IS_PINGING, true);
+   }
+
+   public void setPingingFalse() {
+      setFlag(FLAG_16_IS_PINGING, false);
    }
 
    public void setPingTime(int pingTime) {
@@ -380,10 +408,21 @@ public class RepeatEvent extends BEvent implements IStringable {
       this.repeatState = repeatState;
    }
 
+   /**
+    * This value is ignored when type is {@link IInput#REPEAT_0_INFINITE}
+    * @param value
+    */
    public void setRepeatTarget(int value) {
       multTarget = value;
    }
 
+   /**
+    * <li> {@link IInput#REPEAT_0_INFINITE}
+    * <li> {@link IInput#REPEAT_1_FINITE}
+    * <li> {@link IInput#REPEAT_2_LONG}
+    * <li> {@link IInput#REPEAT_3_TRAIL_FUNCTION}
+    * @param type
+    */
    public void setRepeatType(int type) {
       this.repeatType = type;
    }
@@ -402,58 +441,42 @@ public class RepeatEvent extends BEvent implements IStringable {
       source = src;
    }
 
+   public void setStartTimeOut() {
+      setFlag(FLAG_15_HAS_STARTING_TIMEOUT, true);
+   }
+
+   public void setTimingKeyboard() {
+      startMillis = fc.getInputSettings().getKeyRepeatTimeout();
+      periodMillis = fc.getInputSettings().getKeyRepeatDelay();
+      pingMillis = 20;
+   }
+
+   public void setTimingLongPressMouse() {
+      startMillis = 5000;
+      periodMillis = fc.getInputSettings().getPointerLongTimeout();
+      pingMillis = 20;
+   }
+
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, "EventRepeat");
-      dc.appendVarWithSpace("TypeRepeat", BCodes.getStringRepeatType(repeatType));
+      dc.root(this, RepeatEvent.class, 437);
+      dc.appendVarWithSpace("TypeRepeat", ToStringStaticCoreUi.getStringRepeatType(repeatType));
       dc.appendVarWithSpace("multCount", multCount);
       dc.appendVarWithSpace("multTarget", multTarget);
       dc.nl();
       dc.appendVar("StartMillis", startMillis);
       dc.appendVarWithSpace("PeriodMillis", periodMillis);
-      dc.nlLvl("Cancelers", cancelers);
+      dc.nlLvl(cancelers, "Cancelers");
       dc.nlLvl(fireConditions, "FireConditions");
       dc.nlLvl(cancelingKey, "CancelingEventKey");
-      if (source instanceof IStringable) {
-         IStringable ist = (IStringable) source;
-         dc.nlLvl(ist, "RepeatEventSoure");
-      }
+      dc.nlLvlO(source, "RepeatEventSoure");
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "EventRepeat");
-
+      dc.root1Line(this, RepeatEvent.class);
+      super.toString1Line(dc.sup1Line());
+      dc.appendVarWithSpace("count", multCount);
    }
    //#enddebug
-
-   public String getUserLineString() {
-      if (repeatState == REPEAT_STATE_3_CANCELED) {
-         if (debugName != null) {
-            return debugName + " Repeat canceled";
-         } else {
-            return "Repeat Canceled";
-         }
-      } else if (repeatState == REPEAT_STATE_2_PINGING) {
-         if (debugName != null) {
-            return debugName + " Repeat ping";
-         } else {
-            return "Repeat ping";
-         }
-      } else if (repeatState == REPEAT_STATE_1_STARTED) {
-         return "Repeat Started";
-      } else if (repeatState == REPEAT_STATE_4_FINALIZED) {
-         return "Repeat Finalized" + BCodes.getStringRepeatType(repeatType) + " " + multCount;
-      } else {
-         return "Repeat " + BCodes.getStringRepeatType(repeatType) + " " + multCount;
-      }
-   }
-
-   public void setStartTimeOut() {
-      setFlag(FLAG_15_HAS_STARTING_TIMEOUT, true);
-   }
-
-   public void setPinging() {
-      setFlag(FLAG_16_IS_PINGING, true);
-   }
 
 }

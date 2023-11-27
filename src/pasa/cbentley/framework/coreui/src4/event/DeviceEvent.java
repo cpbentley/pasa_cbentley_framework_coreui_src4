@@ -2,7 +2,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.IExternalDevice;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
@@ -28,7 +28,7 @@ public class DeviceEvent extends BEvent {
     * Some devices have many buttons, others like fingers only have one.
     * <br>
     */
-   protected int deviceButton;
+   protected int           deviceButton;
 
    /**
     * Several devices of the same type will differentiate with a deviceID
@@ -36,7 +36,7 @@ public class DeviceEvent extends BEvent {
     * <br>
     * This is set inside a Host class. Fingers, Mice, Gamepads, Keyboards.
     */
-   protected int deviceID;
+   protected int           deviceID;
 
    /**
     * Any device type may have wheels
@@ -46,7 +46,7 @@ public class DeviceEvent extends BEvent {
     * {@link IInput#DEVICE_3_FINGER}
     * {@link IInput#DEVICE_4_OTHER}
     */
-   protected int deviceType;
+   protected int           deviceType;
 
    /**
     * The mode 
@@ -55,7 +55,7 @@ public class DeviceEvent extends BEvent {
     * <li> {@link IInput#MOD_1_RELEASED} Device Button
     * <li> {@link IInput#MOD_5_WHEELED} Device Wheel Turned
     */
-   protected int mode;
+   protected int           mode;
 
    public DeviceEvent(CoreUiCtx fc, int deviceType, int deviceID, int mode, int deviceButton) {
       super(fc);
@@ -83,6 +83,14 @@ public class DeviceEvent extends BEvent {
       return deviceID;
    }
 
+   /**
+    * <li> {@link IInput#MOD_0_PRESSED} Device Button pressed
+    * <li> {@link IInput#MOD_1_RELEASED} Device Button released
+    * <li> {@link IInput#MOD_3_MOVED} Device Moved
+    * <li> {@link IInput#MOD_4_SENSED} Device Sensed something
+    * <li> {@link IInput#MOD_5_WHEELED} Device Wheel Turned
+    * @return
+    */
    public int getDeviceMode() {
       return mode;
    }
@@ -109,7 +117,7 @@ public class DeviceEvent extends BEvent {
          if (deviceID != 0) {
             str += " " + deviceID;
          }
-         str += " " + BCodes.getStringKey(deviceButton);
+         str += " " + ToStringStaticCoreUi.getStringKey(deviceButton);
       } else if (deviceType == IInput.DEVICE_1_MOUSE) {
          //depends on the mouse
       } else if (deviceType == IInput.DEVICE_3_FINGER) {
@@ -120,11 +128,11 @@ public class DeviceEvent extends BEvent {
             IExternalDevice ed = (IExternalDevice) this.getParamO1();
             String padName = ed.getName() + " #" + deviceID;
             String buttonName = ed.getName(deviceButton);
-            return padName + " " + buttonName + " " + BCodes.getStringMod(mode);
+            return padName + " " + buttonName + " " + ToStringStaticCoreUi.getStringMod(mode);
          }
-         return "GamePad #" + deviceID + " " + deviceButton + " " + BCodes.getStringMod(mode);
+         return "GamePad #" + deviceID + " " + deviceButton + " " + ToStringStaticCoreUi.getStringMod(mode);
       }
-      return str = str + " " + BCodes.getStringMod(mode);
+      return str = str + " " + ToStringStaticCoreUi.getStringMod(mode);
    }
 
    /**
@@ -135,10 +143,10 @@ public class DeviceEvent extends BEvent {
     */
    public String getUserStringButton() {
       if (deviceType == IInput.DEVICE_0_KEYBOARD) {
-         return BCodes.getStringKey(deviceButton);
+         return ToStringStaticCoreUi.getStringKey(deviceButton);
       } else if (deviceType == IInput.DEVICE_1_MOUSE) {
          //depends on the mouse
-         return BCodes.getStringButtonShort(deviceButton);
+         return ToStringStaticCoreUi.getStringButtonShort(deviceButton);
       } else if (deviceType == IInput.DEVICE_3_FINGER) {
          return "Finger#" + deviceButton;
       } else {
@@ -177,9 +185,9 @@ public class DeviceEvent extends BEvent {
       dc.root(this, "DeviceEvent");
       dc.appendVarWithSpace("UserLine", getUserLineString());
       dc.nl();
-      dc.appendVar("DeviceType", BCodes.getStringDeviceType(deviceType));
+      dc.appendVar("DeviceType", ToStringStaticCoreUi.getStringDeviceType(deviceType));
       dc.appendVarWithSpace("DeviceID", deviceID);
-      dc.appendVarWithSpace("Mode", BCodes.getStringMod(mode));
+      dc.appendVarWithSpace("Mode", ToStringStaticCoreUi.getStringMod(mode));
       dc.appendVarWithSpace("Button", deviceButton);
       super.toString(dc.sup());
    }

@@ -3,7 +3,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.ToStringStaticC;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 
 /**
@@ -50,7 +50,7 @@ public class GesturePath extends GestureEvent {
    }
 
    public String getUserLineString() {
-      return "Path " + BCodes.getStringGridType(gridType) + " " + getGA().toStringCompact();
+      return "Path " + ToStringStaticCoreUi.getStringGridType(gridType) + " " + getGA().toStringCompact();
    }
 
    public void toString1Line(Dctx dc) {

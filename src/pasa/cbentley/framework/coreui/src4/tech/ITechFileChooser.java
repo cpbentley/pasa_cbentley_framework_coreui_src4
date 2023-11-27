@@ -1,4 +1,4 @@
-package pasa.cbentley.framework.coreui.src4.interfaces;
+package pasa.cbentley.framework.coreui.src4.tech;
 
 import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
 

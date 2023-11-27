@@ -1,6 +1,8 @@
 package pasa.cbentley.framework.coreui.src4.interfaces;
 
+import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.IStringable;
+import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
 import pasa.cbentley.framework.coreui.src4.event.BEvent;
 import pasa.cbentley.framework.coreui.src4.event.CanvasHostEvent;
@@ -26,7 +28,7 @@ import pasa.cbentley.framework.coreui.src4.event.SenseEvent;
  * @author Charles Bentley
  *
  */
-public interface ICanvasAppli extends IStringable {
+public interface ICanvasAppli extends IStringable, IStatorable {
 
    /**
     * The implementation calls showNotify() immediately prior to this Canvas being made visible on the display.
@@ -49,7 +51,7 @@ public interface ICanvasAppli extends IStringable {
     * @return
     */
    public String getTitle();
-   
+
    /**
     * Path to the icon, null if no icon
     * @return
@@ -67,6 +69,14 @@ public interface ICanvasAppli extends IStringable {
     * @return
     */
    public int getWidth();
+
+   /**
+    * Sets the title, without refreshing the GUI
+    * @param titel
+    */
+   public void setTitle(String title);
+
+   public void setIcon(String icon);
 
    /**
     * Posts an event to this Canvas.
@@ -93,6 +103,13 @@ public interface ICanvasAppli extends IStringable {
     * The Host implementation of the {@link ICanvasAppli}.
     * @return possibly null
     */
-   public ICanvasHost getICanvas();
+   public ICanvasHost getCanvasHost();
+
+   /**
+    * 
+    * @param w
+    * @param h
+    */
+   public void eventCanvasSize(int w, int h);
 
 }

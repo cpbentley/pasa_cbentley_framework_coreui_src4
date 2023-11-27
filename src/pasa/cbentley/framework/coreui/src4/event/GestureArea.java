@@ -45,7 +45,12 @@ public class GestureArea implements IStringable {
       this.w = w;
       this.h = h;
    }
-
+   public int getH() {
+      return h;
+   }
+   public int getW() {
+      return w;
+   }
    /**
     * Does the inside take into account the last line?
     * @param x

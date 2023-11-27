@@ -12,7 +12,7 @@ import pasa.cbentley.core.src4.utils.Geo2dUtils;
 import pasa.cbentley.core.src4.utils.MathUtils;
 import pasa.cbentley.core.src4.utils.StringUtils;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.IBentleyFwSerial;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 import pasa.cbentley.framework.coreui.src4.utils.ViewState;
@@ -42,387 +42,61 @@ import pasa.cbentley.framework.coreui.src4.utils.ViewState;
  */
 public class GesturePointer extends ListElement implements ITechGestures, IBentleyFwSerial {
 
+   private static final int  COSA             = 1 << 1;
+
+   private static final int  DEGREES          = 1 << 3;
+
+   private static final int  DISTANCE         = 1 << 2;
+
    /**
     * Used when point is outside the {@link GestureArea} box.
     * <br>
     * <br>
     */
-   public static final int PATH_OUT = -1;
+   public static final int   PATH_OUT         = -1;
 
-   public static int computeXYGrid1x1Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX1(pos, x, ga);
-      pos = gridFlagY1(pos, y, ga);
-      return pos;
-   }
+   private static final int  SINA             = 1 << 0;
 
-   public static int computeXYGrid1x2Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX1(pos, x, ga);
-      pos = gridFlagY2(pos, y, ga);
-      return pos;
-   }
-
-   public static int computeXYGrid2x1Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX2(pos, x, ga);
-      pos = gridFlagY1(pos, y, ga);
-      return pos;
-   }
-
-   public static int computeXYGrid2x2Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX2(pos, x, ga);
-      pos = gridFlagY2(pos, y, ga);
-      return pos;
-   }
+   private EventKey          activatingKey;
 
    /**
-    * Returns a flag position relative to a 2x3 grid on gesture area
-    * @param x
-    * @param y
-    * @param GestureArea
-    * @return
+    * Flag when values are computed... not to compute them again.
     */
-   public static int computeXYGrid2x3Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX2(pos, x, ga);
-      pos = gridFlagY3(pos, y, ga);
-      return pos;
-   }
+   private int               computedFlags    = 0;
 
-   public static int computeXYGrid3x3Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX3(pos, x, ga);
-      pos = gridFlagY3(pos, y, ga);
-      return pos;
-   }
+   private double            cosA;
 
-   public static int computeXYGrid3x2Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX3(pos, x, ga);
-      pos = gridFlagY2(pos, y, ga);
-      return pos;
-   }
+   private int               dataX;
 
-   /**
-    * Compute the position of x,y on the grid over the {@link GestureArea}.
-    * <br>
-    * What if x,y is right on a boundary? It is inside
-    * <br>
-    * returns
-    * <li>{@link ITechGestures#GRID_TYPE_11_1x1}
-    * <li>...
-    * <li>{@link ITechGestures#GRID_TYPE_33_3x3}
-    * <br>
-    * <br>
-    * 
-    * @param x
-    * @param y
-    * @param ga
-    * @param grid
-    * @return
-    */
-   public static int computeXYGridPosition(int x, int y, GestureArea ga, int grid) {
-      switch (grid) {
-         case ITechGestures.GRID_TYPE_11_1x1:
-            return computeXYGrid1x1Position(x, y, ga);
-         case ITechGestures.GRID_TYPE_12_1x2:
-            return computeXYGrid1x2Position(x, y, ga);
-         case ITechGestures.GRID_TYPE_21_2x1:
-            return computeXYGrid2x1Position(x, y, ga);
-         case ITechGestures.GRID_TYPE_22_2x2:
-            return computeXYGrid2x2Position(x, y, ga);
-         case ITechGestures.GRID_TYPE_23_2x3:
-            return computeXYGrid2x3Position(x, y, ga);
-         case ITechGestures.GRID_TYPE_33_3x3:
-            return computeXYGrid3x3Position(x, y, ga);
-         case ITechGestures.GRID_TYPE_32_3x2:
-            return computeXYGrid3x3Position(x, y, ga);
-         default:
-            throw new IllegalArgumentException("" + grid);
-      }
-
-   }
-
-   private static int gridFlagX1(int pos, int x, GestureArea ga) {
-      int xw = ga.x + ga.w;
-      if (x < ga.x) {
-         //outside left
-         pos |= ITechGestures.FLAGG_01_OUTSIDE_X_LEFT;
-      } else if (x > xw) {
-         //outside right
-         pos |= ITechGestures.FLAGG_03_OUTSIDE_X_RIGHT;
-      } else {
-         //inside x
-         pos |= ITechGestures.FLAGG_02_INSIDE_X;
-         if (x == ga.x || x == xw) {
-            pos |= ITechGestures.FLAGG_17_BOUNDARY_X;
-         }
-      }
-      return pos;
-   }
-
-   private static int gridFlagX2(int pos, int x, GestureArea ga) {
-      int xw = ga.x + ga.w;
-      int wu = ga.w / 2;
-      if (x < ga.x) {
-         //outside left
-         pos |= ITechGestures.FLAGG_01_OUTSIDE_X_LEFT;
-      } else if (x > xw) {
-         //outside right
-         pos |= ITechGestures.FLAGG_03_OUTSIDE_X_RIGHT;
-      } else {
-         //inside x
-         pos |= ITechGestures.FLAGG_02_INSIDE_X;
-         //do the inside flags
-         if (x < ga.x + wu) {
-            pos |= ITechGestures.FLAGG_07_INSIDE_X_21;
-         } else {
-            pos |= ITechGestures.FLAGG_08_INSIDE_X_22;
-            if (x == ga.x + wu) {
-               pos |= ITechGestures.FLAGG_18_BOUNDARY_X_22;
-            }
-         }
-      }
-      return pos;
-   }
-
-   private static int gridFlagX3(int pos, int x, GestureArea ga) {
-      int xw = ga.x + ga.w;
-      int wu = ga.w / 3;
-      if (x < ga.x) {
-         //outside left
-         pos |= ITechGestures.FLAGG_01_OUTSIDE_X_LEFT;
-      } else if (x > xw) {
-         //outside right
-         pos |= ITechGestures.FLAGG_03_OUTSIDE_X_RIGHT;
-      } else {
-         //inside x
-         pos |= ITechGestures.FLAGG_02_INSIDE_X;
-         //do the inside flags
-         if (x < ga.x + wu) {
-            pos |= ITechGestures.FLAGG_09_INSIDE_X_31;
-         } else if (x > xw - wu) {
-            pos |= ITechGestures.FLAGG_11_INSIDE_X_33;
-         } else {
-            pos |= ITechGestures.FLAGG_10_INSIDE_X_32;
-         }
-      }
-      return pos;
-   }
-
-   public static String toStringFlag(int pos) {
-      if (BitUtils.hasFlag(pos, FLAGG_32_POSITION_ID)) {
-         String str = "";
-         if (BitUtils.hasFlag(pos, FLAGG_01_OUTSIDE_X_LEFT)) {
-            str += "OutsideXLeft";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_02_INSIDE_X)) {
-            str += "InX";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_03_OUTSIDE_X_RIGHT)) {
-            str += "OutXRight";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP)) {
-            str += "OutYTop";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_05_INSIDE_Y)) {
-            str += "InY";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_06_OUTSIDE_Y_BOTTOM)) {
-            str += "OutYBot";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_07_INSIDE_X_21)) {
-            str += "X21";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_08_INSIDE_X_22)) {
-            str += "X22";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_09_INSIDE_X_31)) {
-            str += "X31";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_10_INSIDE_X_32)) {
-            str += "X32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_11_INSIDE_X_33)) {
-            str += "X33";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_12_INSIDE_Y_21)) {
-            str += "Y21";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_13_INSIDE_Y_22)) {
-            str += "Y22";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_14_INSIDE_Y_31)) {
-            str += "Y31";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_15_INSIDE_Y_32)) {
-            str += "Y32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_15_INSIDE_Y_32)) {
-            str += "Y32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_16_INSIDE_Y_33)) {
-            str += "Y32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_17_BOUNDARY_X)) {
-            str += "Bx";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_18_BOUNDARY_X_22)) {
-            str += "Bx22";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_19_BOUNDARY_X_32)) {
-            str += "Bx32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_20_BOUNDARY_X_33)) {
-            str += "Bx33";
-         }
-         return str;
-      } else {
-         return "Not a Position";
-      }
-   }
-
-   private static int gridFlagY1(int pos, int y, GestureArea ga) {
-      int yh = ga.y + ga.h;
-      if (y < ga.y) {
-         //outside top
-         pos |= ITechGestures.FLAGG_04_OUTSIDE_Y_TOP;
-      } else if (y > yh) {
-         //outside bottom
-         pos |= ITechGestures.FLAGG_06_OUTSIDE_Y_BOTTOM;
-      } else {
-         //inside y
-         pos |= ITechGestures.FLAGG_05_INSIDE_Y;
-      }
-      return pos;
-   }
-
-   private static int gridFlagY2(int pos, int y, GestureArea ga) {
-      int yh = ga.y + ga.h;
-      int hu = ga.h / 2;
-      if (y < ga.y) {
-         //outside top
-         pos |= ITechGestures.FLAGG_04_OUTSIDE_Y_TOP;
-      } else if (y > yh) {
-         //outside bottom
-         pos |= ITechGestures.FLAGG_06_OUTSIDE_Y_BOTTOM;
-      } else {
-         //inside y
-         pos |= ITechGestures.FLAGG_05_INSIDE_Y;
-         if (y < ga.y + hu) {
-            pos |= ITechGestures.FLAGG_12_INSIDE_Y_21;
-         } else {
-            pos |= ITechGestures.FLAGG_13_INSIDE_Y_22;
-         }
-      }
-      return pos;
-   }
-
-   private static int gridFlagY3(int pos, int y, GestureArea ga) {
-      int yh = ga.y + ga.h;
-      int hu = ga.h / 3;
-      if (y < ga.y) {
-         //outside top
-         pos |= ITechGestures.FLAGG_04_OUTSIDE_Y_TOP;
-      } else if (y > yh) {
-         //outside bottom
-         pos |= ITechGestures.FLAGG_06_OUTSIDE_Y_BOTTOM;
-      } else {
-         //inside y
-         pos |= ITechGestures.FLAGG_05_INSIDE_Y;
-         if (y < ga.y + hu) {
-            pos |= ITechGestures.FLAGG_14_INSIDE_Y_31;
-         } else if (y > yh - hu) {
-            pos |= ITechGestures.FLAGG_16_INSIDE_Y_33;
-         } else {
-            pos |= ITechGestures.FLAGG_15_INSIDE_Y_32;
-         }
-      }
-      return pos;
-   }
-
-   public static boolean isInside(GesturePointer gp, int x, int y, int w, int h) {
-      return GestureArea.isInside(gp.getX(), gp.getY(), x, y, w, h);
-   }
-
-   public static boolean isInside(int pos) {
-      return BitUtils.hasFlag(pos, ITechGestures.FLAGG_02_INSIDE_X) && BitUtils.hasFlag(pos, ITechGestures.FLAGG_05_INSIDE_Y);
-   }
-
-   /**
-    * Does the pos flags matches the dir value
-    * <li> {@link ITechGestures#GESTURE_DIR_00_ANY} will return ture
-    * <li> {@link ITechGestures#GESTURE_DIR_01_VERTICAL} will return true when pos is top or bottom
-    * <br>
-    * Position are the flags
-    * @param pos the position to match {@link ITechGestures#FLAGG_07_INSIDE_X_21}
-    * @param dir the expected direction, or an exit position
-    * @return
-    */
-   public static boolean isMatchPath(int pos, int dir) {
-      //
-      if (BitUtils.hasFlag(dir, ITechGestures.FLAGG_32_POSITION_ID)) {
-         return pos == dir;
-      }
-      if (dir == GESTURE_DIR_00_ANY) {
-         return true;
-      }
-      if (dir != 0) {
-         //on which boundary we cross.. depends on the grid
-         //difference between direction and position
-         if (dir == ITechGestures.GESTURE_DIR_01_VERTICAL) {
-            //vertical exit means bot or top
-            return BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP) || BitUtils.hasFlag(pos, FLAGG_06_OUTSIDE_Y_BOTTOM);
-         } else if (dir == ITechGestures.GESTURE_DIR_02_HORIZONTAL) {
-            return BitUtils.hasFlag(pos, FLAGG_01_OUTSIDE_X_LEFT) || BitUtils.hasFlag(pos, FLAGG_03_OUTSIDE_X_RIGHT);
-         } else if (dir == ITechGestures.GESTURE_DIR_03_TOP) {
-            //exits on top
-            return BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP);
-         } else if (dir == ITechGestures.GESTURE_DIR_04_BOT) {
-            return BitUtils.hasFlag(pos, FLAGG_06_OUTSIDE_Y_BOTTOM);
-         } else if (dir == ITechGestures.GESTURE_DIR_05_LEFT) {
-            return BitUtils.hasFlag(pos, FLAGG_01_OUTSIDE_X_LEFT);
-         } else if (dir == ITechGestures.GESTURE_DIR_06_RIGHT) {
-            return BitUtils.hasFlag(pos, FLAGG_03_OUTSIDE_X_RIGHT);
-         } else if (dir == ITechGestures.GESTURE_DIR_07_TOP_LEFT) {
-            //exits on top left?
-            return BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP);
-         }
-      }
-
-      return false;
-   }
-
-   /**
-    * Does the actualPosition matches the matcher.
-    * <br>
-    * We want a top entry to be valid whatever the grid used to compute pos
-    * <br>
-    * 
-    * @param actualPosition
-    * @param matcher
-    * @return
-    */
-   public static boolean isMatchPosition(int actualPosition, int matcher) {
-      if (actualPosition == matcher) {
-         return true;
-      } else {
-         return false;
-      }
-   }
+   private int               dataY;
 
    private String            debugName;
+
+   private int               degrees;
+
+   private double            distance;
 
    private EventKey[]        eventKeys;
 
    protected final CoreUiCtx fc;
 
    /**
+    * Ratio relative to {@link GestureArea} of the Gesture.
+    * Range of 0 to 1000.
+    */
+   private int               gestureAmplitude = 0;
+
+   private GestureEvent      gestureEvent;
+
+   /**
     * Defines 
     */
    private GestureIdentity   gestureIdentity;
+
+   /**
+    * Time in milliseconds from start to end of the gesture
+    */
+   private int               gestureTiming    = 0;
 
    private boolean           isIntentionalDrag;
 
@@ -438,10 +112,12 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
 
    private int               pressedY;
 
+   private double    sinA;
+
    /**
     * <li> {@link ITechGestures#GESTURE_DIR_03_TOP}
     */
-   private int               slideSubType     = ITechGestures.GESTURE_UNKNOWN;
+   private int       slideSubType = ITechGestures.GESTURE_UNKNOWN;
 
    /**
     * <li> {@link ITechGestures#GESTURE_TYPE_1_DRAG_SLIDE}
@@ -449,34 +125,18 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
     * <li> {@link ITechGestures#GESTURE_TYPE_3_FLING}
     * 
     */
-   private int               slideType        = ITechGestures.GESTURE_UNKNOWN;
+   private int       slideType    = ITechGestures.GESTURE_UNKNOWN;
 
-   /**
-    * Time in milliseconds from start to end of the gesture
-    */
-   private int               gestureTiming    = 0;
-
-   /**
-    * Ratio relative to {@link GestureArea} of the Gesture.
-    * Range of 0 to 1000.
-    */
-   private int               gestureAmplitude = 0;
-
-   private long              timeReference;
-
-   /**
-    * Flag when values are computed... not to compute them again.
-    */
-   private int               computedFlags    = 0;
+   private long      timeReference;
 
    /**
     * Milli seconds since the pressed Time. (Start of time)
     */
-   private IntBuffer         times;
+   private IntBuffer times;
 
-   private IntBuffer         xs;
+   private IntBuffer xs;
 
-   private IntBuffer         ys;
+   private IntBuffer ys;
 
    public GesturePointer(LinkedListDouble list, CoreUiCtx kernel, int pointerID) {
       super(list);
@@ -566,7 +226,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
          return;
       }
       //#debug
-      toDLog().pEvent("vector=" + xReleaseVectorAbs + "," + yReleaseVectorAbs + " slideMinAmplitude=" + slideMinAmplitude + " slideMarginSlop=" + slideMarginSlop + "v=" + BCodes.getStringGestureDir(pointerSlideDir), null, GesturePointer.class, "computeSlide");
+      toDLog().pEvent("vector=" + xReleaseVectorAbs + "," + yReleaseVectorAbs + " slideMinAmplitude=" + slideMinAmplitude + " slideMarginSlop=" + slideMarginSlop + "v=" + ToStringStaticCoreUi.getStringGestureDir(pointerSlideDir), null, GesturePointer.class, "computeSlide");
       if (slideType == GESTURE_NOT_DETECTED) {
 
          //timing of gesture is for 
@@ -588,7 +248,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
             slideSubType = pointerSlideDir;
 
             //#debug
-            toDLog().pEvent("SubType " + BCodes.getStringGestureDir(slideSubType), null, GesturePointer.class, "computeSlide");
+            toDLog().pEvent("SubType " + ToStringStaticCoreUi.getStringGestureDir(slideSubType), null, GesturePointer.class, "computeSlide");
 
             int acc = getAccOverall();
 
@@ -626,23 +286,23 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       int hu2 = 2 * hu;
       int wu2 = 2 * wu;
       int pos = C.ANC_MINUS1_OUTSIDE;
-      if (isInside(this, x, y, hu, wu)) {
+      if (GestureUtils.isInside(this, x, y, hu, wu)) {
          pos = C.ANC_0_TOP_LEFT;
-      } else if (isInside(this, x + wu, y, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu, y, wu, hu)) {
          pos = C.ANC_1_TOP_CENTER;
-      } else if (isInside(this, x + wu2, y, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu2, y, wu, hu)) {
          pos = C.ANC_2_TOP_RIGHT;
-      } else if (isInside(this, x, y + hu, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x, y + hu, wu, hu)) {
          pos = C.ANC_3_CENTER_LEFT;
-      } else if (isInside(this, x + wu, y + hu, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu, y + hu, wu, hu)) {
          pos = C.ANC_4_CENTER_CENTER;
-      } else if (isInside(this, x + wu2, y + hu, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu2, y + hu, wu, hu)) {
          pos = C.ANC_5_CENTER_RIGHT;
-      } else if (isInside(this, x, y + hu2, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x, y + hu2, wu, hu)) {
          pos = C.ANC_6_BOT_LEFT;
-      } else if (isInside(this, x + wu, y + hu2, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu, y + hu2, wu, hu)) {
          pos = C.ANC_7_BOT_CENTER;
-      } else if (isInside(this, x + wu2, y + hu2, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu2, y + hu2, wu, hu)) {
          pos = C.ANC_8_BOT_RIGHT;
       }
       if (pos == C.ANC_MINUS1_OUTSIDE) {
@@ -670,16 +330,20 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       int hu = h / 2;
       int wu = w / 2;
       int pos = -1;
-      if (isInside(this, x, y, hu, wu)) {
+      if (GestureUtils.isInside(this, x, y, hu, wu)) {
          pos = C.ANC_0_TOP_LEFT;
-      } else if (isInside(this, x + wu, y, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu, y, wu, hu)) {
          pos = C.ANC_2_TOP_RIGHT;
-      } else if (isInside(this, x, y + hu, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x, y + hu, wu, hu)) {
          pos = C.ANC_6_BOT_LEFT;
-      } else if (isInside(this, x + wu, y + hu, wu, hu)) {
+      } else if (GestureUtils.isInside(this, x + wu, y + hu, wu, hu)) {
          pos = C.ANC_8_BOT_RIGHT;
       }
       return pos;
+   }
+
+   private int get1For1000(int dist, int etalon) {
+      return dist * 1000 / etalon;
    }
 
    /**
@@ -759,116 +423,6 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    /**
-    * Return 0 if outside.
-    * <br>
-    * Return 1 if dead center.
-    * <br>
-    * @param grid
-    * @return
-    */
-   public float getCloseNess(int grid, GestureArea ga) {
-      int x = getX();
-      int y = getY();
-
-      float val = 0;
-
-      return val;
-   }
-
-   /**
-    * <li> {@link ITechGestures#GESTURE_DIR_03_TOP}
-    * <li> {@link ITechGestures#GESTURE_DIR_04_BOTT}
-    * <li> {@link ITechGestures#GESTURE_DIR_05_LEFT}
-    * <li> {@link ITechGestures#GESTURE_DIR_06_RIGHT}
-    * <li> {@link ITechGestures#GESTURE_DIR_07_TOP_LEFT}
-    * <li> {@link ITechGestures#GESTURE_DIR_08_TOP_RIGHT}
-    * <li> {@link ITechGestures#GESTURE_DIR_09_BOT_LEFT}
-    * <li> {@link ITechGestures#GESTURE_DIR_10_BOT_RIGHT}
-    * @return
-    */
-   public int getCurDir() {
-      int marginSlop = fc.getInputSettings().getXYAxisSlop();
-      return getDirVector(getVectorX(), getVectorY(), marginSlop, 0);
-   }
-
-   public String getDebugName() {
-      return debugName;
-   }
-
-   private double distance;
-
-   private double cosA;
-
-   private double sinA;
-
-   private int    degrees;
-
-   private boolean hasFlagCompute(int flag) {
-      return BitUtils.hasFlag(computedFlags, flag);
-   }
-
-   private void setFlagCompute(int flag) {
-      computedFlags = BitUtils.setFlag(computedFlags, flag, true);
-   }
-
-   private static final int SINA     = 1 << 0;
-
-   private static final int COSA     = 1 << 1;
-
-   private static final int DISTANCE = 1 << 2;
-
-   private static final int DEGREES  = 1 << 3;
-
-   /**
-    * Will be negative when Y is pointing towards up north
-    * @return
-    */
-   public double getSinAlpha() {
-      if (hasFlagCompute(SINA)) {
-         return sinA;
-      }
-      int vx = getVectorX();
-      int vy = getVectorY();
-      double c = Math.sqrt(vx * vx + vy * vy);
-      double sinx = (double) vy / c;
-      sinA = sinx;
-      setFlagCompute(SINA);
-      return sinx;
-   }
-
-   /**
-    * 
-    * Will be negative when X vector is pointing towards the east
-    * @return
-    */
-   public double getCosAlpha() {
-      int vx = getVectorX();
-      double c = getDistance();
-      double cosx = (double) vx / c;
-      return cosx;
-   }
-
-   public double getCosAlpha(int i) {
-      int vx = getVectorX(i);
-      double c = getDistanceV(i);
-      double cosx = (double) vx / c;
-      return cosx;
-   }
-
-   public int getAngleDegreeCos(int i) {
-      int vy = getVectorY(i);
-      double cosx = getCosAlpha(i);
-      double angle = Math.acos(cosx);
-      int degree = (int) Math.toDegrees(angle);
-      if (vy < 0) {
-         degree = -degree + 360;
-      }
-      degrees = degree;
-      setFlagCompute(DEGREES);
-      return degree;
-   }
-
-   /**
     * Returns the Ratio relative to {@link GestureArea} of the Gesture.
     * Range of 0 to 1000.
     * <br>
@@ -903,10 +457,6 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       return gestureAmplitude;
    }
 
-   private int get1For1000(int dist, int etalon) {
-      return dist * 1000 / etalon;
-   }
-
    /**
     * Angle degree relative to X axis.
     * <br>
@@ -918,7 +468,20 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       }
       int vy = getVectorY();
       double cosx = getCosAlpha();
-      double angle = Math.acos(cosx);
+      double angle = MathUtils.acos(cosx);
+      int degree = (int) Math.toDegrees(angle);
+      if (vy < 0) {
+         degree = -degree + 360;
+      }
+      degrees = degree;
+      setFlagCompute(DEGREES);
+      return degree;
+   }
+
+   public int getAngleDegreeCos(int i) {
+      int vy = getVectorY(i);
+      double cosx = getCosAlpha(i);
+      double angle = MathUtils.acos(cosx);
       int degree = (int) Math.toDegrees(angle);
       if (vy < 0) {
          degree = -degree + 360;
@@ -939,8 +502,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
                return 0;
             }
          } else {
-            double c = vy / vx;
-            double angleRad = Math.atan(c);
+            double angleRad = MathUtils.aTan(vy, vx);
             int degree = (int) Math.toDegrees(angleRad);
             return degree;
          }
@@ -951,6 +513,85 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
             return 370;
          }
       }
+   }
+
+   /**
+    * Return 0 if outside.
+    * <br>
+    * Return 1 if dead center.
+    * <br>
+    * @param grid
+    * @return
+    */
+   public float getCloseNess(int grid, GestureArea ga) {
+      int x = getX();
+      int y = getY();
+
+      float val = 0;
+
+      return val;
+   }
+
+   /**
+    * 
+    * Will be negative when X vector is pointing towards the east
+    * @return
+    */
+   public double getCosAlpha() {
+      int vx = getVectorX();
+      double c = getDistance();
+      double cosx = (double) vx / c;
+      return cosx;
+   }
+
+   public double getCosAlpha(int i) {
+      int vx = getVectorX(i);
+      double c = getDistanceV(i);
+      double cosx = (double) vx / c;
+      return cosx;
+   }
+
+   /**
+    * <li> {@link ITechGestures#GESTURE_DIR_03_TOP}
+    * <li> {@link ITechGestures#GESTURE_DIR_04_BOTT}
+    * <li> {@link ITechGestures#GESTURE_DIR_05_LEFT}
+    * <li> {@link ITechGestures#GESTURE_DIR_06_RIGHT}
+    * <li> {@link ITechGestures#GESTURE_DIR_07_TOP_LEFT}
+    * <li> {@link ITechGestures#GESTURE_DIR_08_TOP_RIGHT}
+    * <li> {@link ITechGestures#GESTURE_DIR_09_BOT_LEFT}
+    * <li> {@link ITechGestures#GESTURE_DIR_10_BOT_RIGHT}
+    * @return
+    */
+   public int getCurDir() {
+      int marginSlop = fc.getInputSettings().getXYAxisSlop();
+      return getDirVector(getVectorX(), getVectorY(), marginSlop, 0);
+   }
+
+   public int getDataX() {
+      return dataX;
+   }
+
+   public int getDataY() {
+      return dataY;
+   }
+
+   public String getDebugName() {
+      return debugName;
+   }
+
+   /**
+    * Sub type based on drag gesture type
+    * <li> {@link ITechGestures#GESTURE_DIR_03_TOP}
+    * <li> {@link ITechGestures#GESTURE_DIR_04_BOT}
+    * <li> {@link ITechGestures#GESTURE_DIR_05_LEFT}
+    * <li> {@link ITechGestures#GESTURE_DIR_06_RIGHT}
+    * <li> {@link ITechGestures#GESTURE_DIR_07_TOP_LEFT}
+    * 
+    * @return
+    */
+   public int getDirection() {
+      computeSlide();
+      return slideSubType;
    }
 
    public int getDirFromDegrees(int degrees) {
@@ -1036,6 +677,18 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    /**
+    * Used to check minimum amplitude for some gestures.
+    * <br>
+    * @return
+    */
+   public double getDistance() {
+      int vx = getVectorX();
+      int vy = getVectorY();
+      double c = Math.sqrt(vx * vx + vy * vy);
+      return c;
+   }
+
+   /**
     * Returns the distance on the.
     * <br>
     * This is a measure of the amplitude of the movement
@@ -1055,25 +708,6 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       return (int) curDistance;
    }
 
-   /**
-    * Used to check minimum amplitude for some gestures.
-    * <br>
-    * @return
-    */
-   public double getDistance() {
-      int vx = getVectorX();
-      int vy = getVectorY();
-      double c = Math.sqrt(vx * vx + vy * vy);
-      return c;
-   }
-
-   public double getDistanceV(int i) {
-      int vx = getVectorX(i);
-      int vy = getVectorY(i);
-      double c = Math.sqrt(vx * vx + vy * vy);
-      return c;
-   }
-
    public float getDistanceFloat(int i) {
       int cx0 = xs.get(i);
       int cy0 = ys.get(i);
@@ -1085,6 +719,13 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       float curDistance = Geo2dUtils.getDistance(cx0, cy0, cx1, cy1);
 
       return curDistance;
+   }
+
+   public double getDistanceV(int i) {
+      int vx = getVectorX(i);
+      int vy = getVectorY(i);
+      double c = Math.sqrt(vx * vx + vy * vy);
+      return c;
    }
 
    /**
@@ -1100,6 +741,31 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    /**
+    * The {@link GestureEvent} 
+    * null if no event was created by this {@link GesturePointer}
+    * @return
+    */
+   public GestureEvent getEvent() {
+      return gestureEvent;
+   }
+
+   public EventKey getEventKeyFire() {
+      return activatingKey;
+   }
+
+   /**
+    * Compute pixel distance from the center of the grid area defined by grid.
+    * <br>
+    * From this value one can compute a float ratio of closeness.
+    * Ratio of distance and Half
+    * @param gridPos
+    * @return
+    */
+   public int getGridCenterDistance(int grid) {
+      throw new RuntimeException();
+   }
+
+   /**
     * A {@link GestureIdentity}. It is never null. But initialized with type
     * {@link ITechGestures#GESTURE_TYPE_0_RAW} and {@link GestureArea}.
     * <br>
@@ -1111,18 +777,27 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    /**
-    * Sub type based on drag gesture type
-    * <li> {@link ITechGestures#GESTURE_DIR_03_TOP}
-    * <li> {@link ITechGestures#GESTURE_DIR_04_BOT}
-    * <li> {@link ITechGestures#GESTURE_DIR_05_LEFT}
-    * <li> {@link ITechGestures#GESTURE_DIR_06_RIGHT}
-    * <li> {@link ITechGestures#GESTURE_DIR_07_TOP_LEFT}
-    * 
+    * might be null if no keys
     * @return
     */
-   public int getDirection() {
-      computeSlide();
-      return slideSubType;
+   public EventKey[] getKeys() {
+      return eventKeys;
+   }
+
+   public long getLastEventTime() {
+      return times.getLast() + timeReference;
+   }
+
+   public int getNumKeys() {
+      if (eventKeys == null)
+         return 0;
+      else {
+         return eventKeys.length;
+      }
+   }
+
+   public int getNumPoints() {
+      return times.getSize();
    }
 
    /**
@@ -1149,42 +824,6 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       }
    }
 
-   /**
-    * Compute pixel distance from the center of the grid area defined by grid.
-    * <br>
-    * From this value one can compute a float ratio of closeness.
-    * Ratio of distance and Half
-    * @param gridPos
-    * @return
-    */
-   public int getGridCenterDistance(int grid) {
-      throw new RuntimeException();
-   }
-
-   /**
-    * might be null if no keys
-    * @return
-    */
-   public EventKey[] getKeys() {
-      return eventKeys;
-   }
-
-   public int getNumKeys() {
-      if (eventKeys == null)
-         return 0;
-      else {
-         return eventKeys.length;
-      }
-   }
-
-   public long getLastEventTime() {
-      return times.getLast() + timeReference;
-   }
-
-   public int getNumPoints() {
-      return times.getSize();
-   }
-
    public int[] getPath2x2(GestureArea area) {
       IntBuffer ib = new IntBuffer(fc.getUCtx());
       int size = getSize();
@@ -1193,7 +832,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
          int xi = xs.get(i);
          int yi = ys.get(i);
          //zero base computation
-         int val = computeXYGrid2x2Position(xi, yi, area);
+         int val = GestureUtils.computeXYGrid2x2Position(xi, yi, area);
          if (val != oldV) {
             ib.addInt(val);
             oldV = val;
@@ -1210,7 +849,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
          int xi = xs.get(i);
          int yi = ys.get(i);
          //zero base computation
-         int val = computeXYGrid2x3Position(xi, yi, area);
+         int val = GestureUtils.computeXYGrid2x3Position(xi, yi, area);
          if (val != oldV) {
             ib.addInt(val);
             oldV = val;
@@ -1227,7 +866,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
          int xi = xs.get(i);
          int yi = ys.get(i);
          //zero base computation
-         int val = computeXYGrid3x3Position(xi, yi, area);
+         int val = GestureUtils.computeXYGrid3x3Position(xi, yi, area);
          if (val != oldV) {
             ib.addInt(val);
             oldV = val;
@@ -1270,6 +909,23 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
 
    public int getReleasedY() {
       return ys.getLast();
+   }
+
+   /**
+    * Will be negative when Y is pointing towards up north
+    * @return
+    */
+   public double getSinAlpha() {
+      if (hasFlagCompute(SINA)) {
+         return sinA;
+      }
+      int vx = getVectorX();
+      int vy = getVectorY();
+      double c = Math.sqrt(vx * vx + vy * vy);
+      double sinx = (double) vy / c;
+      sinA = sinx;
+      setFlagCompute(SINA);
+      return sinx;
    }
 
    /**
@@ -1518,6 +1174,10 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       return ys;
    }
 
+   private boolean hasFlagCompute(int flag) {
+      return BitUtils.hasFlag(computedFlags, flag);
+   }
+
    public boolean isDragIntentional() {
       return isIntentionalDrag;
    }
@@ -1583,29 +1243,34 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       }
    }
 
-   private GestureEvent gestureEvent;
-
-   private EventKey     activatingKey;
-
-   /**
-    * The {@link GestureEvent} 
-    * null if no event was created by this {@link GesturePointer}
-    * @return
-    */
-   public GestureEvent getEvent() {
-      return gestureEvent;
-   }
-
-   public void setGestureEvent(GestureEvent ge) {
-      this.gestureEvent = ge;
+   public void setDataXY(int dataX, int dataY) {
+      this.dataX = dataX;
+      this.dataY = dataY;
    }
 
    public void setDebugName(String str) {
       this.debugName = str;
    }
 
+   /**
+    * Set the {@link EventKey} that activated the {@link GesturePointer}.
+    * 
+    * @param edkFire
+    */
+   public void setEventKeyFire(EventKey edkFire) {
+      this.activatingKey = edkFire;
+   }
+
+   private void setFlagCompute(int flag) {
+      computedFlags = BitUtils.setFlag(computedFlags, flag, true);
+   }
+
    public void setGesture(GestureIdentity gestureIdentity) {
       this.gestureIdentity = gestureIdentity;
+   }
+
+   public void setGestureEvent(GestureEvent ge) {
+      this.gestureEvent = ge;
    }
 
    public void setKeys(EventKey[] ar) {
@@ -1627,6 +1292,8 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       times.addInt(0);
    }
 
+   //#mdebug
+
    public void setStateFrom(ViewState vs) {
 
    }
@@ -1635,21 +1302,19 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
 
    }
 
-   //#mdebug
-
    public IDLog toDLog() {
       return fc.getUCtx().toDLog();
    }
 
    public void toString(Dctx dc) {
-      dc.root(this, "GesturePointer");
+      dc.root(this, GesturePointer.class, 1310);
       dc.appendVarWithSpaceNotNull("name", debugName);
       dc.appendVarWithSpace("pointerID", pointerID);
       dc.appendVarWithSpace("x", getX());
       dc.appendVarWithSpace("y", getY());
       computeSlide();
-      dc.appendVarWithSpace("Slide", BCodes.getStringGestureDir(slideType));
-      dc.appendVarWithSpace("SubType", BCodes.getStringGestureType(slideSubType));
+      dc.appendVarWithSpace("Slide", ToStringStaticCoreUi.getStringGestureDir(slideType));
+      dc.appendVarWithSpace("SubType", ToStringStaticCoreUi.getStringGestureType(slideSubType));
       dc.nl();
       dc.appendVar("PressedXY", pressedX + "," + pressedY);
       dc.appendVarWithSpace("releasedXY", getReleasedX() + "," + getReleasedY());
@@ -1657,20 +1322,25 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       dc.appendVarWithSpace("sizeXY", xs.getSize() + "," + ys.getSize());
       dc.appendVarWithSpace("TimesSize", times.getSize());
       dc.nl();
+      dc.appendVar("dataX", dataX);
+      dc.appendVarWithSpace("dataY", dataY);
       dc.appendVarWithSpace("DegreeCos", getAngleDegreeCos());
       dc.appendVarWithSpace("DegreesTan", getAngleDegreeTan());
       dc.nl();
-      dc.appendVarWithSpace("VelocityOverall", getVelocityOverall());
+      dc.appendVar("VelocityOverall", getVelocityOverall());
       dc.appendVarWithSpace("VelocityLast", getVelocityLast());
       dc.appendVarWithSpace("VelocityAvgDistance10", getVelocityAverageOverDistance(10));
       dc.appendVarWithSpace("VelocityAvgDistance100", getVelocityAverageOverDistance(100));
       dc.nl();
-      dc.appendVarWithSpace("isPressed", isPressed);
+      dc.appendVar("isPressed", isPressed);
       dc.appendVarWithSpace("isIntentionalDrag", isIntentionalDrag);
       dc.appendVarWithSpace("isMoving", isMoving);
       dc.appendVarWithSpace("isReleased", isReleased);
 
       dc.nlLvlArray("EventKeys", eventKeys);
+
+      dc.nlLvl(gestureEvent, "gestureEvent");
+      dc.nlLvl(activatingKey, "activatingKey");
 
       //flag this data as potentially very big. only prints a few lines
       int num = xs.getSize();
@@ -1705,18 +1375,5 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       return debugName;
    }
    //#enddebug
-
-   /**
-    * Set the {@link EventKey} that activated the {@link GesturePointer}.
-    * 
-    * @param edkFire
-    */
-   public void setEventKeyFire(EventKey edkFire) {
-      this.activatingKey = edkFire;
-   }
-
-   public EventKey getEventKeyFire() {
-      return activatingKey;
-   }
 
 }

@@ -9,7 +9,7 @@ import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.ctx.IEventsCoreUI;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 import pasa.cbentley.framework.coreui.src4.tech.IInputConstants;
-import pasa.cbentley.framework.coreui.src4.tech.ITechUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
 
 /**
  * Gives values relative to Input. Those values are based on the host (its screen size,)
@@ -26,7 +26,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechUI;
  * @author Charles Bentley
  *
  */
-public class InputSettings implements IInput, IEventConsumer, ITechUI, IStringable {
+public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, IStringable {
 
    private int               allerRetourMinAmplitude;
 
@@ -284,12 +284,21 @@ public class InputSettings implements IInput, IEventConsumer, ITechUI, IStringab
    }
 
    public void toString(Dctx dc) {
-      dc.root(this, "InputSettings");
+      dc.root(this, InputSettings.class);
+      dc.appendVarWithNewLine("AllerRetourMinAmplitude", getAllerRetourMinAmplitude());
+      dc.appendVarWithNewLine("AllerRetourSlop", getAllerRetourSlop());
+      dc.appendVarWithNewLine("FlingSpeedMax", getFlingSpeedMax());
+      dc.appendVarWithNewLine("FlingSpeedMin", getFlingSpeedMin());
+      dc.appendVarWithNewLine("KeyFastTypeTimeout", getKeyFastTypeTimeout());
+      dc.appendVarWithNewLine("KeyNupleTimeout", getKeyNupleTimeout());
+      dc.appendVarWithNewLine("KeyRepeatDelay", getKeyRepeatDelay());
       dc.nl();
-      dc.appendVar("doubleTapSlop", pointerDoubleSlop);
-      dc.nl();
-      dc.appendVar("dragIntention", dragIntention);
-
+      dc.appendVarWithNewLine("NumStartPointers", getNumStartPointers());
+      dc.appendVarWithNewLine("PointerDragSlop", getPointerDragSlop());
+      dc.appendVarWithNewLine("PointerLongTimeout", getPointerLongTimeout());
+      dc.appendVarWithNewLine("PointerNupleSlop", getPointerNupleSlop());
+      dc.appendVarWithNewLine("PointerNupleTimeout", getPointerNupleTimeout());
+      dc.appendVarWithNewLine("SimultaneousTimeOut", getSimultaneousTimeOut());
    }
 
    public String toString1Line() {

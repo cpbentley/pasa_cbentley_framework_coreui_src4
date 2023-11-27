@@ -3,7 +3,7 @@ package pasa.cbentley.framework.coreui.src4.tech;
 import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
 import pasa.cbentley.framework.coreui.src4.event.GestureArea;
 
-public interface ITechUI extends ITechByteObject {
+public interface ITechFeaturesUI extends ITechByteObject {
    public static final int DATA_ID_00                            = 0;
 
    /**
@@ -46,10 +46,10 @@ public interface ITechUI extends ITechByteObject {
    public static final int DATA_ID_17_NUMBER_OF_SCREENS          = 17;
 
    /**
-    * <li>{@link ITechCanvas#SCREEN_0_TOP_NORMAL}
-    * <li>{@link ITechCanvas#SCREEN_1_BOT_UPSIDEDOWN}
-    * <li>{@link ITechCanvas#SCREEN_2_LEFT_ROTATED} 
-    * <li>{@link ITechCanvas#SCREEN_3_RIGHT_ROTATED}
+    * <li>{@link ITechCanvasHost#SCREEN_0_TOP_NORMAL}
+    * <li>{@link ITechCanvasHost#SCREEN_1_BOT_UPSIDEDOWN}
+    * <li>{@link ITechCanvasHost#SCREEN_2_LEFT_ROTATED} 
+    * <li>{@link ITechCanvasHost#SCREEN_3_RIGHT_ROTATED}
     * 
     */
    public static final int DATA_ID_18_SCREEN_ORIENTATION         = 18;
@@ -107,7 +107,7 @@ public interface ITechUI extends ITechByteObject {
    /**
     * Does the framework support drag and drop of files?
     */
-   public static final int HOST_FLAG_1_FILEDROP                  = 1;
+   public static final int HOST_FLAG_1_FILEDROP                  = 1 << 0;
 
    public static final int HOST_FLAG_2                           = 1 << 1;
 
@@ -320,6 +320,10 @@ public interface ITechUI extends ITechByteObject {
     * Should the canvas behave like a window always on top of other windows.
     * <br>
     * Android Phone / MIDP won't support that
+    * 
+    * Puts all active canvas as Always on Top.
+    * 
+    * {@link ITechFeaturesCanvas#}
     */
    public static final int SUP_ID_28_ALWAYS_ON_TOP               = 28;
 
@@ -336,7 +340,7 @@ public interface ITechUI extends ITechByteObject {
 
    public static final int SUP_ID_38_GAMEPADS                    = 38;
 
-   public static final int SUP_ID_50_SENSOR_ACC                  = 50;
+   public static final int SUP_ID_50_SENSOR_ACCELEROMETER        = 50;
 
    public static final int SUP_ID_51_SENSOR_LIGHT                = 51;
 

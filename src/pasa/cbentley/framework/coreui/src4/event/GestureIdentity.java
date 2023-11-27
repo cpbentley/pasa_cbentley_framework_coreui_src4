@@ -4,6 +4,7 @@ import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 
 /**
@@ -16,31 +17,43 @@ public class GestureIdentity implements IStringable {
    /**
     * Vector based direction. Computed from gesture start to gesture computation time.
     * <br>
+    * <li> {@link ITechGestures#GESTURE_DIR_00_ANY}
+    * <li> {@link ITechGestures#GESTURE_DIR_01_VERTICAL}
+    * <li> {@link ITechGestures#GESTURE_DIR_02_HORIZONTAL}
+    * <li> {@link ITechGestures#GESTURE_DIR_03_TOP}
+    * <li> {@link ITechGestures#GESTURE_DIR_04_BOT}
     */
-   public int         dir;
+   public int                dir;
 
    /**
     * A Gesture Area. what is the meaning of null {@link GestureArea} ?
     * it takes the default accessible area. of which windows?
     */
-   public GestureArea ga = new GestureArea(-5000, -5000, 10000, 10000);
+   public GestureArea        ga = new GestureArea(-5000, -5000, 10000, 10000);
 
-   public int         grid;
+   /**
+    * <li> {@link ITechGestures#GRID_TYPE_11_1x1}
+    * <li> {@link ITechGestures#GRID_TYPE_12_1x2}
+    * <li> {@link ITechGestures#GRID_TYPE_13_1x3}
+    * 
+    * <li> {@link ITechGestures#GRID_TYPE_33_3x3}
+    */
+   public int                grid;
 
-   public boolean     isCancelEvent;
+   public boolean            isCancelEvent;
 
-   public boolean     isContinuous;
+   public boolean            isContinuous;
 
-   public boolean     isPonctual;
+   public boolean            isPonctual;
 
    /**
     * Position within the grid
     */
-   public int         pos;
+   public int                pos;
 
-   public int[]       positionPath;
+   public int[]              positionPath;
 
-   public int         type;
+   public int                type;
 
    protected final CoreUiCtx cac;
 
@@ -88,7 +101,7 @@ public class GestureIdentity implements IStringable {
     * @param area
     */
    public void init(int gtype, GestureArea area) {
-      type = gtype;
+      this.type = gtype;
       this.ga = area;
    }
 
@@ -109,8 +122,14 @@ public class GestureIdentity implements IStringable {
       return Dctx.toString(this);
    }
 
-   public void toString(Dctx sb) {
-      sb.root(this, "GestureIdentity");
+   public void toString(Dctx dc) {
+      dc.root(this, GestureIdentity.class, 113);
+
+      dc.appendVarWithSpace("type", ToStringStaticCoreUi.getStringGestureType(type));
+      dc.appendVarWithSpace("dir", ToStringStaticCoreUi.getStringGestureDir(dir));
+      dc.appendVarWithSpace("grid", ToStringStaticCoreUi.getStringGridType(grid));
+
+      dc.nlLvlNullTitle("GestureArea", ga);
    }
 
    public String toString1Line() {
@@ -118,11 +137,11 @@ public class GestureIdentity implements IStringable {
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "GestureIdentity");
+      dc.root1Line(this, GestureIdentity.class);
    }
-   //#enddebug
 
    public UCtx toStringGetUCtx() {
       return cac.getUCtx();
    }
+   //#enddebug
 }

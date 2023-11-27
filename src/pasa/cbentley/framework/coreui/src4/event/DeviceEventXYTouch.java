@@ -2,7 +2,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -76,7 +76,7 @@ public class DeviceEventXYTouch extends DeviceEventXY {
    public String getUserLineString() {
       String str = "";
       if (deviceType == IInput.DEVICE_4_SCREEN) {
-         str = "Finger#" + +deviceButton + " " + BCodes.getStringMod(mode);
+         str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.getStringMod(mode);
       } else {
          return super.getUserLineString();
       }

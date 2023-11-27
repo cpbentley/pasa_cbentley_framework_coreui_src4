@@ -3,7 +3,7 @@ package pasa.cbentley.framework.coreui.src4.interfaces;
 import pasa.cbentley.framework.coreui.src4.utils.ViewState;
 
 /**
- * All object 
+ * All objects that want to support the Bentley serialization framework 
  * @author Charles Bentley
  *
  */

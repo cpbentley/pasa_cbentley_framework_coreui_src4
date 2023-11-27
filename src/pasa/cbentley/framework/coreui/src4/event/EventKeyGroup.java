@@ -2,9 +2,13 @@ package pasa.cbentley.framework.coreui.src4.event;
 
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 
 /**
- * Activates when incoming event cancels {@link DeviceEventGroup#isCancelling(DeviceEvent)}
+ * Pattern activates when incoming {@link BEvent} cancels a {@link DeviceEventGroup}.
+ * <br>
+ * In practice when  {@link DeviceEventGroup#isCancelling(DeviceEvent)} returns true.
+ * 
  * @author Charles Bentley
  *
  */
@@ -35,7 +39,7 @@ public class EventKeyGroup extends EventKey {
    }
 
    public String getUserLineString() {
-      return deg.getUserLineString() + " AnyMode Group" + toStringUserLine(keyType);
+      return deg.getUserLineString() + " AnyMode Group" + ToStringStaticCoreUi.toStringKeyEventUserLine(patternAction);
    }
 
    public boolean isKeyActivated(BEvent be) {

@@ -3,7 +3,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.coreui.src4.interfaces.BCodes;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
@@ -61,7 +61,7 @@ public class GestureEvent extends BEvent implements IStringable, ITechGestures {
    }
 
    /**
-    * True when {@link EventKey} responsible for the fire is {@link EventKey#KEY_TYPE_0_FIRE}
+    * True when {@link EventKey} responsible for the fire is {@link ITechEventKey#KEY_TYPE_0_FIRE}
     * @return
     */
    public boolean isContinuous() {
@@ -79,23 +79,23 @@ public class GestureEvent extends BEvent implements IStringable, ITechGestures {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, "GestureEvent");
-      dc.appendVarWithSpace("Type", BCodes.getStringGestureType(gestureType));
+      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.getStringGestureType(gestureType));
       dc.nlLvl(gp);
       super.toString(dc.sup());
    }
 
    public String getUserLineString() {
-      String str = "Gesture" + BCodes.getStringGestureType(gestureType);
+      String str = "Gesture" + ToStringStaticCoreUi.getStringGestureType(gestureType);
       int gestureDir = getGI().getDir();
       if (gestureDir != 0) {
-         str += BCodes.getStringGestureDir(gestureDir);
+         str += ToStringStaticCoreUi.getStringGestureDir(gestureDir);
       }
       return str + " [" + gp.getIdentity().getGestureArea().toStringCompact() + "]";
    }
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, "GestureEvent");
-      dc.appendVarWithSpace("", BCodes.getStringGestureType(gestureType));
+      dc.appendVarWithSpace("", ToStringStaticCoreUi.getStringGestureType(gestureType));
       super.toString(dc.sup1Line());
    }
    //#enddebug

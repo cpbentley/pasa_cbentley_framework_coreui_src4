@@ -1,10 +1,12 @@
 package pasa.cbentley.framework.coreui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
-import pasa.cbentley.core.src4.ctx.UCtx;
+import pasa.cbentley.byteobjects.src4.interfaces.StatorReaderBO;
 import pasa.cbentley.core.src4.event.BusEvent;
 import pasa.cbentley.core.src4.event.IEventConsumer;
 import pasa.cbentley.core.src4.logging.Dctx;
+import pasa.cbentley.core.src4.stator.StatorReader;
+import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.ctx.IEventsCoreUI;
@@ -16,11 +18,12 @@ import pasa.cbentley.framework.coreui.src4.event.DeviceEventXY;
 import pasa.cbentley.framework.coreui.src4.event.DeviceEventXYTouch;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coreui.src4.interfaces.IHostEvents;
+import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvas;
-import pasa.cbentley.framework.coreui.src4.tech.ITechUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFramePos;
+import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
 
 /**
  * Host implementation will use composition to draw to its host.
@@ -29,7 +32,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechUI;
  * @author Charles Bentley
  *
  */
-public abstract class AbstractCanvasHost extends AbstractUITemplate implements ICanvasHost, IEventConsumer, ITechUI, IEventsCoreUI {
+public abstract class CanvasHostAbstract extends AbstractUITemplate implements ICanvasHost, IEventConsumer, ITechFeaturesUI, IEventsCoreUI {
 
    /** 
     * The Bentley Framework {@link ICanvasAppli}
@@ -37,14 +40,15 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
    protected ICanvasAppli    canvasAppli;
 
    /**
-    * {@link ITechCanvas} definition
+    * {@link ITechCanvasHost} definition
     */
    protected ByteObject      tech;
 
    protected WrapperAbstract wrapper;
 
-   public AbstractCanvasHost(CoreUiCtx cac) {
+   public CanvasHostAbstract(CoreUiCtx cac, ByteObject tech) {
       super(cac);
+      this.tech = tech;
       //register for AppModule events
       cac.getEventBus().addConsumer(this, IEventsCoreUI.PID_1_DEVICE, IEventsCoreUI.EVENT_ID_01_DEVICE_UPDATE);
       cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_0_ANY);
@@ -59,7 +63,7 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
     */
    public void canvasPositionChangedBridge(int id, int x, int y) {
       if (canvasAppli != null) {
-         CanvasHostEvent de = new CanvasHostEvent(cuc, IHostEvents.ACTION_2_MOVED, this);
+         CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_2_MOVED, this);
          de.setX(x);
          de.setY(y);
          canvasAppli.event(de);
@@ -67,13 +71,103 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
    }
 
    /**
+    * TODO difference between Host Full screen and 
+    * How to set full screen mode in Swing?
+    * That's the job of the {@link DeviceDriver}. Similarly for vibration and light uses.
+    * <br>
+    * When Canvas is the sole owner of the JFrame.
+    * <br>
+    * In the case of a Mosaic, the fullscreen call does nothing
+    * @param mode
+    */
+   public void setFullScreenMode(boolean mode) {
+      wrapper.setFullScreenMode(mode);
+   }
+
+   /**
+    * Path to icon in application package
+    * @param string
+    */
+   public void setIcon(String string) {
+      wrapper.setIcon(string);
+   }
+
+   /**
+    * Title of panel. If constrained in a Tab Panned, Title can be used as tab text.
+    * When inside a Frame/Window, Title is the name of the frame.
+    * @param string
+    */
+   public void setTitle(String string) {
+      wrapper.setTitle(string);
+   }
+
+   public void stateWriteTo(StatorWriter state) {
+      state.stateWriteOf(wrapper);
+
+      //has the canvasAppli state been already written?
+      //every object with unknown links has a write id.
+      //model data.. flag as such
+      state.stateWriteOf(canvasAppli);
+   }
+
+   public void stateReadFrom(StatorReader state) {
+
+      StatorReaderBO statorBo = (StatorReaderBO) state;
+      //
+      if (wrapper != null) {
+         //we can apply properties.. but not structural state
+      } else {
+         //if state has no info..
+         //wrapper stays null
+      }
+      //double blind references
+      canvasAppli = (ICanvasAppli) state.createObject(ICanvasAppli.class);
+
+      //what about appli canvas inside this?
+      if (statorBo.hasModel()) {
+         if (canvasAppli == null) {
+
+         }
+      } else {
+         //model data here
+      }
+   }
+
+   /**
+    * Method for those wrappers that just use the default frame positions.
+    * 
+    * This is only called by host implementations that have movable frames
+    * 
+    * @param state
+    */
+   protected void stateWriteHelperFrame(StatorWriter state) {
+      //sets current pos. This is the absolute position
+
+      //delegate to the wrapper how to set the ui state
+      ByteObject framePos = cuc.createTechFrameDefault();
+      CanvasHostAbstract ch = this;
+      int cx = ch.getICX(); // what is this? the wrapper position or the component position which is 0
+      framePos.set2(ITechFramePos.FPOS_OFFSET_02_X2, cx);
+      framePos.set2(ITechFramePos.FPOS_OFFSET_03_Y2, ch.getICY());
+      framePos.set2(ITechFramePos.FPOS_OFFSET_04_W2, ch.getICWidth());
+      framePos.set2(ITechFramePos.FPOS_OFFSET_05_H2, ch.getICHeight());
+
+      boolean isFullScreen = ch.isCanvasFeatureEnabled(SUP_ID_27_FULLSCREEN);
+      framePos.setFlag(ITechFramePos.FPOS_OFFSET_01_FLAG, ITechFramePos.FPOS_FLAG_1_FULLSCREEN, isFullScreen);
+   }
+
+   /**
+    * We create a system wide event. So that anyone can listen to this resize.
+    * 
+    * 
     * @param id screen id where the origin of the canvas is located
     * @param w
     * @param h
     */
    public void canvasSizeChangedBridge(int id, int w, int h) {
       if (canvasAppli != null) {
-         CanvasHostEvent de = new CanvasHostEvent(cuc, IHostEvents.ACTION_3_RESIZED, this);
+         canvasAppli.eventCanvasSize(w,h);
+         CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_3_RESIZED, this);
          de.setW(w);
          de.setH(h);
          canvasAppli.event(de);
@@ -139,9 +233,9 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
 
    public void focusGainedBridge() {
       //#debug
-      toLog().pBridge("", null, AbstractCanvasHost.class, "focusGainedBridge");
+      toLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge");
       if (canvasAppli != null) {
-         AppliEvent ge = new AppliEvent(cuc, IHostEvents.ACTION_4_FOCUS_GAIN);
+         AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_4_FOCUS_GAIN);
          canvasAppli.event(ge);
       }
    }
@@ -151,15 +245,15 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
     */
    public void focusLostBridge() {
       //#debug
-      toLog().pBridge("", null, AbstractCanvasHost.class, "focusLostBridge");
+      toLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge");
       if (canvasAppli != null) {
-         AppliEvent ge = new AppliEvent(cuc, IHostEvents.ACTION_5_FOCUS_LOSS);
+         AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_5_FOCUS_LOSS);
          canvasAppli.event(ge);
       }
 
    }
 
-   public ICanvasAppli getCurrentDisplayable() {
+   public ICanvasAppli getCanvasAppli() {
       return canvasAppli;
    }
 
@@ -216,7 +310,7 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
    public void mouseEnteredBridge(int x, int y) {
       if (canvasAppli != null) {
          //#debug
-         toLog().pBridge("x=" + x + " y=" + y, null, AbstractCanvasHost.class, "mouseEnteredBridge");
+         toLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseEnteredBridge");
          DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_1_ENTER, x, y);
          dex.setSource(canvasAppli);
          canvasAppli.event(dex);
@@ -232,7 +326,7 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
    protected void mouseExitedBridge(int x, int y) {
       if (canvasAppli != null) {
          //#debug
-         toLog().pBridge("x=" + x + " y=" + y, null, AbstractCanvasHost.class, "mouseExitedBridge");
+         toLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseExitedBridge");
          DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_2_EXIT, x, y);
          dex.setSource(canvasAppli);
          canvasAppli.event(dex);
@@ -308,9 +402,7 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
     * {@link IEventsCoreUI#PID_02_CANVAS_1_TITLE}
     */
    public void titleIconComesticUpdate() {
-      //#debug
-      toDLog().pFlow("", this, AbstractCanvasHost.class, "titleIconComesticUpdate", LVL_05_FINE, true);
-      
+
       String title = canvasAppli.getTitle();
       this.setTitle(title);
       String icon = canvasAppli.getIcon();
@@ -323,6 +415,9 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
             this.setIcon(iconPathDefault);
          }
       }
+      //#debug
+      toDLog().pFlow("title=" + title + " icon=" + icon, this, CanvasHostAbstract.class, "titleIconComesticUpdate@line415", LVL_05_FINE, true);
+
    }
 
    /**
@@ -334,7 +429,7 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, "AbstractCanvasHost");
+      dc.root(this, CanvasHostAbstract.class, 428);
       toStringPrivate(dc);
       super.toString(dc.sup());
 
@@ -347,7 +442,7 @@ public abstract class AbstractCanvasHost extends AbstractUITemplate implements I
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "AbstractCanvasHost");
+      dc.root1Line(this, "CanvasHostAbstract");
       toStringPrivate(dc);
       super.toString1Line(dc.sup1Line());
    }

@@ -1,7 +1,7 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
 import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
-import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesFrameworkUI;
+import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesCoreUI;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
 
 /**
@@ -10,11 +10,11 @@ import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
  * <br>
  * Type is 
  * 
- * {@link IFramePos} defines the position
+ * {@link ITechFramePos} defines the position
  * @author Charles Bentley
  *
  */
-public interface ITechCanvas extends ITechByteObject {
+public interface ITechCanvasHost extends ITechByteObject {
 
    public static final int SCREEN_0_TOP_NORMAL               = 0;
 
@@ -53,17 +53,15 @@ public interface ITechCanvas extends ITechByteObject {
    public static final int TCANVAS_FLAG_6_AWT_CANVAS         = 1 << 5;
 
    /**
-    * When set, the Canvas font and content scale to the size of dimension of the canvas
-    * <br>
-    */
-   public static final int TCANVAS_FLAG_6_SCALED             = 1 << 5;
-
-   /**
     * Dynamic Title
     */
    public static final int TCANVAS_FLAG_7_DYNAMIC_TITLE      = 1 << 6;
 
-   public static final int TCANVAS_FLAG_7_SCALED             = 1 << 6;
+   /**
+    * When set, the Canvas font and content scale to the size of dimension of the canvas
+    * <br>
+    */
+   public static final int TCANVAS_FLAG_8_SCALED             = 1 << 7;
 
    public static final int TCANVAS_ID_0_DEFAULT              = 0;
 
@@ -73,11 +71,11 @@ public interface ITechCanvas extends ITechByteObject {
 
    /**
     * Type of wrapper around the canvas.
-    * <li> {@link ITechCanvas#TCANVAS_TYPE_1_FRAME}
-    * <li> {@link ITechCanvas#TCANVAS_TYPE_2_CONTROLLED}
+    * <li> {@link ITechCanvasHost#TCANVAS_TYPE_1_FRAME}
+    * <li> {@link ITechCanvasHost#TCANVAS_TYPE_2_CONTROLLED}
     * 
     */
-   public static final int TCANVAS_OFFSET_02_TYPE1           = A_OBJECT_BASIC_SIZE + 1;
+   public static final int TCANVAS_OFFSET_02_WRAPPER_TYPE1           = A_OBJECT_BASIC_SIZE + 1;
 
    /**
     * ID for fecthing saved settings like position and size.
@@ -88,29 +86,24 @@ public interface ITechCanvas extends ITechByteObject {
    public static final int TCANVAS_OFFSET_03_ID2             = A_OBJECT_BASIC_SIZE + 2;
 
    /**
-    * <li>{@link ITechCanvas#SCREEN_0_TOP_NORMAL}
-    * <li>{@link ITechCanvas#SCREEN_1_BOT_UPSIDEDOWN}
-    * <li>{@link ITechCanvas#SCREEN_2_LEFT_ROTATED}
-    * <li>{@link ITechCanvas#SCREEN_3_RIGHT_ROTATED}
+    * <li>{@link ITechCanvasHost#SCREEN_0_TOP_NORMAL}
+    * <li>{@link ITechCanvasHost#SCREEN_1_BOT_UPSIDEDOWN}
+    * <li>{@link ITechCanvasHost#SCREEN_2_LEFT_ROTATED}
+    * <li>{@link ITechCanvasHost#SCREEN_3_RIGHT_ROTATED}
     * 
     */
    public static final int TCANVAS_OFFSET_03_SCREEN_MODE1    = A_OBJECT_BASIC_SIZE + 4;
 
-   public static final int TCANVAS_OFFSET_04_DEBUG_FLAGS1    = A_OBJECT_BASIC_SIZE + 5;
-
-   public static final int TCANVAS_OFFSET_05_BG_COLOR4       = A_OBJECT_BASIC_SIZE + 6;
-
    /**
-    * Threading mode for the controlling canvas events 
-    * 
-    * <br>
-    * <li>{@link ICtrl#THREADING_0_ONE_TO_RULE_ALL}
-    * <li>{@link ICtrl#THREADING_1_UI_UPDATERENDERING}
-    * <li>{@link ICtrl#THREADING_2_UIUPDATE_RENDERING}
-    * <li>{@link ICtrl#THREADING_3_THREE_SEPARATE}
     * 
     */
-   public static final int TCANVAS_OFFSET_06_THREADING_MODE1 = A_OBJECT_BASIC_SIZE + 10;
+   public static final int TCANVAS_OFFSET_04_DEBUG_FLAGS1    = A_OBJECT_BASIC_SIZE + 5;
+
+   /**
+    * 
+    */
+   public static final int TCANVAS_OFFSET_05_BG_COLOR4       = A_OBJECT_BASIC_SIZE + 6;
+
 
    /**
     * ID of the icon image to use
@@ -123,23 +116,31 @@ public interface ITechCanvas extends ITechByteObject {
    public static final int TCANVAS_OFFSET_08_TITLE_ID_ID2    = A_OBJECT_BASIC_SIZE + 13;
 
    /**
-    * 
+    * This is a settings for host configuration
     */
    public static final int TCANVAS_OFFSET_09_NUM_BUFFERS1    = A_OBJECT_BASIC_SIZE + 15;
 
    /**
-    * Pointer to the {@link IFramePos}
+    * Pointer to the {@link ITechFramePos}.
+    * 
+    * When zero, none has been defined
     */
    public static final int TCANVAS_OFFSET_14_FRAMEPOS2       = A_OBJECT_BASIC_SIZE + 24;
 
-   public static final int TCANVAS_TYPE                      = IBOTypesFrameworkUI.TYPE_5_CANVAS_TECH;
+   public static final int TCANVAS_TYPE                      = IBOTypesCoreUI.TYPE_5_TECH_CANVAS_HOST;
 
    /**
     * The wrapper decided by the launcher
     */
    public static final int TCANVAS_TYPE_0_DEFAULT            = 0;
 
+   /**
+    * Wrapper should be an independant frame
+    */
    public static final int TCANVAS_TYPE_1_FRAME              = 0;
 
+   /**
+    * 
+    */
    public static final int TCANVAS_TYPE_2_CONTROLLED         = 1;
 }

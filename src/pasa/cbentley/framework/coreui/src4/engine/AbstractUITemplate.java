@@ -32,7 +32,7 @@ public class AbstractUITemplate implements IStringable {
    }
 
    public void toString(Dctx dc) {
-      dc.root(this, "AbstractUITemplate");
+      dc.root(this, AbstractUITemplate.class, 35);
    }
 
    public UCtx toStringGetUCtx() {

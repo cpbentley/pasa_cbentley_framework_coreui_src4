@@ -3,6 +3,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -52,7 +53,7 @@ public class EventKeyInGroup extends EventKey implements IStringable {
       if (isSimul) {
          simul = " simul";
       }
-      return de.getUserLineString() + " AnyMode in " + simul + " Group" + toStringUserLine(keyType);
+      return de.getUserLineString() + " AnyMode in " + simul + " Group" + ToStringStaticCoreUi.toStringKeyEventUserLine(patternAction);
    }
 
    public boolean isEquals(EventKey ek) {
