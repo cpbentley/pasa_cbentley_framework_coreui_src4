@@ -130,7 +130,12 @@ public class BCodes implements IBCodes, ITechGestures {
    }
 
    public static String getKeyName(int keyCode) {
-      return "UnkownKeyName" + keyCode;
+      char c = getChar(keyCode);
+      if(c == 'Z') {
+         return "UnkownKeyName" + keyCode;
+      } else {
+         return String.valueOf(c);
+      }
    }
 
    public static int getLockSize(int lock) {

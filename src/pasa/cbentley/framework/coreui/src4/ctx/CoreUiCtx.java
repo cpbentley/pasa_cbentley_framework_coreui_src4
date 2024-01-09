@@ -33,7 +33,9 @@ import pasa.cbentley.framework.coreui.src4.utils.InputSettings;
 /**
  * Intermediate CoreUi context for J2Se, J2me, Android, IOS, etc.
  * 
- * 
+ * <p>
+ * Introduces Canvas, Gestures on top of {@link CoreDrawCtx} capabilities
+ * </p>
  * @author Charles Bentley
  *
  */

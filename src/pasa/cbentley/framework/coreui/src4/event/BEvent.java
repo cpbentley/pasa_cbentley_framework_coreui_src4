@@ -105,6 +105,10 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
       return timeStamp;
    }
 
+   /**
+    * 
+    * @return
+    */
    public int getType() {
       return type;
    }
@@ -155,7 +159,7 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
 
    public void toString(Dctx dc) {
       dc.root(this, BEvent.class, 154);
-      if(debugName != null) {
+      if (debugName != null) {
          dc.append("'");
          dc.append(debugName);
          dc.append("'");
@@ -173,7 +177,7 @@ public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, BEvent.class);
-      if(debugName != null) {
+      if (debugName != null) {
          dc.append("'");
          dc.append(debugName);
          dc.append("'");

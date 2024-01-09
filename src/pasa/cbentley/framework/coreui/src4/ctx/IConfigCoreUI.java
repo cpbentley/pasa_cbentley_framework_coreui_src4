@@ -23,5 +23,9 @@ public interface IConfigCoreUI extends IConfigBO {
     */
    public String getIconPathDefault();
 
+   /**
+    * TODO this value should be made relative to screensize/font size
+    * @return
+    */
    public int getAllerRetourMinAmplitudePixel();
 }
