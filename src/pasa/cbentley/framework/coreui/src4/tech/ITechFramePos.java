@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
-import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
+import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
 import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesCoreUI;
 import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
 
@@ -31,7 +31,7 @@ import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
  * @author Charles Bentley
  *
  */
-public interface ITechFramePos extends ITechByteObject {
+public interface ITechFramePos extends IByteObject {
 
    public static final int FPOS_BASIC_SIZE             = A_OBJECT_BASIC_SIZE + 13;
 

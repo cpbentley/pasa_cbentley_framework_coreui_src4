@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
-import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
+import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
 import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesCoreUI;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
 
@@ -14,7 +14,7 @@ import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
  * @author Charles Bentley
  *
  */
-public interface ITechCanvasHost extends ITechByteObject {
+public interface ITechCanvasHost extends IByteObject {
 
    public static final int SCREEN_0_TOP_NORMAL               = 0;
 

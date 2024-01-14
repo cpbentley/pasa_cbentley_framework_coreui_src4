@@ -1,7 +1,7 @@
 package pasa.cbentley.framework.coreui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
-import pasa.cbentley.byteobjects.src4.interfaces.StatorReaderBO;
+import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
 import pasa.cbentley.core.src4.event.BusEvent;
 import pasa.cbentley.core.src4.event.IEventConsumer;
 import pasa.cbentley.core.src4.logging.Dctx;

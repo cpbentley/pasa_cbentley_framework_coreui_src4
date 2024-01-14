@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.ctx;
 
-import pasa.cbentley.byteobjects.src4.tech.ITechCtxSettings;
+import pasa.cbentley.byteobjects.src4.core.interfaces.IBOCtxSettings;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
 import pasa.cbentley.framework.coredraw.src4.interfaces.ITechDrawer;
 import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
@@ -10,7 +10,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
  * @author Charles Bentley
  *
  */
-public interface ITechCtxSettingsCoreUI extends ITechCtxSettings {
+public interface ITechCtxSettingsCoreUI extends IBOCtxSettings {
 
    public static final int CTX_COREUI_BASIC_SIZE        = CTX_BASIC_SIZE + 5;
 

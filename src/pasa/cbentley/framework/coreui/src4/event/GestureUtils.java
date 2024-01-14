@@ -1,19 +1,11 @@
 package pasa.cbentley.framework.coreui.src4.event;
 
-import pasa.cbentley.core.src4.ctx.UCtx;
-import pasa.cbentley.core.src4.logging.Dctx;
-import pasa.cbentley.core.src4.logging.IDLog;
 import pasa.cbentley.core.src4.utils.BitUtils;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 
 public class GestureUtils implements ITechGestures {
 
-   protected final CoreUiCtx cuc;
-
-   public GestureUtils(CoreUiCtx cuc) {
-      this.cuc = cuc;
-   }
    public static int computeXYGrid1x1Position(int x, int y, GestureArea ga) {
       int pos = FLAGG_32_POSITION_ID;
       pos = gridFlagX1(pos, x, ga);
@@ -56,17 +48,17 @@ public class GestureUtils implements ITechGestures {
       return pos;
    }
 
-   public static int computeXYGrid3x3Position(int x, int y, GestureArea ga) {
-      int pos = FLAGG_32_POSITION_ID;
-      pos = gridFlagX3(pos, x, ga);
-      pos = gridFlagY3(pos, y, ga);
-      return pos;
-   }
-
    public static int computeXYGrid3x2Position(int x, int y, GestureArea ga) {
       int pos = FLAGG_32_POSITION_ID;
       pos = gridFlagX3(pos, x, ga);
       pos = gridFlagY2(pos, y, ga);
+      return pos;
+   }
+
+   public static int computeXYGrid3x3Position(int x, int y, GestureArea ga) {
+      int pos = FLAGG_32_POSITION_ID;
+      pos = gridFlagX3(pos, x, ga);
+      pos = gridFlagY3(pos, y, ga);
       return pos;
    }
 
@@ -107,7 +99,7 @@ public class GestureUtils implements ITechGestures {
          default:
             throw new IllegalArgumentException("" + grid);
       }
-   
+
    }
 
    private static int gridFlagX1(int pos, int x, GestureArea ga) {
@@ -175,78 +167,6 @@ public class GestureUtils implements ITechGestures {
          }
       }
       return pos;
-   }
-
-   public static String toStringFlag(int pos) {
-      if (BitUtils.hasFlag(pos, FLAGG_32_POSITION_ID)) {
-         String str = "";
-         if (BitUtils.hasFlag(pos, FLAGG_01_OUTSIDE_X_LEFT)) {
-            str += "OutsideXLeft";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_02_INSIDE_X)) {
-            str += "InX";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_03_OUTSIDE_X_RIGHT)) {
-            str += "OutXRight";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP)) {
-            str += "OutYTop";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_05_INSIDE_Y)) {
-            str += "InY";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_06_OUTSIDE_Y_BOTTOM)) {
-            str += "OutYBot";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_07_INSIDE_X_21)) {
-            str += "X21";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_08_INSIDE_X_22)) {
-            str += "X22";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_09_INSIDE_X_31)) {
-            str += "X31";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_10_INSIDE_X_32)) {
-            str += "X32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_11_INSIDE_X_33)) {
-            str += "X33";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_12_INSIDE_Y_21)) {
-            str += "Y21";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_13_INSIDE_Y_22)) {
-            str += "Y22";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_14_INSIDE_Y_31)) {
-            str += "Y31";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_15_INSIDE_Y_32)) {
-            str += "Y32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_15_INSIDE_Y_32)) {
-            str += "Y32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_16_INSIDE_Y_33)) {
-            str += "Y32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_17_BOUNDARY_X)) {
-            str += "Bx";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_18_BOUNDARY_X_22)) {
-            str += "Bx22";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_19_BOUNDARY_X_32)) {
-            str += "Bx32";
-         }
-         if (BitUtils.hasFlag(pos, FLAGG_20_BOUNDARY_X_33)) {
-            str += "Bx33";
-         }
-         return str;
-      } else {
-         return "Not a Position";
-      }
    }
 
    private static int gridFlagY1(int pos, int y, GestureArea ga) {
@@ -356,7 +276,7 @@ public class GestureUtils implements ITechGestures {
             return BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP);
          }
       }
-   
+
       return false;
    }
 
@@ -378,39 +298,82 @@ public class GestureUtils implements ITechGestures {
       }
    }
 
-   
-   //#mdebug
-   public IDLog toDLog() {
-      return toStringGetUCtx().toDLog();
+   public static String toStringFlag(int pos) {
+      if (BitUtils.hasFlag(pos, FLAGG_32_POSITION_ID)) {
+         String str = "";
+         if (BitUtils.hasFlag(pos, FLAGG_01_OUTSIDE_X_LEFT)) {
+            str += "OutsideXLeft";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_02_INSIDE_X)) {
+            str += "InX";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_03_OUTSIDE_X_RIGHT)) {
+            str += "OutXRight";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_04_OUTSIDE_Y_TOP)) {
+            str += "OutYTop";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_05_INSIDE_Y)) {
+            str += "InY";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_06_OUTSIDE_Y_BOTTOM)) {
+            str += "OutYBot";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_07_INSIDE_X_21)) {
+            str += "X21";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_08_INSIDE_X_22)) {
+            str += "X22";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_09_INSIDE_X_31)) {
+            str += "X31";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_10_INSIDE_X_32)) {
+            str += "X32";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_11_INSIDE_X_33)) {
+            str += "X33";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_12_INSIDE_Y_21)) {
+            str += "Y21";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_13_INSIDE_Y_22)) {
+            str += "Y22";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_14_INSIDE_Y_31)) {
+            str += "Y31";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_15_INSIDE_Y_32)) {
+            str += "Y32";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_15_INSIDE_Y_32)) {
+            str += "Y32";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_16_INSIDE_Y_33)) {
+            str += "Y32";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_17_BOUNDARY_X)) {
+            str += "Bx";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_18_BOUNDARY_X_22)) {
+            str += "Bx22";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_19_BOUNDARY_X_32)) {
+            str += "Bx32";
+         }
+         if (BitUtils.hasFlag(pos, FLAGG_20_BOUNDARY_X_33)) {
+            str += "Bx33";
+         }
+         return str;
+      } else {
+         return "Not a Position";
+      }
    }
 
-   public String toString() {
-      return Dctx.toString(this);
+   protected final CoreUiCtx cuc;
+
+   public GestureUtils(CoreUiCtx cuc) {
+      this.cuc = cuc;
    }
-
-   public void toString(Dctx dc) {
-      dc.root(this, GestureUtils.class);
-      toStringPrivate(dc);
-   }
-
-   public String toString1Line() {
-      return Dctx.toString1Line(this);
-   }
-
-   private void toStringPrivate(Dctx dc) {
-
-   }
-
-   public void toString1Line(Dctx dc) {
-      dc.root1Line(this, GestureUtils.class);
-      toStringPrivate(dc);
-   }
-
-   public UCtx toStringGetUCtx() {
-      return cuc.getUCtx();
-   }
-
-   //#enddebug
-   
 
 }

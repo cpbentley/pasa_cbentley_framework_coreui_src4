@@ -1,9 +1,9 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
-import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
+import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
 import pasa.cbentley.framework.coreui.src4.event.GestureArea;
 
-public interface ITechFeaturesUI extends ITechByteObject {
+public interface ITechFeaturesUI extends IByteObject {
    public static final int DATA_ID_00                            = 0;
 
    /**

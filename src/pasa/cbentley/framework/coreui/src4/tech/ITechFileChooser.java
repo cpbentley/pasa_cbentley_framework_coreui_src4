@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
-import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
+import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
 
 /**
  * Describe the configuration of a File Chooser called by {@link IHostTools#getFileChooser(mordan.bentleyfw.interfaces.ui.ICanvasHost)}
@@ -10,7 +10,7 @@ import pasa.cbentley.byteobjects.src4.tech.ITechByteObject;
  * @author Charles-Philip
  *
  */
-public interface ITechFileChooser extends ITechByteObject {
+public interface ITechFileChooser extends IByteObject {
 
    public static final int FILECHOOSER_OFFSET_01_FLAG       = A_OBJECT_BASIC_SIZE;
 
