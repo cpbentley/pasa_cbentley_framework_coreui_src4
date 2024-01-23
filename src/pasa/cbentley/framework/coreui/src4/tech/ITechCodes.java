@@ -26,7 +26,7 @@ package pasa.cbentley.framework.coreui.src4.tech;
  * @author Charles-Philip Bentley
  *
  */
-public interface IBCodes {
+public interface ITechCodes {
 
    public static int        AXIS_X                         = 555;
 

@@ -1,9 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.ctx;
 
 import pasa.cbentley.byteobjects.src4.core.interfaces.IBOCtxSettings;
-import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
-import pasa.cbentley.framework.coredraw.src4.interfaces.ITechDrawer;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
 
 /**
  * 
@@ -19,8 +16,7 @@ public interface ITechCtxSettingsCoreUI extends IBOCtxSettings {
    /**
     * Enable drag drop support.
     * 
-    * Host might not. see
-    * {@link ITechFeaturesUI#HOST_FLAG_1_FILEDROP}
+    * Host might not support it. TODO
     */
    public static final int CTX_COREUI_FLAG_2_DRAG_DROP = 1 << 1;
 

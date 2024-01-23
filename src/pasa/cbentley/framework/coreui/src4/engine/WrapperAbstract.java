@@ -1,13 +1,15 @@
 package pasa.cbentley.framework.coreui.src4.engine;
 
+import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.core.src4.stator.StatorReader;
 import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasOwner;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 /**
  * A Wrapper controls only 1 {@link CanvasHostAbstract}
@@ -30,12 +32,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
  * @author Charles Bentley
  *
  */
-public abstract class WrapperAbstract extends AbstractUITemplate implements IStringable, ITechFeaturesUI, IStatorable {
-
-   /**
-    * The create
-    */
-   private ICanvasOwner manager;
+public abstract class WrapperAbstract extends ObjectCUC implements IStringable, ITechHostUI, IStatorable {
 
    protected WrapperAbstract(CoreUiCtx cac) {
       super(cac);
@@ -56,15 +53,6 @@ public abstract class WrapperAbstract extends AbstractUITemplate implements IStr
    public abstract void canvasShow();
 
    /**
-    * {@link ICanvasOwner} of this wrapper. Basically the object that created it and knows
-    *  its true nature.
-    * @return
-    */
-   public ICanvasOwner getWrapperManager() {
-      return manager;
-   }
-
-   /**
     * 
     * @param feature
     * @return
@@ -74,13 +62,31 @@ public abstract class WrapperAbstract extends AbstractUITemplate implements IStr
    }
 
    /**
+    * Returns true if the user cannot move the Wrapper independantly.
     * 
+    * Basically all returns true unless a free floating frame wrapper.
     * @return
     */
    public abstract boolean isContained();
 
+   /**
+    * Called when the {@link CanvasHostAbstract} implementation is using a host wrapper
+    * and its that wrapper that can answer the question to
+    * {@link CanvasHostAbstract#isCanvasFeatureEnabled(int)}.
+    * 
+    * @param feature
+    * @return
+    */
    public boolean isFeatureEnabled(int feature) {
       return false;
+   }
+
+   public ICtx getCtxOwner() {
+      return cuc;
+   }
+
+   public int getStatorableClassID() {
+      throw new RuntimeException("Must be implemented by subclass");
    }
 
    /** 
@@ -154,21 +160,19 @@ public abstract class WrapperAbstract extends AbstractUITemplate implements IStr
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, AbstractUITemplate.class);
+      dc.root(this, WrapperAbstract.class, 156);
       toStringPrivate(dc);
       super.toString(dc.sup());
-
-      dc.nlLvl(manager, ICanvasOwner.class);
-   }
-
-   public void toString1Line(Dctx dc) {
-      dc.root1Line(this, AbstractUITemplate.class);
-      toStringPrivate(dc);
-      super.toString1Line(dc.sup1Line());
    }
 
    private void toStringPrivate(Dctx dc) {
 
+   }
+
+   public void toString1Line(Dctx dc) {
+      dc.root1Line(this, WrapperAbstract.class);
+      toStringPrivate(dc);
+      super.toString1Line(dc.sup1Line());
    }
 
    //#enddebug

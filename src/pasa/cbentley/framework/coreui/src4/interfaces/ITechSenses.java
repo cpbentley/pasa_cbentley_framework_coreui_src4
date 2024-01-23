@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.interfaces;
 
-public interface ISenses {
+public interface ITechSenses {
    
    /**
     * 

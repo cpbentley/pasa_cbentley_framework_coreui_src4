@@ -4,7 +4,7 @@ import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
+import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
 
 /**
  * This interface defines Outbound methods used by the <b>Bentley</b> framework to communicate with the <b>Outside World</b>
@@ -97,10 +97,10 @@ public interface ICanvasHost extends IStringable, IStatorable {
    public int getICY();
 
    /**
-    * {@link ITechCanvasHost} 
-    * @return
+    * {@link IBOCanvasHost} 
+    * @return not null
     */
-   public ByteObject getTech();
+   public ByteObject getBOCanvasHost();
 
    public void icRepaint();
 

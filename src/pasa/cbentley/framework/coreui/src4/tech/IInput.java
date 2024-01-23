@@ -34,11 +34,11 @@ public interface IInput {
     * <li> {@link IInput#MOD_5_WHEELED}
     * <br>
     * Each pointer has button options
-    * <li> {@link IBCodes#PBUTTON_0_DEFAULT}
-    * <li> {@link IBCodes#PBUTTON_1_RIGHT}
-    * <li> {@link IBCodes#PBUTTON_2_MIDDLE}
-    * <li> {@link IBCodes#PBUTTON_3_WHEEL_UP}
-    * <li> {@link IBCodes#PBUTTON_4_WHEEL_DOWN}
+    * <li> {@link ITechCodes#PBUTTON_0_DEFAULT}
+    * <li> {@link ITechCodes#PBUTTON_1_RIGHT}
+    * <li> {@link ITechCodes#PBUTTON_2_MIDDLE}
+    * <li> {@link ITechCodes#PBUTTON_3_WHEEL_UP}
+    * <li> {@link ITechCodes#PBUTTON_4_WHEEL_DOWN}
     * <br>
     * <br>
     * CmdTrigger can model, Pressed Center Ctx, Dragged to Ctx
@@ -152,9 +152,9 @@ public interface IInput {
     * Long press are event repeats with a special long timeouts
     * When a long press is called, key contains the milliseconds.
     * Except for the special timing values
-    * <li> {@link IBCodes#TIMING_0_NONE}
-    * <li> {@link IBCodes#TIMING_1_SLOW}
-    * <li> {@link IBCodes#TIMING_3_FAST}
+    * <li> {@link ITechCodes#TIMING_0_NONE}
+    * <li> {@link ITechCodes#TIMING_1_SLOW}
+    * <li> {@link ITechCodes#TIMING_3_FAST}
     * <br>
     * <br>
     * Long press event may generate pre event and post events.

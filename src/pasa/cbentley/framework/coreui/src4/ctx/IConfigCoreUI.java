@@ -1,10 +1,10 @@
 package pasa.cbentley.framework.coreui.src4.ctx;
 
 import pasa.cbentley.byteobjects.src4.ctx.IConfigBO;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 /**
- * {@link ITechFeaturesUI}
+ * {@link ITechHostUI}
  * 
  * Not all values in the config goes to the {@link ITechCtxSettingsCoreUI}
  * 

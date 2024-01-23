@@ -2,10 +2,10 @@ package pasa.cbentley.framework.coreui.src4.interfaces;
 
 import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
-import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 
-public class BCodes implements IBCodes, ITechGestures {
+public class BCodes implements ITechCodes, ITechGestures {
 
    public static final int createLock(int key1, int key2) {
       return (key1 << 8) + key2;

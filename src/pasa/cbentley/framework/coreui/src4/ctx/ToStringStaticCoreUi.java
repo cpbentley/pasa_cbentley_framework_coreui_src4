@@ -3,13 +3,14 @@ package pasa.cbentley.framework.coreui.src4.ctx;
 import pasa.cbentley.core.src4.logging.ToStringStaticBase;
 import pasa.cbentley.framework.coreui.src4.event.ITechEventKey;
 import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
-import pasa.cbentley.framework.coreui.src4.interfaces.ISenses;
-import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
+import pasa.cbentley.framework.coreui.src4.interfaces.ITechSenses;
+import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
+import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
-public class ToStringStaticCoreUi extends ToStringStaticBase implements IBCodes {
+public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCodes {
 
    public static String getStringRepeatType(int type) {
       switch (type) {
@@ -30,30 +31,39 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements IBCodes 
 
    public static String getStringScreenMode(int mode) {
       switch (mode) {
-         case ITechCanvasHost.SCREEN_0_TOP_NORMAL:
+         case IBOCanvasHost.SCREEN_0_TOP_NORMAL:
             return "Normal";
-         case ITechCanvasHost.SCREEN_1_BOT_UPSIDEDOWN:
+         case IBOCanvasHost.SCREEN_1_BOT_UPSIDEDOWN:
             return "UpSideDown";
-         case ITechCanvasHost.SCREEN_2_LEFT_ROTATED:
+         case IBOCanvasHost.SCREEN_2_LEFT_ROTATED:
             return "RotatedLeft";
-         case ITechCanvasHost.SCREEN_3_RIGHT_ROTATED:
+         case IBOCanvasHost.SCREEN_3_RIGHT_ROTATED:
             return "RotatedRight";
          default:
             return "Unknown ScreenMode " + mode;
       }
    }
 
+   public static String toStringFeature(int feat) {
+      switch (feat) {
+         case ITechHostUI.SUP_ID_38_GAMEPADS:
+            return "GamePads";
+         default:
+            return "UnknownFeature"+feat;
+      }
+   }
+   
    public static String getStringButtonShort(int pointerButID) {
       switch (pointerButID) {
-         case IBCodes.PBUTTON_4_WHEEL_DOWN:
+         case ITechCodes.PBUTTON_4_WHEEL_DOWN:
             return "WheelDown";
-         case IBCodes.PBUTTON_3_WHEEL_UP:
+         case ITechCodes.PBUTTON_3_WHEEL_UP:
             return "WheelUp";
-         case IBCodes.PBUTTON_0_DEFAULT:
+         case ITechCodes.PBUTTON_0_DEFAULT:
             return "Left";
-         case IBCodes.PBUTTON_1_RIGHT:
+         case ITechCodes.PBUTTON_1_RIGHT:
             return "Right";
-         case IBCodes.PBUTTON_2_MIDDLE:
+         case ITechCodes.PBUTTON_2_MIDDLE:
             return "Middle";
          default:
             return "Unknown Button " + pointerButID;
@@ -161,19 +171,19 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements IBCodes 
 
    public static String getStringSense(int type) {
       switch (type) {
-         case ISenses.GESTURE_TYPE_05_SHAKE:
+         case ITechSenses.GESTURE_TYPE_05_SHAKE:
             return "Shake";
-         case ISenses.GESTURE_TYPE_07_MOVE:
+         case ITechSenses.GESTURE_TYPE_07_MOVE:
             return "Move";
-         case ISenses.GESTURE_TYPE_08_LIGHT:
+         case ITechSenses.GESTURE_TYPE_08_LIGHT:
             return "Light";
-         case ISenses.SENSOR_TYPE_04_AXIS:
+         case ITechSenses.SENSOR_TYPE_04_AXIS:
             return "Axis";
-         case ISenses.GESTURE_TYPE_10_LOCATION:
+         case ITechSenses.GESTURE_TYPE_10_LOCATION:
             return "Location";
-         case ISenses.GESTURE_TYPE_11_COMPASS:
+         case ITechSenses.GESTURE_TYPE_11_COMPASS:
             return "Compass";
-         case ISenses.GESTURE_TYPE_12_DEVICE:
+         case ITechSenses.GESTURE_TYPE_12_DEVICE:
             return "Device";
          default:
             return "UnknownSenseType" + type;
@@ -350,15 +360,15 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements IBCodes 
     */
    public static String getStringMouseButton(int pointerButID) {
       switch (pointerButID) {
-         case IBCodes.PBUTTON_0_DEFAULT:
+         case ITechCodes.PBUTTON_0_DEFAULT:
             return "MouseLeft";
-         case IBCodes.PBUTTON_1_RIGHT:
+         case ITechCodes.PBUTTON_1_RIGHT:
             return "MouseRight";
-         case IBCodes.PBUTTON_2_MIDDLE:
+         case ITechCodes.PBUTTON_2_MIDDLE:
             return "MouseMiddle";
-         case IBCodes.PBUTTON_4_WHEEL_DOWN:
+         case ITechCodes.PBUTTON_4_WHEEL_DOWN:
             return "WheelDown";
-         case IBCodes.PBUTTON_3_WHEEL_UP:
+         case ITechCodes.PBUTTON_3_WHEEL_UP:
             return "WheelUp";
          default:
             return "Unknown Button " + pointerButID;
@@ -367,11 +377,11 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements IBCodes 
 
    public static String getStringPointer(int pointer) {
       switch (pointer) {
-         case IBCodes.POINTER_ID_0:
+         case ITechCodes.POINTER_ID_0:
             return "1stPointer";
-         case IBCodes.POINTER_ID_1:
+         case ITechCodes.POINTER_ID_1:
             return "2ndPointer";
-         case IBCodes.POINTER_ID_2:
+         case ITechCodes.POINTER_ID_2:
             return "3rdPointer";
          default:
             return "UnknownPointer" + pointer;
@@ -430,11 +440,11 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements IBCodes 
 
    public static String getStringTiming(int time) {
       switch (time) {
-         case IBCodes.TIMING_0_NONE:
+         case ITechCodes.TIMING_0_NONE:
             return "Normal";
-         case IBCodes.TIMING_1_SLOW:
+         case ITechCodes.TIMING_1_SLOW:
             return "Slow";
-         case IBCodes.TIMING_3_FAST:
+         case ITechCodes.TIMING_3_FAST:
             return "Fast";
          default:
             return "UnknownTiming" + time;

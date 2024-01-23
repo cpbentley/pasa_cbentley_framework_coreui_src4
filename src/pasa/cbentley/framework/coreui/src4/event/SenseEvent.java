@@ -5,7 +5,7 @@ import pasa.cbentley.core.src4.utils.StringUtils;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.IExternalDevice;
-import pasa.cbentley.framework.coreui.src4.interfaces.ISenses;
+import pasa.cbentley.framework.coreui.src4.interfaces.ITechSenses;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -14,10 +14,10 @@ import pasa.cbentley.framework.coreui.src4.tech.IInput;
  * <br>
  * <br>
  * Sensor Type:<br>
- * <li> {@link ISenses#GESTURE_TYPE_05_SHAKE}
- * <li> {@link ISenses#GESTURE_TYPE_08_LIGHT}
- * <li> {@link ISenses#GESTURE_TYPE_09_VOICE}
- * <li> {@link ISenses#GESTURE_TYPE_10_LOCATION} 
+ * <li> {@link ITechSenses#GESTURE_TYPE_05_SHAKE}
+ * <li> {@link ITechSenses#GESTURE_TYPE_08_LIGHT}
+ * <li> {@link ITechSenses#GESTURE_TYPE_09_VOICE}
+ * <li> {@link ITechSenses#GESTURE_TYPE_10_LOCATION} 
  * 
  * <br>
  * <br>
@@ -27,10 +27,10 @@ import pasa.cbentley.framework.coreui.src4.tech.IInput;
  */
 public class SenseEvent extends DeviceEvent {
    /**
-    * <li> {@link ISenses#GESTURE_TYPE_05_SHAKE}
-    * <li> {@link ISenses#GESTURE_TYPE_08_LIGHT}
-    * <li> {@link ISenses#GESTURE_TYPE_09_VOICE}
-    * <li> {@link ISenses#GESTURE_TYPE_10_LOCATION}
+    * <li> {@link ITechSenses#GESTURE_TYPE_05_SHAKE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_08_LIGHT}
+    * <li> {@link ITechSenses#GESTURE_TYPE_09_VOICE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_10_LOCATION}
     * 
     */
    private int     sensorType;
@@ -81,12 +81,12 @@ public class SenseEvent extends DeviceEvent {
    }
 
    public String getUserLineString() {
-      if (sensorType == ISenses.GESTURE_TYPE_12_DEVICE) {
+      if (sensorType == ITechSenses.GESTURE_TYPE_12_DEVICE) {
          IExternalDevice ed = (IExternalDevice) this.getParamO1();
          String padName = ed.getName() + " #" + deviceID;
-         if (sensorSubType == ISenses.DEVICE_CONNECTED) {
+         if (sensorSubType == ITechSenses.DEVICE_CONNECTED) {
             padName += " connected";
-         } else if (sensorSubType == ISenses.DEVICE_DISCONNECTED) {
+         } else if (sensorSubType == ITechSenses.DEVICE_DISCONNECTED) {
             padName += " disconnected";
          }
          return padName;

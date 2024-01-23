@@ -2,6 +2,7 @@ package pasa.cbentley.framework.coreui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
+import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.event.BusEvent;
 import pasa.cbentley.core.src4.event.IEventConsumer;
 import pasa.cbentley.core.src4.logging.Dctx;
@@ -9,7 +10,9 @@ import pasa.cbentley.core.src4.stator.StatorReader;
 import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.IBOTypesCoreUI;
 import pasa.cbentley.framework.coreui.src4.ctx.IEventsCoreUI;
+import pasa.cbentley.framework.coreui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.coreui.src4.event.AppliEvent;
 import pasa.cbentley.framework.coreui.src4.event.BEvent;
 import pasa.cbentley.framework.coreui.src4.event.CanvasHostEvent;
@@ -19,11 +22,11 @@ import pasa.cbentley.framework.coreui.src4.event.DeviceEventXYTouch;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
-import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
+import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
+import pasa.cbentley.framework.coreui.src4.tech.IBOFramePos;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFramePos;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
+import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 /**
  * Host implementation will use composition to draw to its host.
@@ -32,7 +35,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
  * @author Charles Bentley
  *
  */
-public abstract class CanvasHostAbstract extends AbstractUITemplate implements ICanvasHost, IEventConsumer, ITechFeaturesUI, IEventsCoreUI {
+public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHost, IEventConsumer, ITechHostUI, IEventsCoreUI {
 
    /** 
     * The Bentley Framework {@link ICanvasAppli}
@@ -40,18 +43,26 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
    protected ICanvasAppli    canvasAppli;
 
    /**
-    * {@link ITechCanvasHost} definition
+    * {@link IBOCanvasHost} definition
     */
-   protected ByteObject      tech;
+   protected ByteObject      boCanvasHost;
 
    protected WrapperAbstract wrapper;
 
-   public CanvasHostAbstract(CoreUiCtx cac, ByteObject tech) {
+   public CanvasHostAbstract(CoreUiCtx cac, ByteObject boCanvasHost) {
       super(cac);
-      this.tech = tech;
+      this.boCanvasHost = boCanvasHost;
       //register for AppModule events
       cac.getEventBus().addConsumer(this, IEventsCoreUI.PID_1_DEVICE, IEventsCoreUI.EVENT_ID_01_DEVICE_UPDATE);
       cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_0_ANY);
+   }
+
+   public int getStatorableClassID() {
+      throw new RuntimeException("Must be implemented by subclass");
+   }
+
+   public ICtx getCtxOwner() {
+      return cuc;
    }
 
    /**
@@ -85,6 +96,43 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
    }
 
    /**
+    * Wrapper around {@link IBOCanvasHost#TCANVAS_OFFSET_03_ID2} 
+    * @return
+    */
+   public int getCanvasID() {
+      return boCanvasHost.get2(IBOCanvasHost.TCANVAS_OFFSET_03_ID2);
+   }
+
+   /**
+    * {@link IBOTypesCoreUI#TYPE_8_FRAME_POS} of the {@link IBOCanvasHost}
+    * 
+    * When and where was it set in the first place ?
+    * @return
+    */
+   public ByteObject getFramePOS() {
+      return boCanvasHost.getSubFirst(IBOTypesCoreUI.TYPE_8_FRAME_POS);
+   }
+
+   public ByteObject getFramePosNewWithXYWH() {
+      ByteObject framePos = cuc.createBOFrameDefault();
+      setXYWHToFramePos(framePos);
+      return framePos;
+   }
+
+   public void setXYWHToFramePos(ByteObject framePos) {
+      //sets current pos. This is the absolute position
+      int cx = this.getICX(); // what is this? the wrapper position or the component position which is 0
+      int cy = this.getICY();
+      int cw = this.getICWidth();
+      int ch = this.getICHeight();
+      framePos.set2(IBOFramePos.FPOS_OFFSET_02_X2, cx);
+      framePos.set2(IBOFramePos.FPOS_OFFSET_03_Y2, cy);
+      framePos.set2(IBOFramePos.FPOS_OFFSET_04_W2, cw);
+      framePos.set2(IBOFramePos.FPOS_OFFSET_05_H2, ch);
+
+   }
+
+   /**
     * Path to icon in application package
     * @param string
     */
@@ -102,71 +150,26 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
    }
 
    public void stateWriteTo(StatorWriter state) {
-      state.stateWriteOf(wrapper);
-
-      //has the canvasAppli state been already written?
-      //every object with unknown links has a write id.
-      //model data.. flag as such
-      state.stateWriteOf(canvasAppli);
+      state.writerToStatorable(wrapper);
+      state.writerToStatorable(canvasAppli);
    }
 
    public void stateReadFrom(StatorReader state) {
 
       StatorReaderBO statorBo = (StatorReaderBO) state;
-      //
-      if (wrapper != null) {
-         //we can apply properties.. but not structural state
-      } else {
-         //if state has no info..
-         //wrapper stays null
-      }
-      //double blind references
-      canvasAppli = (ICanvasAppli) state.createObject(ICanvasAppli.class);
+      wrapper = (WrapperAbstract) statorBo.readObject(wrapper);
+      canvasAppli = (ICanvasAppli) statorBo.readObject(canvasAppli);
 
-      //what about appli canvas inside this?
-      if (statorBo.hasModel()) {
-         if (canvasAppli == null) {
-
-         }
-      } else {
-         //model data here
-      }
-   }
-
-   /**
-    * Method for those wrappers that just use the default frame positions.
-    * 
-    * This is only called by host implementations that have movable frames
-    * 
-    * @param state
-    */
-   protected void stateWriteHelperFrame(StatorWriter state) {
-      //sets current pos. This is the absolute position
-
-      //delegate to the wrapper how to set the ui state
-      ByteObject framePos = cuc.createTechFrameDefault();
-      CanvasHostAbstract ch = this;
-      int cx = ch.getICX(); // what is this? the wrapper position or the component position which is 0
-      framePos.set2(ITechFramePos.FPOS_OFFSET_02_X2, cx);
-      framePos.set2(ITechFramePos.FPOS_OFFSET_03_Y2, ch.getICY());
-      framePos.set2(ITechFramePos.FPOS_OFFSET_04_W2, ch.getICWidth());
-      framePos.set2(ITechFramePos.FPOS_OFFSET_05_H2, ch.getICHeight());
-
-      boolean isFullScreen = ch.isCanvasFeatureEnabled(SUP_ID_27_FULLSCREEN);
-      framePos.setFlag(ITechFramePos.FPOS_OFFSET_01_FLAG, ITechFramePos.FPOS_FLAG_1_FULLSCREEN, isFullScreen);
    }
 
    /**
     * We create a system wide event. So that anyone can listen to this resize.
-    * 
-    * 
-    * @param id screen id where the origin of the canvas is located
     * @param w
     * @param h
     */
-   public void canvasSizeChangedBridge(int id, int w, int h) {
+   public void canvasSizeChangedBridge(int w, int h) {
       if (canvasAppli != null) {
-         canvasAppli.eventCanvasSize(w,h);
+         canvasAppli.eventCanvasSize(w, h);
          CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_3_RESIZED, this);
          de.setW(w);
          de.setH(h);
@@ -233,7 +236,7 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
 
    public void focusGainedBridge() {
       //#debug
-      toLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge");
+      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge");
       if (canvasAppli != null) {
          AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_4_FOCUS_GAIN);
          canvasAppli.event(ge);
@@ -245,7 +248,7 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
     */
    public void focusLostBridge() {
       //#debug
-      toLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge");
+      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge");
       if (canvasAppli != null) {
          AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_5_FOCUS_LOSS);
          canvasAppli.event(ge);
@@ -257,8 +260,8 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
       return canvasAppli;
    }
 
-   public ByteObject getTech() {
-      return tech;
+   public ByteObject getBOCanvasHost() {
+      return boCanvasHost;
    }
 
    public WrapperAbstract getWrapper() {
@@ -310,7 +313,7 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
    public void mouseEnteredBridge(int x, int y) {
       if (canvasAppli != null) {
          //#debug
-         toLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseEnteredBridge");
+         toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseEnteredBridge");
          DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_1_ENTER, x, y);
          dex.setSource(canvasAppli);
          canvasAppli.event(dex);
@@ -326,7 +329,7 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
    protected void mouseExitedBridge(int x, int y) {
       if (canvasAppli != null) {
          //#debug
-         toLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseExitedBridge");
+         toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseExitedBridge");
          DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_2_EXIT, x, y);
          dex.setSource(canvasAppli);
          canvasAppli.event(dex);
@@ -372,10 +375,10 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
          int code;
          if (rot == -1) {
             //up
-            code = IBCodes.PBUTTON_3_WHEEL_UP;
+            code = ITechCodes.PBUTTON_3_WHEEL_UP;
          } else {
             //down
-            code = IBCodes.PBUTTON_4_WHEEL_DOWN;
+            code = ITechCodes.PBUTTON_4_WHEEL_DOWN;
          }
          DeviceEvent de = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_5_WHEELED, 0, scrollAmount, code);
          canvasAppli.event(de);
@@ -394,6 +397,12 @@ public abstract class CanvasHostAbstract extends AbstractUITemplate implements I
       canvasAppli = dis;
    }
 
+   /**
+    * Called by {@link CoreUiCtx} when creating a new {@link ICanvasHost}.
+    * 
+    * It needs to have a wrapper to be shown on the host platform.
+    * @param wrapper
+    */
    public void setWrapper(WrapperAbstract wrapper) {
       this.wrapper = wrapper;
    }

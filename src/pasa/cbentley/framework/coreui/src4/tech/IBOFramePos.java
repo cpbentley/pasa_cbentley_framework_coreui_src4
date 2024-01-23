@@ -11,17 +11,17 @@ import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
  * 
  * Every {@link ICanvasHost} is located somewhere. 
  * 
- * This {@link ITechFramePos} encapsulates this information for the framework's {@link WrapperAbstract}. 
+ * This {@link IBOFramePos} encapsulates this information for the framework's {@link WrapperAbstract}. 
  * 
  * It requests an update with {@link ICanvasHost#updateSettings(mordan.memory.ByteObject)}.
  * <br>
  * <br>
- * When {@link IAppli} changes the {@link ITechFramePos} of one of its {@link ICanvasHost},
+ * When {@link IAppli} changes the {@link IBOFramePos} of one of its {@link ICanvasHost},
  * <br>
  * <br>
  * The {@link IAppli} can thus change the screen on which the {@link ICanvasHost} is being shown.
  * <br>
- * Only feasible when {@link ITechFeaturesUI#SUP_ID_24_MULTIPLE_WINDOWS} feature is supported by host.
+ * Only feasible when {@link ITechHostUI#SUP_ID_24_MULTIPLE_WINDOWS} feature is supported by host.
  * <br>
  * We want to be able to send a ICanvas to another screen. Query screen.
  * Screens are conveniences. when screen is not available, a Virtual Screen is used.
@@ -31,7 +31,7 @@ import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
  * @author Charles Bentley
  *
  */
-public interface ITechFramePos extends IByteObject {
+public interface IBOFramePos extends IByteObject {
 
    public static final int FPOS_BASIC_SIZE             = A_OBJECT_BASIC_SIZE + 13;
 

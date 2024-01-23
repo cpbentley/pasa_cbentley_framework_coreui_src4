@@ -1,7 +1,18 @@
 package pasa.cbentley.framework.coreui.src4.ctx;
 
+import pasa.cbentley.byteobjects.src4.ctx.IEventsBO;
+import pasa.cbentley.core.src4.ctx.IEventsCore;
 import pasa.cbentley.core.src4.interfaces.IEvents;
+import pasa.cbentley.framework.coredraw.src4.ctx.IEventsCoreDraw;
 
+/**
+ * <li>{@link IEventsCore}
+ * <li>{@link IEventsBO}
+ * <li>{@link IEventsCoreDraw}
+ * 
+ * @author Charles Bentley
+ *
+ */
 public interface IEventsCoreUI extends IEvents {
    public static final int BASE_EVENTS               = 4;
 
@@ -24,26 +35,26 @@ public interface IEventsCoreUI extends IEvents {
 
    public static final int PID_1_DEVICE              = 1;
 
-   public static final int PID_02_CANVAS              = 1;
+   public static final int PID_02_CANVAS             = 1;
 
-   public static final int PID_02_CANVAS_0_ANY        = 1;
+   public static final int PID_02_CANVAS_0_ANY       = 1;
 
-   public static final int PID_02_CANVAS_1_TITLE      = 2;
+   public static final int PID_02_CANVAS_1_TITLE     = 2;
 
    /**
     * Number of events for producer of Canvas events
     */
-   public static final int PID_02_CANVAS_X_NUM        = 1;
-   
+   public static final int PID_02_CANVAS_X_NUM       = 1;
+
    /**
     * Event that Request the current Virtual Keyboard to open.
     * <br>
     * Might be Host
     */
-   public static final int DEVICE_VIRT_KEYB_REQUEST   = 0;
+   public static final int DEVICE_VIRT_KEYB_REQUEST  = 0;
 
-   public static final int DEVICE_VIRT_FLASH_LIGHT    = 1;
+   public static final int DEVICE_VIRT_FLASH_LIGHT   = 1;
 
-   public static final int DEVICE_VIRT_KEYB_OFF       = 1;
+   public static final int DEVICE_VIRT_KEYB_OFF      = 1;
 
 }

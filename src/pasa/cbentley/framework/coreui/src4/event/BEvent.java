@@ -10,7 +10,7 @@ import pasa.cbentley.core.src4.utils.DateUtils;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
-import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
 
@@ -30,7 +30,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
  * @author Charles Bentley
  *
  */
-public class BEvent extends BusEvent implements IStringable, IInput, IBCodes {
+public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes {
 
    public static final int   EVENT_FLAG_1_VIRTUAL    = 1;
 

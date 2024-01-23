@@ -1,6 +1,5 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
-import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
 import pasa.cbentley.framework.coreui.src4.event.GestureArea;
 
 /**
@@ -10,7 +9,7 @@ import pasa.cbentley.framework.coreui.src4.event.GestureArea;
  * @author Charles Bentley
  *
  */
-public interface ITechGestures extends IByteObject {
+public interface ITechGestures  {
    
    public static final int FLAG_08_IS_DO_DISTANCE_MOD             = 1 << 7;
 

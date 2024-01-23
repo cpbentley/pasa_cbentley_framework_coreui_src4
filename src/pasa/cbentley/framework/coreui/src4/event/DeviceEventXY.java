@@ -3,7 +3,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 
 /**
@@ -76,7 +76,7 @@ public class DeviceEventXY extends DeviceEvent {
          if (mode == IInput.MOD_3_MOVED) {
             str = "Mouse " + deviceID + " Moved";
          } else if (mode == IInput.MOD_5_WHEELED) {
-            if(y == IBCodes.PBUTTON_3_WHEEL_UP) {
+            if(y == ITechCodes.PBUTTON_3_WHEEL_UP) {
                str = "Mouse wheeled up "+ x;
             } else {
                str = "Mouse wheeled down "+ x;

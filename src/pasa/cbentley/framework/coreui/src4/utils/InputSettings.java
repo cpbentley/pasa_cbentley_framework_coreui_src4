@@ -8,8 +8,8 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.coreui.src4.ctx.IEventsCoreUI;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
-import pasa.cbentley.framework.coreui.src4.tech.IInputConstants;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
+import pasa.cbentley.framework.coreui.src4.tech.ITechInputConstants;
+import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 /**
  * Gives values relative to Input. Those values are based on the host (its screen size,)
@@ -26,7 +26,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
  * @author Charles Bentley
  *
  */
-public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, IStringable {
+public class InputSettings implements IInput, IEventConsumer, ITechHostUI, IStringable {
 
    private int               allerRetourMinAmplitude;
 
@@ -80,7 +80,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (allerRetourMinAmplitude == 0) {
          allerRetourMinAmplitude = cuc.getHostInt(DATA_ID_15_ALLER_RETOUR_MIN_AMPLITUDE);
          if (allerRetourMinAmplitude == 0) {
-            allerRetourMinAmplitude = IInputConstants.BF_ALLER_RETOUR_MIN_AMPLITUDE;
+            allerRetourMinAmplitude = ITechInputConstants.BF_ALLER_RETOUR_MIN_AMPLITUDE;
          }
       }
       return allerRetourMinAmplitude;
@@ -90,7 +90,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (allerRetourSlop == 0) {
          allerRetourSlop = cuc.getHostInt(DATA_ID_14_ALLER_RETOUR_SLOP);
          if (allerRetourSlop == 0) {
-            allerRetourSlop = IInputConstants.BF_ALLER_RETOUR_SLOP;
+            allerRetourSlop = ITechInputConstants.BF_ALLER_RETOUR_SLOP;
          }
       }
       return allerRetourSlop;
@@ -104,7 +104,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (flingSpeedMax == 0) {
          flingSpeedMax = cuc.getHostInt(DATA_ID_11_FLING_SPEED_MAX);
          if (flingSpeedMax == 0) {
-            flingSpeedMax = IInputConstants.BF_FLING_SPEED_MAX;
+            flingSpeedMax = ITechInputConstants.BF_FLING_SPEED_MAX;
          }
       }
       return flingSpeedMax;
@@ -118,7 +118,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (flingSpeedMin == 0) {
          flingSpeedMin = cuc.getHostInt(DATA_ID_12_FLING_SPEED_MIN);
          if (flingSpeedMin == 0) {
-            flingSpeedMin = IInputConstants.BF_FLING_SPEED_MIN;
+            flingSpeedMin = ITechInputConstants.BF_FLING_SPEED_MIN;
          }
       }
       return flingSpeedMin;
@@ -128,7 +128,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (keyFastType == 0) {
          keyFastType = cuc.getHostInt(DATA_ID_26_KEY_FAST_TYPE_TIMEOUT);
          if (keyFastType <= 0) {
-            keyFastType = IInputConstants.BF_TIME_FAST_TYPE;
+            keyFastType = ITechInputConstants.BF_TIME_FAST_TYPE;
          }
       }
       return keyFastType;
@@ -139,7 +139,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (keyDoubleTimeout == 0) {
          keyDoubleTimeout = cuc.getHostInt(DATA_ID_27_KEY_NUPLE_TIMEOUT);
          if (keyDoubleTimeout == 0) {
-            keyDoubleTimeout = IInputConstants.BF_KEY_DOUBLE_TIMEOUT;
+            keyDoubleTimeout = ITechInputConstants.BF_KEY_DOUBLE_TIMEOUT;
          }
       }
       return keyDoubleTimeout;
@@ -153,7 +153,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (keyRepeatDelay == 0) {
          keyRepeatDelay = cuc.getHostInt(DATA_ID_25_KEY_REPEAT_DELAY);
          if (keyRepeatDelay <= 0) {
-            keyRepeatDelay = IInputConstants.BF_KEY_REPEAT_DELAY;
+            keyRepeatDelay = ITechInputConstants.BF_KEY_REPEAT_DELAY;
          }
       }
       return keyRepeatDelay;
@@ -168,7 +168,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
          //compute it
          keyRepeatTimeOut = cuc.getHostInt(DATA_ID_24_KEY_REPEAT_TIMEOUT);
          if (keyRepeatTimeOut <= 0) {
-            keyRepeatTimeOut = IInputConstants.BF_KEY_REPEAT_TIMEOUT;
+            keyRepeatTimeOut = ITechInputConstants.BF_KEY_REPEAT_TIMEOUT;
          }
       }
       return keyRepeatTimeOut;
@@ -209,7 +209,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (longPressTimeOut == 0) {
          longPressTimeOut = cuc.getHostInt(DATA_ID_01_POINTER_LONG_TIMEOUT);
          if (longPressTimeOut <= 0) {
-            longPressTimeOut = IInputConstants.BF_LONG_PRESS_TIMEOUT;
+            longPressTimeOut = ITechInputConstants.BF_LONG_PRESS_TIMEOUT;
          }
       }
       return longPressTimeOut;
@@ -223,7 +223,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (pointerDoubleSlop == 0) {
          pointerDoubleSlop = cuc.getHostInt(DATA_ID_02_POINTER_NUPLE_SLOP);
          if (pointerDoubleSlop <= 0) {
-            pointerDoubleSlop = IInputConstants.BF_POINTER_DOUBLE_SLOP;
+            pointerDoubleSlop = ITechInputConstants.BF_POINTER_DOUBLE_SLOP;
          }
       }
       return pointerDoubleSlop;
@@ -232,7 +232,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
    public int getPointerNupleTimeout() {
       if (pointerDoubleTimeout == 0) {
          if (pointerDoubleTimeout <= 0) {
-            pointerDoubleTimeout = IInputConstants.BF_POINTER_DOUBLE_TIMEOUT;
+            pointerDoubleTimeout = ITechInputConstants.BF_POINTER_DOUBLE_TIMEOUT;
          }
       }
       return pointerDoubleTimeout;
@@ -242,7 +242,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (simultaneousTimeout == 0) {
          simultaneousTimeout = cuc.getHostInt(DATA_ID_10_SIMULTANEOUS_TIMEOUT);
          if (simultaneousTimeout == 0) {
-            simultaneousTimeout = IInputConstants.BF_SIMULTANEOUS_TIMEOUT;
+            simultaneousTimeout = ITechInputConstants.BF_SIMULTANEOUS_TIMEOUT;
          }
       }
       return simultaneousTimeout;
@@ -259,7 +259,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
       if (slideMinAmplitude == 0) {
          slideMinAmplitude = cuc.getHostInt(DATA_ID_09_SLIDE_MIN_AMPLITUDE);
          if (slideMinAmplitude == 0) {
-            slideMinAmplitude = IInputConstants.BF_SLIDE_MIN_AMPLITUDE;
+            slideMinAmplitude = ITechInputConstants.BF_SLIDE_MIN_AMPLITUDE;
          }
       }
       return slideMinAmplitude;
@@ -272,7 +272,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechFeaturesUI, I
     */
    public int getXYAxisSlop() {
       if (slideMargin == 0) {
-         slideMargin = IInputConstants.BF_SLIDE_MARGIN;
+         slideMargin = ITechInputConstants.BF_SLIDE_MARGIN;
       }
       return slideMargin;
    }

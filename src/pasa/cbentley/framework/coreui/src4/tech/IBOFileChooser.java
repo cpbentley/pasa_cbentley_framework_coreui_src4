@@ -10,7 +10,7 @@ import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
  * @author Charles-Philip
  *
  */
-public interface ITechFileChooser extends IByteObject {
+public interface IBOFileChooser extends IByteObject {
 
    public static final int FILECHOOSER_OFFSET_01_FLAG       = A_OBJECT_BASIC_SIZE;
 

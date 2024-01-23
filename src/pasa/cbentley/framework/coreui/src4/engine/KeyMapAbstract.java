@@ -4,9 +4,9 @@ import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IDLog;
 import pasa.cbentley.core.src4.logging.IStringable;
-import pasa.cbentley.framework.coreui.src4.tech.IBCodes;
+import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
 
-public abstract class KeyMapAbstract implements IStringable, IBCodes {
+public abstract class KeyMapAbstract implements IStringable, ITechCodes {
 
    protected int        pressedKeyCounter;
 
@@ -64,7 +64,7 @@ public abstract class KeyMapAbstract implements IStringable, IBCodes {
    }
 
    /**
-    * Maps the key id to {@link IBCodes}
+    * Maps the key id to {@link ITechCodes}
     * @param key
     * @return
     */

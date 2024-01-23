@@ -6,7 +6,7 @@ import pasa.cbentley.core.src4.logging.IDLog;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 
-public class KeyReapeatBlock implements IStringable {
+public class KeyRepeatBlock implements IStringable {
 
    protected int             pressedKeyCounter;
 
@@ -14,7 +14,7 @@ public class KeyReapeatBlock implements IStringable {
 
    protected final CoreUiCtx cuc;
 
-   public KeyReapeatBlock(CoreUiCtx cuc) {
+   public KeyRepeatBlock(CoreUiCtx cuc) {
       this.cuc = cuc;
 
    }
@@ -57,7 +57,7 @@ public class KeyReapeatBlock implements IStringable {
          pressedKeyCounter--;
       }
    }
-   
+
    //#mdebug
    public IDLog toDLog() {
       return toStringGetUCtx().toDLog();
@@ -68,12 +68,12 @@ public class KeyReapeatBlock implements IStringable {
    }
 
    public void toString(Dctx dc) {
-      dc.root(this, "KeyReapeatBlock");
+      dc.root(this, KeyRepeatBlock.class, 71);
       toStringPrivate(dc);
-      
+
       for (int i = 0; i < pressedKeyCounter; i++) {
-        dc.append(pressedKeys[i]); 
-        dc.append(" "); 
+         dc.append(pressedKeys[i]);
+         dc.append(" ");
       }
    }
 
@@ -83,7 +83,7 @@ public class KeyReapeatBlock implements IStringable {
 
    private void toStringPrivate(Dctx dc) {
       dc.appendVarWithSpace("pressedKeyCounter", pressedKeyCounter);
-    
+
    }
 
    public void toString1Line(Dctx dc) {
@@ -96,6 +96,5 @@ public class KeyReapeatBlock implements IStringable {
    }
 
    //#enddebug
-   
 
 }

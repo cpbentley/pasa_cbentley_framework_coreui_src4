@@ -2,7 +2,7 @@ package pasa.cbentley.framework.coreui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
-import pasa.cbentley.byteobjects.src4.stator.StatorWriterBO;
+import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IDLog;
@@ -12,12 +12,13 @@ import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.core.src4.structs.IntToObjects;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.coreui.src4.event.BEvent;
 import pasa.cbentley.framework.coreui.src4.interfaces.IBEventListener;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coreui.src4.tech.ITechCanvasHost;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
+import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
+import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 /**
  * Base implementation of {@link ICanvasAppli}. UI on the side of the Bentley framework.
@@ -26,7 +27,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
  * @author Charles-Philip Bentley
  *
  */
-public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
+public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAppli, IStringable {
 
    /**
    * Link to the Framework implementation of a Canvas.
@@ -34,8 +35,6 @@ public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
    * Used to request repaints,  query the width/height
    */
    protected ICanvasHost     canvasHost;
-
-   protected final CoreUiCtx cuc;
 
    /**
     * Freely settable by subclass
@@ -64,32 +63,38 @@ public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
     * @param cac
     */
    public CanvasAppliAbstract(CoreUiCtx cac) {
-      this(cac, cac.createTechCanvasHostDefault());
+      this(cac, null);
    }
+
+
 
    /**
     * Creates a {@link ICanvasHost} based on the given tech.
     * 
     * At this stage, we don't know about the technicalities of the implementation
-    * @param cac
-    * @param canvasHostTech {@link ITechCanvasHost}
+    * @param cuc
+    * @param canvasHostTech {@link IBOCanvasHost}
     */
-   public CanvasAppliAbstract(CoreUiCtx cac, ByteObject canvasHostTech) {
-      if (cac == null) {
-         throw new NullPointerException();
+   public CanvasAppliAbstract(CoreUiCtx cuc, ByteObject canvasHostTech) {
+      super(cuc);
+      if (canvasHostTech == null) {
+         canvasHostTech = cuc.createBOCanvasHostDefault();
       }
-      this.cuc = cac;
-      this.uc = cac.getUCtx();
-      canvasHost = cac.createCanvas(canvasHostTech);
+      this.uc = cuc.getUCtx();
+      canvasHost = cuc.createCanvasHost(canvasHostTech);
       if (canvasHost == null) {
          throw new NullPointerException();
       }
-      cac.linkCanvasAppliToHost(this, canvasHost);
+      cuc.linkCanvasAppliToHost(this, canvasHost);
    }
 
    public void canvasHostUpdate() {
       //force title after the link. afterwards when changed inside app, event will call it
       canvasHost.titleIconComesticUpdate();
+   }
+
+   public int getStatorableClassID() {
+      throw new RuntimeException("Must be implemented by subclass");
    }
 
    /**
@@ -133,15 +138,6 @@ public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
       canvasHost.flushGraphics();
    }
 
-   /**
-    * Returns the {@link CanvasCtx} of this canvas.
-    * <br>
-    * 
-    * @return
-    */
-   public CoreUiCtx getCUC() {
-      return cuc;
-   }
 
    /**
     * TODO method for active rendering.
@@ -178,11 +174,11 @@ public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
    }
 
    /**
-    * return {@link ITechCanvasHost}
+    * return {@link IBOCanvasHost}
     * @return
     */
    public ByteObject getTechCanvasHost() {
-      return canvasHost.getTech();
+      return canvasHost.getBOCanvasHost();
    }
 
    /**
@@ -245,7 +241,7 @@ public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
    /**
     */
    public void setFullScreenMode(boolean mode) {
-      canvasHost.setCanvasFeature(ITechFeaturesUI.SUP_ID_27_FULLSCREEN, mode);
+      canvasHost.setCanvasFeature(ITechHostUI.SUP_ID_27_FULLSCREEN, mode);
    }
 
    public void setListener(IBEventListener lis) {
@@ -269,71 +265,62 @@ public abstract class CanvasAppliAbstract implements ICanvasAppli, IStringable {
    /**
     */
    public void stateReadFrom(StatorReader state) {
+
       StatorReaderBO stator = (StatorReaderBO) state;
 
-      canvasTitle = stator.getDataReader().readString();
-      canvasIconPath = stator.getDataReader().readString();
+      canvasTitle = stator.getReader().readString();
+      canvasIconPath = stator.getReader().readString();
+
+      //
+      if (canvasHost != null) {
+         //we want to delete it.. remove it from view etc.
+      }
 
       //canvas host is not critical. you can create a default one
       //create a new one or update the one we have? stator decides
-      canvasHost = (ICanvasHost) stator.createObject(ICanvasHost.class, canvasHost);
+      canvasHost = (ICanvasHost) stator.readObject(cuc, canvasHost);
 
       //critical and optional objects when rebuilding from state
-      listener = (IBEventListener) stator.createObject(IBEventListener.class, listener);
+      listener = (IBEventListener) stator.readObject(listener);
    }
 
    /**
     */
    public void stateWriteTo(StatorWriter state) {
-      if (state.isObjectNotWritten(this)) {
-         StatorWriterBO stator = (StatorWriterBO) state;
-         //it might already be written... who knows
-         stator.getDataWriter().writeString(canvasTitle);
-         stator.getDataWriter().writeString(canvasIconPath);
-         stator.stateWriteOf(canvasHost);
-         stator.stateWriteOf(listener);
-      }
+      //it might already be written... who knows
+      state.getWriter().writeString(canvasTitle);
+      state.getWriter().writeString(canvasIconPath);
+      state.writerToStatorable(canvasHost);
+      state.writerToStatorable(listener);
    }
+
 
    //#mdebug
-
-   public IDLog toDLog() {
-      return cuc.toDLog();
-   }
-
-   public String toString() {
-      return Dctx.toString(this);
-   }
-
    public void toString(Dctx dc) {
-      dc.root(this, CanvasAppliAbstract.class, 296);
-      dc.appendVarWithSpace("getWidth", getWidth());
-      dc.appendVarWithSpace("getHeight", getHeight());
-      dc.appendVarWithSpace("isShown", isShown());
+      dc.root(this, CanvasAppliAbstract.class, 300);
+      toStringPrivate(dc);
+      super.toString(dc.sup());
+      
       dc.appendVarWithSpace("canvasTitle", canvasTitle);
       dc.appendVarWithSpace("canvasIconPath", canvasIconPath);
       dc.nlLvl(listener, "IBEventListener");
       dc.nlLvlArray("Duplicates", duplicates);
       dc.nlLvl(canvasHost, "ICanvasHost");
-
    }
 
-   public String toString1Line() {
-      return Dctx.toString1Line(this);
-   }
-
-   /**
-    * Called when  {@link Dctx} see the same object for another time
-    * @param dc
-    */
-   public void toString1Line(Dctx dc) {
-      dc.root1Line(this, CanvasAppliAbstract.class);
+   private void toStringPrivate(Dctx dc) {
       dc.appendVarWithSpace("getWidth", getWidth());
       dc.appendVarWithSpace("getHeight", getHeight());
+      dc.appendVarWithSpace("isShown", isShown());
    }
-   //#encacebug
 
-   public UCtx toStringGetUCtx() {
-      return cuc.getUCtx();
+   public void toString1Line(Dctx dc) {
+      dc.root1Line(this, CanvasAppliAbstract.class);
+      toStringPrivate(dc);
+      super.toString1Line(dc.sup1Line());
    }
+
+   //#enddebug
+   
+
 }

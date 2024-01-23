@@ -1,6 +1,6 @@
 package pasa.cbentley.framework.coreui.src4.tech;
 
-public interface IInputConstants {
+public interface ITechInputConstants {
 
   public static final int BF_ALLER_RETOUR_MIN_AMPLITUDE = 100;
 

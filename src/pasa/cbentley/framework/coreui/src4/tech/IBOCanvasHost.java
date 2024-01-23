@@ -10,11 +10,11 @@ import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
  * <br>
  * Type is 
  * 
- * {@link ITechFramePos} defines the position
+ * {@link IBOFramePos} defines the position
  * @author Charles Bentley
  *
  */
-public interface ITechCanvasHost extends IByteObject {
+public interface IBOCanvasHost extends IByteObject {
 
    public static final int SCREEN_0_TOP_NORMAL               = 0;
 
@@ -71,8 +71,8 @@ public interface ITechCanvasHost extends IByteObject {
 
    /**
     * Type of wrapper around the canvas.
-    * <li> {@link ITechCanvasHost#TCANVAS_TYPE_1_FRAME}
-    * <li> {@link ITechCanvasHost#TCANVAS_TYPE_2_CONTROLLED}
+    * <li> {@link IBOCanvasHost#TCANVAS_TYPE_1_FRAME}
+    * <li> {@link IBOCanvasHost#TCANVAS_TYPE_2_CONTROLLED}
     * 
     */
    public static final int TCANVAS_OFFSET_02_WRAPPER_TYPE1           = A_OBJECT_BASIC_SIZE + 1;
@@ -86,10 +86,10 @@ public interface ITechCanvasHost extends IByteObject {
    public static final int TCANVAS_OFFSET_03_ID2             = A_OBJECT_BASIC_SIZE + 2;
 
    /**
-    * <li>{@link ITechCanvasHost#SCREEN_0_TOP_NORMAL}
-    * <li>{@link ITechCanvasHost#SCREEN_1_BOT_UPSIDEDOWN}
-    * <li>{@link ITechCanvasHost#SCREEN_2_LEFT_ROTATED}
-    * <li>{@link ITechCanvasHost#SCREEN_3_RIGHT_ROTATED}
+    * <li>{@link IBOCanvasHost#SCREEN_0_TOP_NORMAL}
+    * <li>{@link IBOCanvasHost#SCREEN_1_BOT_UPSIDEDOWN}
+    * <li>{@link IBOCanvasHost#SCREEN_2_LEFT_ROTATED}
+    * <li>{@link IBOCanvasHost#SCREEN_3_RIGHT_ROTATED}
     * 
     */
    public static final int TCANVAS_OFFSET_03_SCREEN_MODE1    = A_OBJECT_BASIC_SIZE + 4;
@@ -121,7 +121,7 @@ public interface ITechCanvasHost extends IByteObject {
    public static final int TCANVAS_OFFSET_09_NUM_BUFFERS1    = A_OBJECT_BASIC_SIZE + 15;
 
    /**
-    * Pointer to the {@link ITechFramePos}.
+    * Pointer to the {@link IBOFramePos}.
     * 
     * When zero, none has been defined
     */

@@ -1,7 +1,7 @@
 package pasa.cbentley.framework.coreui.src4.interfaces;
 
 import pasa.cbentley.core.src4.logging.IStringable;
-import pasa.cbentley.framework.coreui.src4.tech.ITechFeaturesUI;
+import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
 
 /**
  * Interface towards Gesture Services/
@@ -25,8 +25,12 @@ public interface IHostGestures extends IStringable {
    /**
     * Ask the Host listeners to start listening to the given Gestures
     * 
-    * <li> {@link ITechFeaturesUI#HOST_FLAGY_1_LONGPRESS}
-    * <li> {@link ISenses#GESTURE_TYPE_09_VOICE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_05_SHAKE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_07_MOVE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_09_VOICE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_10_LOCATION}
+    * <li> {@link ITechSenses#GESTURE_TYPE_12_DEVICE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_11_COMPASS}
     * <br>
     * <br>
     * 
@@ -34,7 +38,24 @@ public interface IHostGestures extends IStringable {
     */
    public void enableGesture(int flag);
 
+   /**
+    * 
+    * @param flag
+    */
    public void disableGesture(int flag);
 
+   /**
+    * Implementation tells {@link CoreUiCtx} whether it supports the type of Gesture.
+    * 
+    * <li> {@link ITechSenses#GESTURE_TYPE_05_SHAKE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_07_MOVE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_09_VOICE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_10_LOCATION}
+    * <li> {@link ITechSenses#GESTURE_TYPE_12_DEVICE}
+    * <li> {@link ITechSenses#GESTURE_TYPE_11_COMPASS}
+    * 
+    * @param flag
+    * @return
+    */
    public boolean isGestureSupported(int flag);
 }
