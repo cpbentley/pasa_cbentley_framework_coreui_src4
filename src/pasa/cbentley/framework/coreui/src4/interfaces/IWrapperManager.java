@@ -13,13 +13,13 @@ import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
  * 
  * Create {@link WrapperAbstract} implementations from {@link IBOCanvasHost}
  * 
- * <li> {@link ICanvasOwner#createNewWrapper(ByteObject)}
+ * <li> {@link IWrapperManager#createNewWrapper(ByteObject)}
  * 
  * </p>
  * @author Charles Bentley
  *
  */
-public interface ICanvasOwner extends IStringable {
+public interface IWrapperManager extends IStringable {
 
    /**
     * When the wrapper is not able to set its title, the wrapper delegates the job to its manager.
@@ -29,7 +29,7 @@ public interface ICanvasOwner extends IStringable {
    public void setTitle(WrapperAbstract wrapper, String title);
 
    /**
-    * Tries to set the given size to the wrapper
+    * Called by the wrapper when it does not know how to set its size because of its nature.
     * @param wrapper
     * @param w
     * @param h
@@ -38,7 +38,10 @@ public interface ICanvasOwner extends IStringable {
    public boolean setSize(WrapperAbstract wrapper, int w, int h);
 
    /**
-    * 
+    * Called by the Wrapper when it does not know how to set its position because of its nature.
+    * <p>
+    * For example, a Panel wrapper inside a Tabbed Pane.
+    * </p>
     * @param wrapper
     * @param x
     * @param y

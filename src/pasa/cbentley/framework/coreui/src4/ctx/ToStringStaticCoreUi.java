@@ -4,7 +4,6 @@ import pasa.cbentley.core.src4.logging.ToStringStaticBase;
 import pasa.cbentley.framework.coreui.src4.event.ITechEventKey;
 import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.coreui.src4.interfaces.ITechSenses;
-import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
 import pasa.cbentley.framework.coreui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.coreui.src4.tech.ITechGestures;
@@ -31,13 +30,13 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
 
    public static String getStringScreenMode(int mode) {
       switch (mode) {
-         case IBOCanvasHost.SCREEN_0_TOP_NORMAL:
+         case ITechHostUI.SCREEN_0_TOP_NORMAL:
             return "Normal";
-         case IBOCanvasHost.SCREEN_1_BOT_UPSIDEDOWN:
+         case ITechHostUI.SCREEN_1_BOT_UPSIDEDOWN:
             return "UpSideDown";
-         case IBOCanvasHost.SCREEN_2_LEFT_ROTATED:
+         case ITechHostUI.SCREEN_2_LEFT_ROTATED:
             return "RotatedLeft";
-         case IBOCanvasHost.SCREEN_3_RIGHT_ROTATED:
+         case ITechHostUI.SCREEN_3_RIGHT_ROTATED:
             return "RotatedRight";
          default:
             return "Unknown ScreenMode " + mode;

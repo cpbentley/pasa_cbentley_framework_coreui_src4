@@ -2,11 +2,14 @@ package pasa.cbentley.framework.coreui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
+import pasa.cbentley.byteobjects.src4.stator.StatorWriterBO;
 import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IDLog;
 import pasa.cbentley.core.src4.logging.IStringable;
+import pasa.cbentley.core.src4.stator.ITechStator;
+import pasa.cbentley.core.src4.stator.ITechStatorable;
 import pasa.cbentley.core.src4.stator.StatorReader;
 import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.core.src4.structs.IntToObjects;
@@ -23,7 +26,11 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 /**
  * Base implementation of {@link ICanvasAppli}. UI on the side of the Bentley framework.
  * <br>
- * I
+ * 
+ * Can a {@link CanvasAppliAbstract} be used without a {@link ICanvasHost} ?
+ * Some kind of null host ? Why not. But it won't recieve any events from the host.
+ * It will have to be managed by the Application
+ * Some kind of CanvasHostAppli class ?
  * @author Charles-Philip Bentley
  *
  */
@@ -34,29 +41,29 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    * <br>
    * Used to request repaints,  query the width/height
    */
-   protected ICanvasHost     canvasHost;
+   protected ICanvasHost   canvasHost;
 
    /**
     * Freely settable by subclass
     * 
     * {@link CanvasHostAbstract#titleIconComesticUpdate()} must be call for update on Host canvas.
     */
-   protected String          canvasIconPath;
+   protected String        canvasIconPath;
 
    /**
     * Freely settable by subclass
     * 
     * {@link CanvasHostAbstract#titleIconComesticUpdate()} must be call for update on Host canvas.
     */
-   protected String          canvasTitle;
+   protected String        canvasTitle;
 
-   protected ICanvasHost[]   duplicates;
+   protected ICanvasHost[] duplicates;
 
-   protected IntToObjects    dups;
+   protected IntToObjects  dups;
 
-   protected final UCtx      uc;
+   protected final UCtx    uc;
 
-   private IBEventListener   listener;
+   private IBEventListener listener;
 
    /**
     * When the Canvas is created, a reference to the Swing/SWT/J2ME Canvas is fetched
@@ -66,22 +73,20 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
       this(cac, null);
    }
 
-
-
    /**
     * Creates a {@link ICanvasHost} based on the given tech.
     * 
     * At this stage, we don't know about the technicalities of the implementation
     * @param cuc
-    * @param canvasHostTech {@link IBOCanvasHost}
+    * @param boCanvasHost {@link IBOCanvasHost}
     */
-   public CanvasAppliAbstract(CoreUiCtx cuc, ByteObject canvasHostTech) {
+   public CanvasAppliAbstract(CoreUiCtx cuc, ByteObject boCanvasHost) {
       super(cuc);
-      if (canvasHostTech == null) {
-         canvasHostTech = cuc.createBOCanvasHostDefault();
+      if (boCanvasHost == null) {
+         boCanvasHost = cuc.createBOCanvasHostDefault();
       }
       this.uc = cuc.getUCtx();
-      canvasHost = cuc.createCanvasHost(canvasHostTech);
+      canvasHost = cuc.createCanvasHost(boCanvasHost);
       if (canvasHost == null) {
          throw new NullPointerException();
       }
@@ -94,7 +99,7 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    }
 
    public int getStatorableClassID() {
-      throw new RuntimeException("Must be implemented by subclass");
+      throw new RuntimeException("Must be implemented by subclass" + this.getClass().getName());
    }
 
    /**
@@ -138,7 +143,6 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
       canvasHost.flushGraphics();
    }
 
-
    /**
     * TODO method for active rendering.
     * 
@@ -171,14 +175,6 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
          canvasIconPath = cuc.getConfigUI().getIconPathDefault();
       }
       return canvasIconPath;
-   }
-
-   /**
-    * return {@link IBOCanvasHost}
-    * @return
-    */
-   public ByteObject getTechCanvasHost() {
-      return canvasHost.getBOCanvasHost();
    }
 
    /**
@@ -265,42 +261,54 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    /**
     */
    public void stateReadFrom(StatorReader state) {
-
+      
+      //#debug
+      toDLog().pData("StatorReader", this, CanvasAppliAbstract.class, "stateReadFrom", LVL_05_FINE, true);
+      //parameters were already read
+      
       StatorReaderBO stator = (StatorReaderBO) state;
 
+      
+      state.checkInt(98765);
       canvasTitle = stator.getReader().readString();
       canvasIconPath = stator.getReader().readString();
 
-      //
-      if (canvasHost != null) {
-         //we want to delete it.. remove it from view etc.
-      }
-
-      //canvas host is not critical. you can create a default one
-      //create a new one or update the one we have? stator decides
       canvasHost = (ICanvasHost) stator.readObject(cuc, canvasHost);
-
-      //critical and optional objects when rebuilding from state
       listener = (IBEventListener) stator.readObject(listener);
    }
 
    /**
     */
    public void stateWriteTo(StatorWriter state) {
+
+      //#debug
+      toDLog().pData("StatorWriter", this, CanvasAppliAbstract.class, "stateWriteTo", LVL_05_FINE, true);
+     
+      stateWriteToParamSub(state);
+      
       //it might already be written... who knows
+      state.writeInt(98765);
       state.getWriter().writeString(canvasTitle);
       state.getWriter().writeString(canvasIconPath);
+
       state.writerToStatorable(canvasHost);
       state.writerToStatorable(listener);
    }
 
-
+   protected void stateWriteToParamSub(StatorWriter state) {
+      //Do the parameters for the constructor
+      state.writeInt(ITechStator.MAGIC_WORD_OBJECT_PARAM);
+      StatorWriterBO swbo = (StatorWriterBO)state;
+      ByteObject boCanvasHost = this.getCanvasHost().getBOCanvasHost();
+      swbo.writeByteObject(boCanvasHost);
+   }
+   
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, CanvasAppliAbstract.class, 300);
       toStringPrivate(dc);
       super.toString(dc.sup());
-      
+
       dc.appendVarWithSpace("canvasTitle", canvasTitle);
       dc.appendVarWithSpace("canvasIconPath", canvasIconPath);
       dc.nlLvl(listener, "IBEventListener");
@@ -321,6 +329,5 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    }
 
    //#enddebug
-   
 
 }

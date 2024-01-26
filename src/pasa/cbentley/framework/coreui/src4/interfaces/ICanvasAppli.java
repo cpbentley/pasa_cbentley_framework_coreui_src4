@@ -4,6 +4,7 @@ import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
+import pasa.cbentley.framework.coreui.src4.engine.CanvasHostAbstract;
 import pasa.cbentley.framework.coreui.src4.event.BEvent;
 import pasa.cbentley.framework.coreui.src4.event.CanvasHostEvent;
 import pasa.cbentley.framework.coreui.src4.event.DeviceEvent;
@@ -106,7 +107,7 @@ public interface ICanvasAppli extends IStringable, IStatorable {
    public ICanvasHost getCanvasHost();
 
    /**
-    * 
+    * Called by {@link CanvasHostAbstract} when it has been resized
     * @param w
     * @param h
     */

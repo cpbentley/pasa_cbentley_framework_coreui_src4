@@ -51,6 +51,9 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    public CanvasHostAbstract(CoreUiCtx cac, ByteObject boCanvasHost) {
       super(cac);
+      if(boCanvasHost == null) {
+         throw new NullPointerException();
+      }
       this.boCanvasHost = boCanvasHost;
       //register for AppModule events
       cac.getEventBus().addConsumer(this, IEventsCoreUI.PID_1_DEVICE, IEventsCoreUI.EVENT_ID_01_DEVICE_UPDATE);
@@ -58,7 +61,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    public int getStatorableClassID() {
-      throw new RuntimeException("Must be implemented by subclass");
+      throw new RuntimeException("Must be implemented by subclass " + this.getClass().getName());
    }
 
    public ICtx getCtxOwner() {
@@ -113,6 +116,13 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       return boCanvasHost.getSubFirst(IBOTypesCoreUI.TYPE_8_FRAME_POS);
    }
 
+
+   public void onExit() {
+      if(wrapper != null) {
+         wrapper.onExit();
+      }
+   }
+   
    public ByteObject getFramePosNewWithXYWH() {
       ByteObject framePos = cuc.createBOFrameDefault();
       setXYWHToFramePos(framePos);
@@ -155,7 +165,11 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    public void stateReadFrom(StatorReader state) {
-
+      if(state == null) {
+         //#debug
+         toDLog().pData("StatorReader is null for CanvasHostAbstract", this, CanvasHostAbstract.class, "stateReadFrom", LVL_05_FINE, true);
+         return;
+      }
       StatorReaderBO statorBo = (StatorReaderBO) state;
       wrapper = (WrapperAbstract) statorBo.readObject(wrapper);
       canvasAppli = (ICanvasAppli) statorBo.readObject(canvasAppli);

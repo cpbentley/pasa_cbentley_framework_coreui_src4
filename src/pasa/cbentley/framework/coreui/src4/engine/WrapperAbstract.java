@@ -7,8 +7,9 @@ import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.core.src4.stator.StatorReader;
 import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.IConfigCoreUI;
 import pasa.cbentley.framework.coreui.src4.ctx.ObjectCUC;
-import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasOwner;
+import pasa.cbentley.framework.coreui.src4.interfaces.IWrapperManager;
 import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 /**
@@ -52,6 +53,9 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
     */
    public abstract void canvasShow();
 
+   public void onExit() {
+      
+   }
    /**
     * 
     * @param feature
@@ -86,14 +90,14 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
    }
 
    public int getStatorableClassID() {
-      throw new RuntimeException("Must be implemented by subclass");
+      throw new RuntimeException("Must be implemented by subclass" + getClass().getName());
    }
 
    /** 
     * Initialize the wrapper with the Canvas.
     * <br><br>
     * The {@link SwingManager} when requested to create a new canvas does the following
-    * <li> Asks its {@link ICanvasOwner} which wrapper to create.
+    * <li> Asks its {@link IWrapperManager} which wrapper to create.
     * <li> Creates a {@link CanvasAbstractSwing} with requested capabilities (OpenGL, Active Rendering etc)
     * <li> Link the Wrapper with the {@link CanvasAbstractSwing}
     * <li> Link the {@link CanvasAbstractSwing} with the wrapper.
@@ -103,6 +107,11 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
     */
    public abstract void setCanvasHost(CanvasHostAbstract canvas);
 
+   /**
+    * Asks the wrapper to position its in the default position as defined by {@link IConfigCoreUI}
+    * 
+    * Host Implementation of configuration provides the value x,y.
+    */
    public abstract void setDefaultStartPosition();
 
    public boolean setFeature(int feature, boolean mode) {

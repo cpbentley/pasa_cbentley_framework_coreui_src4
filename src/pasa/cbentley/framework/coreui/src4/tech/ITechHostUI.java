@@ -52,10 +52,10 @@ public interface ITechHostUI extends ITech {
    public static final int DATA_ID_17_NUMBER_OF_SCREENS          = 17;
 
    /**
-    * <li>{@link IBOCanvasHost#SCREEN_0_TOP_NORMAL}
-    * <li>{@link IBOCanvasHost#SCREEN_1_BOT_UPSIDEDOWN}
-    * <li>{@link IBOCanvasHost#SCREEN_2_LEFT_ROTATED} 
-    * <li>{@link IBOCanvasHost#SCREEN_3_RIGHT_ROTATED}
+    * <li>{@link ITechHostUI#SCREEN_0_TOP_NORMAL}
+    * <li>{@link ITechHostUI#SCREEN_1_BOT_UPSIDEDOWN}
+    * <li>{@link ITechHostUI#SCREEN_2_LEFT_ROTATED} 
+    * <li>{@link ITechHostUI#SCREEN_3_RIGHT_ROTATED}
     * 
     */
    public static final int DATA_ID_18_SCREEN_ORIENTATION         = 18;
@@ -236,5 +236,13 @@ public interface ITechHostUI extends ITech {
 
 
    public static final int SUP_ID_50_SENSOR_ACC                  = 50;
+
+   int SCREEN_0_TOP_NORMAL               = 0;
+
+   int SCREEN_1_BOT_UPSIDEDOWN           = 1;
+
+   int SCREEN_2_LEFT_ROTATED             = 2;
+
+   int SCREEN_3_RIGHT_ROTATED            = 3;
 
 }
