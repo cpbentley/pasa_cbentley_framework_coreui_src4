@@ -50,7 +50,7 @@ public class GesturePath extends GestureEvent {
    }
 
    public String getUserLineString() {
-      return "Path " + ToStringStaticCoreUi.getStringGridType(gridType) + " " + getGA().toStringCompact();
+      return "Path " + ToStringStaticCoreUi.toStringGridType(gridType) + " " + getGA().toStringCompact();
    }
 
    public void toString1Line(Dctx dc) {

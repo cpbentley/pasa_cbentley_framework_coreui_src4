@@ -3,6 +3,7 @@ package pasa.cbentley.framework.coreui.src4.event;
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.coreui.src4.ctx.CoreUiCtx;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.coreui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.coreui.src4.tech.IInput;
@@ -19,7 +20,7 @@ public class CanvasHostEvent extends BEvent {
     */
    private int         actionType;
 
-   private ICanvasHost canvasHot;
+   private ICanvasHost canvasHost;
 
    private int         h;
 
@@ -43,7 +44,7 @@ public class CanvasHostEvent extends BEvent {
       super(cuc);
       this.type = IInput.TYPE_3_CANVAS;
       this.actionType = actionType;
-      this.canvasHot = canvasHot;
+      this.canvasHost = canvasHot;
    }
 
    /**
@@ -55,7 +56,7 @@ public class CanvasHostEvent extends BEvent {
    }
 
    public ICanvasHost getCanvasHot() {
-      return canvasHot;
+      return canvasHost;
    }
 
    public int getH() {
@@ -102,17 +103,36 @@ public class CanvasHostEvent extends BEvent {
       this.y = y;
    }
 
+
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, "CanvasHostEvent");
-      dc.append(" " + x + "," + y);
+      dc.root(this, CanvasHostEvent.class, 110);
+      toStringPrivate(dc);
       super.toString(dc.sup());
+      
+      dc.appendVarWithSpace("x", x);
+      dc.appendVarWithSpace("y", y);
+      dc.appendVarWithSpace("w", w);
+      dc.appendVarWithSpace("h", h);
+      
+      dc.nlLvl(tech, "tech");
+      
+      dc.nlLvl(canvasHost, "canvasHost");
+   }
+
+   private void toStringPrivate(Dctx dc) {
+      dc.appendVarWithSpace("actionType", actionType);
+      dc.appendBracketedWithSpace(ToStringStaticCoreUi.toStringAppliAction(actionType));
+      
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "CanvasHostEvent");
-      dc.append(" " + x + "," + y);
+      dc.root1Line(this, CanvasHostEvent.class);
+      toStringPrivate(dc);
       super.toString1Line(dc.sup1Line());
    }
+
    //#enddebug
+   
+
 }

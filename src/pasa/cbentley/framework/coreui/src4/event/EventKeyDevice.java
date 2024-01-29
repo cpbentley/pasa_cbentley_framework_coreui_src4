@@ -126,7 +126,7 @@ public class EventKeyDevice extends EventKey {
    }
 
    private void toStringPrivate(Dctx dc) {
-      dc.appendVarWithSpace("Mode", ToStringStaticCoreUi.getStringEventKeyModeType(modeType));
+      dc.appendVarWithSpace("Mode", ToStringStaticCoreUi.toStringEventKeyModeType(modeType));
    }
 
    public void toString1Line(Dctx dc) {

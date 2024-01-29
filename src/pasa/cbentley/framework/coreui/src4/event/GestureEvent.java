@@ -79,23 +79,23 @@ public class GestureEvent extends BEvent implements IStringable, ITechGestures {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, "GestureEvent");
-      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.getStringGestureType(gestureType));
+      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.toStringGestureType(gestureType));
       dc.nlLvl(gp);
       super.toString(dc.sup());
    }
 
    public String getUserLineString() {
-      String str = "Gesture" + ToStringStaticCoreUi.getStringGestureType(gestureType);
+      String str = "Gesture" + ToStringStaticCoreUi.toStringGestureType(gestureType);
       int gestureDir = getGI().getDir();
       if (gestureDir != 0) {
-         str += ToStringStaticCoreUi.getStringGestureDir(gestureDir);
+         str += ToStringStaticCoreUi.toStringGestureDir(gestureDir);
       }
       return str + " [" + gp.getIdentity().getGestureArea().toStringCompact() + "]";
    }
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, "GestureEvent");
-      dc.appendVarWithSpace("", ToStringStaticCoreUi.getStringGestureType(gestureType));
+      dc.appendVarWithSpace("", ToStringStaticCoreUi.toStringGestureType(gestureType));
       super.toString(dc.sup1Line());
    }
    //#enddebug

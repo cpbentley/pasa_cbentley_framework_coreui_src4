@@ -76,7 +76,7 @@ public class DeviceEventXYTouch extends DeviceEventXY {
    public String getUserLineString() {
       String str = "";
       if (deviceType == IInput.DEVICE_4_SCREEN) {
-         str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.getStringMod(mode);
+         str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.toStringMod(mode);
       } else {
          return super.getUserLineString();
       }

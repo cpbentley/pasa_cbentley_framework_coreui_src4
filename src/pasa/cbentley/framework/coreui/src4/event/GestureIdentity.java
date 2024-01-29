@@ -125,9 +125,9 @@ public class GestureIdentity implements IStringable {
    public void toString(Dctx dc) {
       dc.root(this, GestureIdentity.class, 113);
 
-      dc.appendVarWithSpace("type", ToStringStaticCoreUi.getStringGestureType(type));
-      dc.appendVarWithSpace("dir", ToStringStaticCoreUi.getStringGestureDir(dir));
-      dc.appendVarWithSpace("grid", ToStringStaticCoreUi.getStringGridType(grid));
+      dc.appendVarWithSpace("type", ToStringStaticCoreUi.toStringGestureType(type));
+      dc.appendVarWithSpace("dir", ToStringStaticCoreUi.toStringGestureDir(dir));
+      dc.appendVarWithSpace("grid", ToStringStaticCoreUi.toStringGridType(grid));
 
       dc.nlLvlNullTitle("GestureArea", ga);
    }

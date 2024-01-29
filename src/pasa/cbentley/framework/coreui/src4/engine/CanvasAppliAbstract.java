@@ -263,7 +263,7 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    public void stateReadFrom(StatorReader state) {
       
       //#debug
-      toDLog().pData("StatorReader", this, CanvasAppliAbstract.class, "stateReadFrom", LVL_05_FINE, true);
+      toDLog().pStator("StatorReader", this, CanvasAppliAbstract.class, "stateReadFrom", LVL_05_FINE, true);
       //parameters were already read
       
       StatorReaderBO stator = (StatorReaderBO) state;
@@ -282,7 +282,7 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    public void stateWriteTo(StatorWriter state) {
 
       //#debug
-      toDLog().pData("StatorWriter", this, CanvasAppliAbstract.class, "stateWriteTo", LVL_05_FINE, true);
+      toDLog().pStator("StatorWriter", this, CanvasAppliAbstract.class, "stateWriteTo", LVL_05_FINE, true);
      
       stateWriteToParamSub(state);
       

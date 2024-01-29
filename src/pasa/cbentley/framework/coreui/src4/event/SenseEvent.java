@@ -91,7 +91,7 @@ public class SenseEvent extends DeviceEvent {
          }
          return padName;
       }
-      return "Sense " + ToStringStaticCoreUi.getStringSense(sensorType);
+      return "Sense " + ToStringStaticCoreUi.toStringSense(sensorType);
    }
 
    public float getValue() {
@@ -113,7 +113,7 @@ public class SenseEvent extends DeviceEvent {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, "SenseEvent");
-      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringSense(sensorType));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringSense(sensorType));
       if (values != null) {
          for (int i = 0; i < values.length; i++) {
             dc.nl();
@@ -124,7 +124,7 @@ public class SenseEvent extends DeviceEvent {
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, "SenseEvent");
-      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringSense(sensorType));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringSense(sensorType));
    }
    //#enddebug
 

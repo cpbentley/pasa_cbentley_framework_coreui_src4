@@ -165,7 +165,7 @@ public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes 
          dc.append("'");
       }
       dc.appendVarWithSpace("#", id);
-      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.getStringEventType(type));
+      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.toStringEventType(type));
       dc.appendVarWithSpace("Flags", flags);
       dc.appendVarWithSpace("Time", DateUtils.getDslashMslashYslashHourslashMin(timeStamp));
       super.toString(dc.sup());
@@ -183,7 +183,7 @@ public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes 
          dc.append("'");
       }
       dc.appendVarWithSpace("#", id);
-      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.getStringEventType(type));
+      dc.appendVarWithSpace("Type", ToStringStaticCoreUi.toStringEventType(type));
       if (flags != 0) {
          dc.appendVarWithSpace("Flags", flags);
       }

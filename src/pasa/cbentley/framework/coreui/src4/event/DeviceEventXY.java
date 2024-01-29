@@ -82,10 +82,10 @@ public class DeviceEventXY extends DeviceEvent {
                str = "Mouse wheeled down "+ x;
             }
          } else {
-            str = "Mouse " + ToStringStaticCoreUi.getStringButtonShort(deviceButton) + " " + ToStringStaticCoreUi.getStringMod(mode);
+            str = "Mouse " + ToStringStaticCoreUi.toStringButtonShort(deviceButton) + " " + ToStringStaticCoreUi.toStringMod(mode);
          }
       } else if (deviceType == IInput.DEVICE_3_FINGER) {
-         str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.getStringMod(mode);
+         str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.toStringMod(mode);
       }
       str += " " + getX() + "," + getY();
       return str;

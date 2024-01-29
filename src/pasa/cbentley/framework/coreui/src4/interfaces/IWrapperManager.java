@@ -2,6 +2,7 @@ package pasa.cbentley.framework.coreui.src4.interfaces;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.IStringable;
+import pasa.cbentley.framework.coreui.src4.engine.CanvasHostAbstract;
 import pasa.cbentley.framework.coreui.src4.engine.WrapperAbstract;
 import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
 
@@ -60,5 +61,8 @@ public interface IWrapperManager extends IStringable {
     * @return
     */
    public WrapperAbstract createNewWrapper(ByteObject tech);
+
+   public CanvasHostAbstract createCanvasHost(WrapperAbstract wrapper, ByteObject canvasTech);
+      
 
 }

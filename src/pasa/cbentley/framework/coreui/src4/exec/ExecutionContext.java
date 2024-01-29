@@ -59,7 +59,7 @@ import pasa.cbentley.framework.coreui.src4.event.BEvent;
  * @author Charles Bentley
  *
  */
-public class ExecutionContext implements IExecContext, IStringable {
+public class ExecutionContext implements ITechExecutionContext, IStringable {
 
    protected IntToObjects data;
 
@@ -91,7 +91,7 @@ public class ExecutionContext implements IExecContext, IStringable {
       this.pending = pending;
    }
    /**
-    * What thread should an Event run? 
+    * On which thread should an Event run? 
     * <br>
     * Thread ID is provided.
     * <br>
@@ -99,7 +99,7 @@ public class ExecutionContext implements IExecContext, IStringable {
     * @param producer
     */
    public void addEvent(int eventID, Object producer) {
-      types.add(TYPE_0_EVENT, null); //flag for event
+      types.add(EXEC_TYPE_0_EVENT, null); //flag for event
       data.add(eventID, producer);
    }
 
@@ -109,7 +109,7 @@ public class ExecutionContext implements IExecContext, IStringable {
     * @param producer
     */
    public void addRun(int eventID, Object producer) {
-      types.add(TYPE_1_RUN, null); //flag for event
+      types.add(EXEC_TYPE_1_RUN, null); //flag for event
       data.add(eventID, producer);
    }
 
@@ -148,7 +148,7 @@ public class ExecutionContext implements IExecContext, IStringable {
    public void queueBEvent(BEvent ev) {
       ExecEntry ee = new ExecEntry();
       ee.o = ev;
-      ee.type = TYPE_0_EVENT;
+      ee.type = EXEC_TYPE_0_EVENT;
       execEntries.add(ee);
    }
 

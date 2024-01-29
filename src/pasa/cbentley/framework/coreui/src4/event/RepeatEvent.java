@@ -330,9 +330,9 @@ public class RepeatEvent extends BEvent implements IStringable {
       } else if (repeatState == REPEAT_STATE_1_STARTED) {
          return "Repeat Started";
       } else if (repeatState == REPEAT_STATE_4_FINALIZED) {
-         return "Repeat Finalized" + ToStringStaticCoreUi.getStringRepeatType(repeatType) + " " + multCount;
+         return "Repeat Finalized" + ToStringStaticCoreUi.toStringRepeatType(repeatType) + " " + multCount;
       } else {
-         return "Repeat " + ToStringStaticCoreUi.getStringRepeatType(repeatType) + " " + multCount;
+         return "Repeat " + ToStringStaticCoreUi.toStringRepeatType(repeatType) + " " + multCount;
       }
    }
 
@@ -460,7 +460,7 @@ public class RepeatEvent extends BEvent implements IStringable {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, RepeatEvent.class, 437);
-      dc.appendVarWithSpace("TypeRepeat", ToStringStaticCoreUi.getStringRepeatType(repeatType));
+      dc.appendVarWithSpace("TypeRepeat", ToStringStaticCoreUi.toStringRepeatType(repeatType));
       dc.appendVarWithSpace("multCount", multCount);
       dc.appendVarWithSpace("multTarget", multTarget);
       dc.nl();

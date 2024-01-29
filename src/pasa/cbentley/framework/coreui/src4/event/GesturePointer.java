@@ -226,7 +226,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
          return;
       }
       //#debug
-      toDLog().pEvent("vector=" + xReleaseVectorAbs + "," + yReleaseVectorAbs + " slideMinAmplitude=" + slideMinAmplitude + " slideMarginSlop=" + slideMarginSlop + "v=" + ToStringStaticCoreUi.getStringGestureDir(pointerSlideDir), null, GesturePointer.class, "computeSlide");
+      toDLog().pEvent("vector=" + xReleaseVectorAbs + "," + yReleaseVectorAbs + " slideMinAmplitude=" + slideMinAmplitude + " slideMarginSlop=" + slideMarginSlop + "v=" + ToStringStaticCoreUi.toStringGestureDir(pointerSlideDir), null, GesturePointer.class, "computeSlide");
       if (slideType == GESTURE_NOT_DETECTED) {
 
          //timing of gesture is for 
@@ -248,7 +248,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
             slideSubType = pointerSlideDir;
 
             //#debug
-            toDLog().pEvent("SubType " + ToStringStaticCoreUi.getStringGestureDir(slideSubType), null, GesturePointer.class, "computeSlide");
+            toDLog().pEvent("SubType " + ToStringStaticCoreUi.toStringGestureDir(slideSubType), null, GesturePointer.class, "computeSlide");
 
             int acc = getAccOverall();
 
@@ -1313,8 +1313,8 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       dc.appendVarWithSpace("x", getX());
       dc.appendVarWithSpace("y", getY());
       computeSlide();
-      dc.appendVarWithSpace("Slide", ToStringStaticCoreUi.getStringGestureDir(slideType));
-      dc.appendVarWithSpace("SubType", ToStringStaticCoreUi.getStringGestureType(slideSubType));
+      dc.appendVarWithSpace("Slide", ToStringStaticCoreUi.toStringGestureDir(slideType));
+      dc.appendVarWithSpace("SubType", ToStringStaticCoreUi.toStringGestureType(slideSubType));
       dc.nl();
       dc.appendVar("PressedXY", pressedX + "," + pressedY);
       dc.appendVarWithSpace("releasedXY", getReleasedX() + "," + getReleasedY());

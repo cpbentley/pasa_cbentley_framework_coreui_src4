@@ -11,185 +11,20 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
 
 public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCodes {
 
-   public static String getStringRepeatType(int type) {
-      switch (type) {
-         case IInput.REPEAT_0_INFINITE:
-            return "Infinite";
-         case IInput.REPEAT_1_FINITE:
-            return "Finite";
-         case IInput.REPEAT_2_LONG:
-            return "Long";
-         case IInput.REPEAT_3_TRAIL_FUNCTION:
-            return "Trail";
-         case IInput.REPEAT_4_PATTERN:
-            return "Pattern";
-         default:
-            return "UnknownType " + type;
-      }
-   }
-
-   public static String getStringScreenMode(int mode) {
-      switch (mode) {
-         case ITechHostUI.SCREEN_0_TOP_NORMAL:
-            return "Normal";
-         case ITechHostUI.SCREEN_1_BOT_UPSIDEDOWN:
-            return "UpSideDown";
-         case ITechHostUI.SCREEN_2_LEFT_ROTATED:
-            return "RotatedLeft";
-         case ITechHostUI.SCREEN_3_RIGHT_ROTATED:
-            return "RotatedRight";
-         default:
-            return "Unknown ScreenMode " + mode;
-      }
-   }
-
-   public static String toStringFeature(int feat) {
-      switch (feat) {
-         case ITechHostUI.SUP_ID_38_GAMEPADS:
-            return "GamePads";
-         default:
-            return "UnknownFeature"+feat;
-      }
-   }
-   
-   public static String getStringButtonShort(int pointerButID) {
-      switch (pointerButID) {
-         case ITechCodes.PBUTTON_4_WHEEL_DOWN:
-            return "WheelDown";
-         case ITechCodes.PBUTTON_3_WHEEL_UP:
-            return "WheelUp";
-         case ITechCodes.PBUTTON_0_DEFAULT:
-            return "Left";
-         case ITechCodes.PBUTTON_1_RIGHT:
-            return "Right";
-         case ITechCodes.PBUTTON_2_MIDDLE:
-            return "Middle";
-         default:
-            return "Unknown Button " + pointerButID;
-      }
-   }
-
-   public static String getStringEventType(int t) {
-      switch (t) {
-         case IInput.TYPE_0_OTHER:
-            return "Other";
-         case IInput.TYPE_1_DEVICE:
-            return "Device";
-         case IInput.TYPE_2_GESTURE:
-            return "Gesture";
-         case IInput.TYPE_3_CANVAS:
-            return "Canvas";
-         case IInput.TYPE_4_REPEAT:
-            return "Repeat";
-         case IInput.TYPE_5_CTX_CHANGE:
-            return "CtxChange";
-         case IInput.TYPE_6_APPLI:
-            return "Appli";
-         default:
-            return "Unknown" + t;
-      }
-   }
-
-   public static String getStringAppliAction(int subtype) {
-      switch (subtype) {
-         case ITechEventHost.ACTION_1_CLOSE:
-            return "Closed";
-         case ITechEventHost.ACTION_2_MOVED:
-            return "Moved";
-         case ITechEventHost.ACTION_3_RESIZED:
-            return "Resized";
-         case ITechEventHost.ACTION_4_FOCUS_GAIN:
-            return "FocusGain";
-         case ITechEventHost.ACTION_5_FOCUS_LOSS:
-            return "FocusLoss";
-         default:
-            return "UnknownAction" + subtype;
-      }
-   }
-
-   /**
-    * 
-    * @param key
-    * @return
-    */
-   public static String getStringGestureDir(int key) {
-      switch (key) {
-         case ITechGestures.GESTURE_DIR_00_ANY:
+   public static String toStringEventKeyModeType(int modeType) {
+      switch (modeType) {
+         case ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_0_INVERSE:
+            return "Inverse";
+         case ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_1_SAME:
+            return "Same";
+         case ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_2_ANY:
             return "Any";
-         case ITechGestures.GESTURE_DIR_01_VERTICAL:
-            return "Vertical";
-         case ITechGestures.GESTURE_DIR_02_HORIZONTAL:
-            return "Horizontal";
-         case ITechGestures.GESTURE_DIR_03_TOP:
-            return "Top";
-         case ITechGestures.GESTURE_DIR_04_BOT:
-            return "Bot";
-         case ITechGestures.GESTURE_DIR_05_LEFT:
-            return "Left";
-         case ITechGestures.GESTURE_DIR_06_RIGHT:
-            return "Right";
-         case ITechGestures.GESTURE_DIR_07_TOP_LEFT:
-            return "TopLeft";
-         case ITechGestures.GESTURE_DIR_08_TOP_RIGHT:
-            return "TopRight";
-         case ITechGestures.GESTURE_DIR_09_BOT_LEFT:
-            return "BotLeft";
-         case ITechGestures.GESTURE_DIR_10_BOT_RIGHT:
-            return "BotRight";
-         case ITechGestures.GESTURE_NOT_DETECTED:
-            return "NotDetected";
-         case ITechGestures.GESTURE_UNKNOWN:
-            return "NotComputed";
          default:
-            return "UnknownGestureDir" + key;
+            return "UnknownModeType" + modeType;
       }
    }
 
-   public static String getStringDeviceType(int devType) {
-      switch (devType) {
-         case IInput.DEVICE_0_KEYBOARD:
-            return "Keyboard";
-         case IInput.DEVICE_1_MOUSE:
-            return "Mouse";
-         case IInput.DEVICE_2_GAMEPAD:
-            return "Gamepad";
-         case IInput.DEVICE_3_FINGER:
-            return "Finger";
-         case IInput.DEVICE_4_SCREEN:
-            return "Screen";
-         case IInput.DEVICE_5_OTHER:
-            return "Other";
-         case IInput.DEVICE_6_POINTER:
-            return "Pointer";
-         case IInput.DEVICE_7_SENSOR:
-            return "Sensor";
-         default:
-            return "UnknownDeviceType" + devType;
-      }
-   }
-
-   public static String getStringSense(int type) {
-      switch (type) {
-         case ITechSenses.GESTURE_TYPE_05_SHAKE:
-            return "Shake";
-         case ITechSenses.GESTURE_TYPE_07_MOVE:
-            return "Move";
-         case ITechSenses.GESTURE_TYPE_08_LIGHT:
-            return "Light";
-         case ITechSenses.SENSOR_TYPE_04_AXIS:
-            return "Axis";
-         case ITechSenses.GESTURE_TYPE_10_LOCATION:
-            return "Location";
-         case ITechSenses.GESTURE_TYPE_11_COMPASS:
-            return "Compass";
-         case ITechSenses.GESTURE_TYPE_12_DEVICE:
-            return "Device";
-         default:
-            return "UnknownSenseType" + type;
-      }
-   }
-
-   public static String getStringGestureType(int key) {
+   public static String toStringGestureType(int key) {
       switch (key) {
          case ITechGestures.GESTURE_TYPE_0_RAW:
             return "Raw";
@@ -215,13 +50,63 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
       return "UnknownGesture" + key;
    }
 
+   public static String toStringGridArea(int gridFlags) {
+      switch (gridFlags) {
+         case ITechGestures.GRID_X1_Y1:
+            return "X1_Y1";
+         case ITechGestures.GRID_X1_Y2:
+            return "X1_Y2";
+         case ITechGestures.GRID_X1_Y3:
+            return "X1_Y3";
+         case ITechGestures.GRID_X2_Y1:
+            return "X2_Y1";
+         case ITechGestures.GRID_X2_Y2:
+            return "X2_Y2";
+         case ITechGestures.GRID_X2_Y3:
+            return "X2_Y3";
+         case ITechGestures.GRID_X3_Y1:
+            return "X3_Y1";
+         case ITechGestures.GRID_X3_Y2:
+            return "X3_Y2";
+         case ITechGestures.GRID_X3_Y3:
+            return "X3_Y3";
+         default:
+            return "Unknown Grid " + gridFlags;
+      }
+   }
+
+   public static String toStringGridType(int type) {
+      switch (type) {
+         case ITechGestures.GRID_TYPE_11_1x1:
+            return "1x1";
+         case ITechGestures.GRID_TYPE_12_1x2:
+            return "1x2";
+         case ITechGestures.GRID_TYPE_21_2x1:
+            return "2x1";
+         case ITechGestures.GRID_TYPE_22_2x2:
+            return "2x2";
+         case ITechGestures.GRID_TYPE_23_2x3:
+            return "2x3";
+         case ITechGestures.GRID_TYPE_33_3x3:
+            return "3x3";
+         case ITechGestures.GRID_TYPE_32_3x2:
+            return "3x2";
+         case ITechGestures.GRID_TYPE_31_3x1:
+            return "3x1";
+         case ITechGestures.GRID_TYPE_13_1x3:
+            return "1x3";
+         default:
+            return "Unknown Grid " + type;
+      }
+   }
+
    /**
     * TODO When Keyboard is in Russian mode.... We are the framework level. this can only be known
     * by the Driver. Some Kind of Locale
     * @param key
     * @return
     */
-   public static String getStringKey(final int key) {
+   public static String toStringKey(final int key) {
       switch (key) {
          case KEY_NUM0:
             return "0";
@@ -333,7 +218,7 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
       }
    }
 
-   public static String getStringMod(int mod) {
+   public static String toStringMod(int mod) {
       switch (mod) {
          case IInput.MOD_0_PRESSED:
             return "Pressed";
@@ -357,7 +242,7 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
     * @param pointerButID
     * @return
     */
-   public static String getStringMouseButton(int pointerButID) {
+   public static String toStringMouseButton(int pointerButID) {
       switch (pointerButID) {
          case ITechCodes.PBUTTON_0_DEFAULT:
             return "MouseLeft";
@@ -374,7 +259,7 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
       }
    }
 
-   public static String getStringPointer(int pointer) {
+   public static String toStringPointer(int pointer) {
       switch (pointer) {
          case ITechCodes.POINTER_ID_0:
             return "1stPointer";
@@ -387,66 +272,173 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
       }
    }
 
-   public static String getStringGridType(int type) {
+   public static String toStringRepeatType(int type) {
       switch (type) {
-         case ITechGestures.GRID_TYPE_11_1x1:
-            return "1x1";
-         case ITechGestures.GRID_TYPE_12_1x2:
-            return "1x2";
-         case ITechGestures.GRID_TYPE_21_2x1:
-            return "2x1";
-         case ITechGestures.GRID_TYPE_22_2x2:
-            return "2x2";
-         case ITechGestures.GRID_TYPE_23_2x3:
-            return "2x3";
-         case ITechGestures.GRID_TYPE_33_3x3:
-            return "3x3";
-         case ITechGestures.GRID_TYPE_32_3x2:
-            return "3x2";
-         case ITechGestures.GRID_TYPE_31_3x1:
-            return "3x1";
-         case ITechGestures.GRID_TYPE_13_1x3:
-            return "1x3";
+         case IInput.REPEAT_0_INFINITE:
+            return "Infinite";
+         case IInput.REPEAT_1_FINITE:
+            return "Finite";
+         case IInput.REPEAT_2_LONG:
+            return "Long";
+         case IInput.REPEAT_3_TRAIL_FUNCTION:
+            return "Trail";
+         case IInput.REPEAT_4_PATTERN:
+            return "Pattern";
          default:
-            return "Unknown Grid " + type;
+            return "UnknownType " + type;
       }
    }
 
-   public static String getStringGridArea(int gridFlags) {
-      switch (gridFlags) {
-         case ITechGestures.GRID_X1_Y1:
-            return "X1_Y1";
-         case ITechGestures.GRID_X1_Y2:
-            return "X1_Y2";
-         case ITechGestures.GRID_X1_Y3:
-            return "X1_Y3";
-         case ITechGestures.GRID_X2_Y1:
-            return "X2_Y1";
-         case ITechGestures.GRID_X2_Y2:
-            return "X2_Y2";
-         case ITechGestures.GRID_X2_Y3:
-            return "X2_Y3";
-         case ITechGestures.GRID_X3_Y1:
-            return "X3_Y1";
-         case ITechGestures.GRID_X3_Y2:
-            return "X3_Y2";
-         case ITechGestures.GRID_X3_Y3:
-            return "X3_Y3";
-         default:
-            return "Unknown Grid " + gridFlags;
-      }
-   }
-
-   public static String getStringTiming(int time) {
-      switch (time) {
-         case ITechCodes.TIMING_0_NONE:
+   public static String toStringScreenMode(int mode) {
+      switch (mode) {
+         case ITechHostUI.SCREEN_0_TOP_NORMAL:
             return "Normal";
-         case ITechCodes.TIMING_1_SLOW:
-            return "Slow";
-         case ITechCodes.TIMING_3_FAST:
-            return "Fast";
+         case ITechHostUI.SCREEN_1_BOT_UPSIDEDOWN:
+            return "UpSideDown";
+         case ITechHostUI.SCREEN_2_LEFT_ROTATED:
+            return "RotatedLeft";
+         case ITechHostUI.SCREEN_3_RIGHT_ROTATED:
+            return "RotatedRight";
          default:
-            return "UnknownTiming" + time;
+            return "Unknown ScreenMode " + mode;
+      }
+   }
+
+   /**
+    * {@link ITechEventHost}
+    * @param subtype
+    * @return
+    */
+   public static String toStringAppliAction(int subtype) {
+      switch (subtype) {
+         case ITechEventHost.ACTION_1_CLOSE:
+            return "Closed";
+         case ITechEventHost.ACTION_2_MOVED:
+            return "Moved";
+         case ITechEventHost.ACTION_3_RESIZED:
+            return "Resized";
+         case ITechEventHost.ACTION_4_FOCUS_GAIN:
+            return "FocusGain";
+         case ITechEventHost.ACTION_5_FOCUS_LOSS:
+            return "FocusLoss";
+         case ITechEventHost.ACTION_6_NOTIFY_SHOW:
+            return "NotifyShow";
+         case ITechEventHost.ACTION_7_NOTIFY_HIDE:
+            return "NotifyHide";
+         case ITechEventHost.ACTION_8_APPLI_PAUSED:
+            return "AppliPaused";
+         case ITechEventHost.ACTION_9_APPLI_STARTED:
+            return "AppliStarted";
+         default:
+            return "UnknownAction" + subtype;
+      }
+   }
+
+   public static String toStringButtonShort(int pointerButID) {
+      switch (pointerButID) {
+         case ITechCodes.PBUTTON_4_WHEEL_DOWN:
+            return "WheelDown";
+         case ITechCodes.PBUTTON_3_WHEEL_UP:
+            return "WheelUp";
+         case ITechCodes.PBUTTON_0_DEFAULT:
+            return "Left";
+         case ITechCodes.PBUTTON_1_RIGHT:
+            return "Right";
+         case ITechCodes.PBUTTON_2_MIDDLE:
+            return "Middle";
+         default:
+            return "Unknown Button " + pointerButID;
+      }
+   }
+
+   public static String toStringDeviceType(int devType) {
+      switch (devType) {
+         case IInput.DEVICE_0_KEYBOARD:
+            return "Keyboard";
+         case IInput.DEVICE_1_MOUSE:
+            return "Mouse";
+         case IInput.DEVICE_2_GAMEPAD:
+            return "Gamepad";
+         case IInput.DEVICE_3_FINGER:
+            return "Finger";
+         case IInput.DEVICE_4_SCREEN:
+            return "Screen";
+         case IInput.DEVICE_5_OTHER:
+            return "Other";
+         case IInput.DEVICE_6_POINTER:
+            return "Pointer";
+         case IInput.DEVICE_7_SENSOR:
+            return "Sensor";
+         default:
+            return "UnknownDeviceType" + devType;
+      }
+   }
+
+   public static String toStringEventType(int t) {
+      switch (t) {
+         case IInput.TYPE_0_OTHER:
+            return "Other";
+         case IInput.TYPE_1_DEVICE:
+            return "Device";
+         case IInput.TYPE_2_GESTURE:
+            return "Gesture";
+         case IInput.TYPE_3_CANVAS:
+            return "Canvas";
+         case IInput.TYPE_4_REPEAT:
+            return "Repeat";
+         case IInput.TYPE_5_CTX_CHANGE:
+            return "CtxChange";
+         case IInput.TYPE_6_APPLI:
+            return "Appli";
+         default:
+            return "Unknown" + t;
+      }
+   }
+
+   public static String toStringFeature(int feat) {
+      switch (feat) {
+         case ITechHostUI.SUP_ID_38_GAMEPADS:
+            return "GamePads";
+         default:
+            return "UnknownFeature" + feat;
+      }
+   }
+
+   /**
+    * 
+    * @param key
+    * @return
+    */
+   public static String toStringGestureDir(int key) {
+      switch (key) {
+         case ITechGestures.GESTURE_DIR_00_ANY:
+            return "Any";
+         case ITechGestures.GESTURE_DIR_01_VERTICAL:
+            return "Vertical";
+         case ITechGestures.GESTURE_DIR_02_HORIZONTAL:
+            return "Horizontal";
+         case ITechGestures.GESTURE_DIR_03_TOP:
+            return "Top";
+         case ITechGestures.GESTURE_DIR_04_BOT:
+            return "Bot";
+         case ITechGestures.GESTURE_DIR_05_LEFT:
+            return "Left";
+         case ITechGestures.GESTURE_DIR_06_RIGHT:
+            return "Right";
+         case ITechGestures.GESTURE_DIR_07_TOP_LEFT:
+            return "TopLeft";
+         case ITechGestures.GESTURE_DIR_08_TOP_RIGHT:
+            return "TopRight";
+         case ITechGestures.GESTURE_DIR_09_BOT_LEFT:
+            return "BotLeft";
+         case ITechGestures.GESTURE_DIR_10_BOT_RIGHT:
+            return "BotRight";
+         case ITechGestures.GESTURE_NOT_DETECTED:
+            return "NotDetected";
+         case ITechGestures.GESTURE_UNKNOWN:
+            return "NotComputed";
+         default:
+            return "UnknownGestureDir" + key;
       }
    }
 
@@ -476,16 +468,52 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
       }
    }
 
-   public static String getStringEventKeyModeType(int modeType) {
-      switch (modeType) {
-         case ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_0_INVERSE:
-            return "Inverse";
-         case ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_1_SAME:
-            return "Same";
-         case ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_2_ANY:
-            return "Any";
+   public static String toStringScreenConfig(int c) {
+      switch (c) {
+         case ITechHostUI.SCREEN_0_TOP_NORMAL:
+            return "Normal";
+         case ITechHostUI.SCREEN_1_BOT_UPSIDEDOWN:
+            return "UpsideDown";
+         case ITechHostUI.SCREEN_2_LEFT_ROTATED:
+            return "Left";
+         case ITechHostUI.SCREEN_3_RIGHT_ROTATED:
+            return "Right";
          default:
-            return "UnknownModeType" + modeType;
+            return "UnknownConfig" + c;
+      }
+   }
+
+   public static String toStringSense(int type) {
+      switch (type) {
+         case ITechSenses.GESTURE_TYPE_05_SHAKE:
+            return "Shake";
+         case ITechSenses.GESTURE_TYPE_07_MOVE:
+            return "Move";
+         case ITechSenses.GESTURE_TYPE_08_LIGHT:
+            return "Light";
+         case ITechSenses.SENSOR_TYPE_04_AXIS:
+            return "Axis";
+         case ITechSenses.GESTURE_TYPE_10_LOCATION:
+            return "Location";
+         case ITechSenses.GESTURE_TYPE_11_COMPASS:
+            return "Compass";
+         case ITechSenses.GESTURE_TYPE_12_DEVICE:
+            return "Device";
+         default:
+            return "UnknownSenseType" + type;
+      }
+   }
+
+   public static String toStringTiming(int time) {
+      switch (time) {
+         case ITechCodes.TIMING_0_NONE:
+            return "Normal";
+         case ITechCodes.TIMING_1_SLOW:
+            return "Slow";
+         case ITechCodes.TIMING_3_FAST:
+            return "Fast";
+         default:
+            return "UnknownTiming" + time;
       }
    }
 

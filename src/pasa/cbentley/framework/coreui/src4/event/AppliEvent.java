@@ -46,16 +46,16 @@ public class AppliEvent extends BEvent {
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, "AppliEvent");
-      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringAppliAction(mode));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringAppliAction(mode));
    }
 
    public String getUserLineString() {
-      return "Appli " + ToStringStaticCoreUi.getStringAppliAction(getAction());
+      return "Appli " + ToStringStaticCoreUi.toStringAppliAction(getAction());
    }
 
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, "AppliEvent");
-      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.getStringAppliAction(mode));
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringAppliAction(mode));
    }
    //#enddebug
 }

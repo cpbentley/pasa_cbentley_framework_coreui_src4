@@ -106,11 +106,5 @@ public interface ICanvasAppli extends IStringable, IStatorable {
     */
    public ICanvasHost getCanvasHost();
 
-   /**
-    * Called by {@link CanvasHostAbstract} when it has been resized
-    * @param w
-    * @param h
-    */
-   public void eventCanvasSize(int w, int h);
 
 }

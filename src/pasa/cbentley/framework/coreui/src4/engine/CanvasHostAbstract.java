@@ -183,7 +183,6 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void canvasSizeChangedBridge(int w, int h) {
       if (canvasAppli != null) {
-         canvasAppli.eventCanvasSize(w, h);
          CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_3_RESIZED, this);
          de.setW(w);
          de.setH(h);

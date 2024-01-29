@@ -1,6 +1,14 @@
 package pasa.cbentley.framework.coreui.src4.interfaces;
 
-public interface ITechEventHost {
+import pasa.cbentley.core.src4.interfaces.ITech;
+import pasa.cbentley.framework.coreui.src4.ctx.ToStringStaticCoreUi;
+
+/**
+ * {@link ToStringStaticCoreUi#toStringAppliAction(int)}
+ * @author Charles Bentley
+ *
+ */
+public interface ITechEventHost extends ITech {
 
    /**
     * When a Canvas is closed. Closing while a key modifier is
