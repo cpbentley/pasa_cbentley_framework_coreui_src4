@@ -56,8 +56,8 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       }
       this.boCanvasHost = boCanvasHost;
       //register for AppModule events
-      cac.getEventBus().addConsumer(this, IEventsCoreUI.PID_1_DEVICE, IEventsCoreUI.EVENT_ID_01_DEVICE_UPDATE);
-      cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_0_ANY);
+      cac.getEventBus().addConsumer(this, IEventsCoreUI.PID_01_DEVICE, IEventsCoreUI.PID_01_DEVICE_05_UPDATE);
+      cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_00_ANY);
    }
 
    public int getStatorableClassID() {
@@ -193,7 +193,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    public void consumeEvent(BusEvent e) {
       if (e.getPID() == PID_02_CANVAS) {
          if (e.getProducer() == canvasAppli) {
-            if (e.getEventID() == PID_02_CANVAS_1_TITLE) {
+            if (e.getEventID() == PID_02_CANVAS_01_TITLE) {
                titleIconComesticUpdate();
             }
          }
@@ -421,7 +421,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    /**
-    * {@link IEventsCoreUI#PID_02_CANVAS_1_TITLE}
+    * {@link IEventsCoreUI#PID_02_CANVAS_01_TITLE}
     */
    public void titleIconComesticUpdate() {
 

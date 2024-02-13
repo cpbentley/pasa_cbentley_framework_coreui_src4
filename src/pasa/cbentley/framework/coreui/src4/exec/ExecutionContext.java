@@ -10,9 +10,16 @@ import pasa.cbentley.framework.coreui.src4.event.BEvent;
 
 /**
  * An {@link ExecutionContext} records or queue state changes during the process of a command.
- * It belongs to one thread. It exists to allow multi threading.
- * <br>
+ * It belongs to one thread. 
+ * 
+ * 
+ * 
+ * <li>It exists to allow multi threading.
+ * <li>.
+ * 
+ * <p>
  * At the end of the command execution, the state changes records are acted upon.
+ * </p>
  * <li>Events are processed first
  * <li>Commands executed ?
  * <li>Runnables to be run once the command ends.

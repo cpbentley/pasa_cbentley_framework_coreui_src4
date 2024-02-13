@@ -21,7 +21,7 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
       super(cdc.getBOC());
       this.cuc = cdc;
       //#debug
-      toDLog().pInit("starts", this, BOModuleCoreUi.class, "BOModuleCoreUi", LVL_05_FINE, true);
+      toDLog().pInit("", this, BOModuleCoreUi.class, "Created@25", LVL_04_FINER, true);
    }
 
    public ByteObject getFlagOrderedBO(ByteObject bo, int offset, int flag) {
@@ -46,10 +46,6 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
    }
 
    //#mdebug
-   public void toString(Dctx dc) {
-      dc.root(this, "BOModuleCoreUi");
-      super.toString(dc.newLevel());
-   }
 
    public boolean toString(Dctx dc, ByteObject bo) {
       int type = bo.getType();
@@ -69,9 +65,6 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
       return true;
    }
 
-   public void toString1Line(Dctx dc) {
-      dc.root(this, "BOModuleCoreUi");
-   }
    //#enddebug
 
    public boolean toString1Line(Dctx dc, ByteObject bo) {
@@ -118,5 +111,26 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
             return null;
       }
    }
+   
+   //#mdebug
+   public void toString(Dctx dc) {
+      dc.root(this, BOModuleCoreUi.class, 120);
+      toStringPrivate(dc);
+      super.toString(dc.sup());
+   }
+
+   private void toStringPrivate(Dctx dc) {
+      
+   }
+
+   public void toString1Line(Dctx dc) {
+      dc.root1Line(this, BOModuleCoreUi.class);
+      toStringPrivate(dc);
+      super.toString1Line(dc.sup1Line());
+   }
+
+   //#enddebug
+   
+
 
 }

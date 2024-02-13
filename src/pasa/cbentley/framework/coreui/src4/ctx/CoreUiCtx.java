@@ -5,11 +5,10 @@ import pasa.cbentley.byteobjects.src4.ctx.ABOCtx;
 import pasa.cbentley.byteobjects.src4.ctx.BOCtx;
 import pasa.cbentley.byteobjects.src4.ctx.IConfigBO;
 import pasa.cbentley.byteobjects.src4.ctx.IStaticIDsBO;
-import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
-import pasa.cbentley.byteobjects.src4.stator.StatorWriterBO;
 import pasa.cbentley.core.src4.api.ApiManager;
 import pasa.cbentley.core.src4.ctx.CtxManager;
 import pasa.cbentley.core.src4.ctx.ICtx;
+import pasa.cbentley.core.src4.ctx.IStaticIDs;
 import pasa.cbentley.core.src4.event.EventBusArray;
 import pasa.cbentley.core.src4.event.IEventBus;
 import pasa.cbentley.core.src4.interfaces.IExecutor;
@@ -26,9 +25,9 @@ import pasa.cbentley.framework.coreui.src4.event.BEvent;
 import pasa.cbentley.framework.coreui.src4.event.GestureArea;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.coreui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coreui.src4.interfaces.IWrapperManager;
 import pasa.cbentley.framework.coreui.src4.interfaces.IHostGestures;
 import pasa.cbentley.framework.coreui.src4.interfaces.IHostUI;
+import pasa.cbentley.framework.coreui.src4.interfaces.IWrapperManager;
 import pasa.cbentley.framework.coreui.src4.tech.IBOCanvasHost;
 import pasa.cbentley.framework.coreui.src4.tech.IBOFramePos;
 import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
@@ -48,7 +47,7 @@ import pasa.cbentley.framework.coreui.src4.utils.InputSettings;
  * @author Charles Bentley
  *
  */
-public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHostUI, ITechCtxSettingsCoreUI {
+public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHostUI, IBOCtxSettingsCoreUI {
 
    private BOModuleCoreUi      boModule;
 
@@ -75,8 +74,6 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
 
    protected final CoreDrawCtx cdc;
 
-   private EventBusArray       eventBus;
-
    private InputSettings       inputSettings;
 
    protected int               pressedKeyCounter;
@@ -84,6 +81,8 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
    protected int[]             pressedKeys = new int[20];
 
    private IWrapperManager     wrapperManager;
+
+   private EventBusArray       eventBus;
 
    public CoreUiCtx(IConfigCoreUI configUI, CoreDrawCtx cdc) {
       super(configUI, cdc.getBOC());
@@ -94,6 +93,8 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
 
       CtxManager cm = uc.getCtxManager();
       cm.registerStaticRange(this, IStaticIDsBO.SID_BYTEOBJECT_TYPES, IBOTypesCoreUI.AZ_BOTYPE_FW_A, IBOTypesCoreUI.AZ_BOTYPE_FW_Z);
+
+      cm.registerStaticRange(this, IStaticIDs.SID_EVENTS, IEventsCoreUI.A_SID_COREUI_EVENT_A, IEventsCoreUI.A_SID_COREUI_EVENT_Z);
    }
 
    protected void applySettings(ByteObject settingsNew, ByteObject settingsOld) {
@@ -112,7 +113,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
       tech.set2(IBOCanvasHost.TCANVAS_OFFSET_14_FRAMEPOS2, 0);
       return tech;
    }
-   
+
    public void clearCanvases() {
       canvasRoot = null;
       canvases.clear();
@@ -273,9 +274,9 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
       for (int i = 0; i < canvases.nextempty; i++) {
          CanvasHostAbstract c = (CanvasHostAbstract) canvases.getObjectAtIndex(i);
          c.onExit();
-      }      
+      }
    }
-   
+
    public int getBOCtxSettingSize() {
       return CTX_COREUI_BASIC_SIZE;
    }
@@ -348,8 +349,6 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
       }
       return hosts;
    }
-   
-
 
    public CanvasHostAbstract getCanvasFromID(int id) {
       for (int i = 0; i < canvases.nextempty; i++) {
@@ -385,16 +384,21 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
       return new ICtx[] { cdc };
    }
 
-   public int[] getEventBaseTopology() {
+   /**
+    * Returns the number of events
+    * @return
+    */
+   private int[] getEventBaseTopology() {
       int[] events = new int[IEventsCoreUI.BASE_EVENTS];
-      events[IEventsCoreUI.PID_0_ANY] = IEventsCoreUI.PID_0_ANY;
-      events[IEventsCoreUI.PID_02_CANVAS] = IEventsCoreUI.PID_02_CANVAS_X_NUM;
+      events[IEventsCoreUI.PID_00] = IEventsCoreUI.PID_00_XX;
+      events[IEventsCoreUI.PID_01] = IEventsCoreUI.PID_01_XX;
+      events[IEventsCoreUI.PID_02] = IEventsCoreUI.PID_02_XX;
       return events;
    }
 
    public IEventBus getEventBus() {
       if (eventBus == null) {
-         eventBus = new EventBusArray(uc, this, getEventBaseTopology());
+         eventBus = new EventBusArray(getUC(), this, getEventBaseTopology(), IEventsCoreUI.A_SID_COREUI_EVENT_A);
       }
       return eventBus;
    }
@@ -552,7 +556,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
    }
 
    /**
-    * Will be called when we need to apply incoming config to {@link ITechCtxSettingsCoreUI} ByteObject.
+    * Will be called when we need to apply incoming config to {@link IBOCtxSettingsCoreUI} ByteObject.
     * @param config
     * @param settings
     */
@@ -616,7 +620,6 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
          CanvasHostAbstract canvas = (CanvasHostAbstract) canvases.getObjectAtIndex(i);
          dc.nlLvl(canvas, "AbstractCanvasHost");
       }
-      dc.nlLvl(eventBus, "eventBus");
 
       dc.nlLvl(cdc, CoreDrawCtx.class);
    }
@@ -631,8 +634,18 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
 
    }
 
-  
+   /**
+    * {@link IBOCtxSettingsCoreUI}
+    */
+   public void toStringCtxSettings(Dctx dc, ByteObject bo) {
+      super.toStringCtxSettings(dc, bo);
+      dc.nl();
+      dc.append("#IBOCtxSettingsCoreUI");
+      dc.nl();
+      boolean isFullScreen = bo.hasFlag(CTX_COREUI_OFFSET_01_FLAG1, CTX_COREUI_FLAG_1_FULLSCREEN);
+      dc.appendVarWithNewLine("isFullScreen", isFullScreen);
 
+   }
    //#enddebug
 
 }

@@ -19,7 +19,7 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
  * Class registers for Device update event, in which case, every value is invalidated.
  * <br>
  * 
- * {@link IEventsBentleyFw#EVENT_ID_01_DEVICE_UPDATE}
+ * {@link IEventsBentleyFw#PID_01_DEVICE_05_UPDATE}
  * 
  * 
  * 
@@ -64,11 +64,11 @@ public class InputSettings implements IInput, IEventConsumer, ITechHostUI, IStri
 
    public InputSettings(CoreUiCtx fc) {
       this.cuc = fc;
-      cuc.getEventBus().addConsumer(this, IEventsCoreUI.PID_1_DEVICE, IEventsCoreUI.EVENT_ID_01_DEVICE_UPDATE);
+      cuc.getEventBus().addConsumer(this, IEventsCoreUI.PID_01_DEVICE, IEventsCoreUI.PID_01_DEVICE_05_UPDATE);
    }
 
    public void consumeEvent(BusEvent e) {
-      if (e.getEventID() == IEventsCoreUI.EVENT_ID_01_DEVICE_UPDATE) {
+      if (e.getEventID() == IEventsCoreUI.PID_01_DEVICE_05_UPDATE) {
          //reset all
          longPressTimeOut = 0;
          keyRepeatTimeOut = 0;
