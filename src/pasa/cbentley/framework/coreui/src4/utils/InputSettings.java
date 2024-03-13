@@ -311,7 +311,7 @@ public class InputSettings implements IInput, IEventConsumer, ITechHostUI, IStri
    //#enddebug
 
    public UCtx toStringGetUCtx() {
-      return cuc.getUCtx();
+      return cuc.getUC();
    }
 
 }

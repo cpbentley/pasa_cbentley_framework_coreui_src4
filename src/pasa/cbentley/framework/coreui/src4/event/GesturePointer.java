@@ -143,7 +143,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
       this.fc = kernel;
       this.pointerID = pointerID;
       gestureIdentity = new GestureIdentity(fc);
-      UCtx uc = fc.getUCtx();
+      UCtx uc = fc.getUC();
       xs = new IntBuffer(uc);
       ys = new IntBuffer(uc);
       times = new IntBuffer(uc);
@@ -825,7 +825,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    public int[] getPath2x2(GestureArea area) {
-      IntBuffer ib = new IntBuffer(fc.getUCtx());
+      IntBuffer ib = new IntBuffer(fc.getUC());
       int size = getSize();
       int oldV = -1;
       for (int i = 0; i < size; i++) {
@@ -842,7 +842,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    public int[] getPath2x3(GestureArea area) {
-      IntBuffer ib = new IntBuffer(fc.getUCtx());
+      IntBuffer ib = new IntBuffer(fc.getUC());
       int size = getSize();
       int oldV = -1;
       for (int i = 0; i < size; i++) {
@@ -859,7 +859,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    public int[] getPath3x3(GestureArea area) {
-      IntBuffer ib = new IntBuffer(fc.getUCtx());
+      IntBuffer ib = new IntBuffer(fc.getUC());
       int size = getSize();
       int oldV = -1;
       for (int i = 0; i < size; i++) {
@@ -1303,7 +1303,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
    }
 
    public IDLog toDLog() {
-      return fc.getUCtx().toDLog();
+      return fc.getUC().toDLog();
    }
 
    public void toString(Dctx dc) {
@@ -1344,7 +1344,7 @@ public class GesturePointer extends ListElement implements ITechGestures, IBentl
 
       //flag this data as potentially very big. only prints a few lines
       int num = xs.getSize();
-      StringUtils su = fc.getUCtx().getStrU();
+      StringUtils su = fc.getUC().getStrU();
       for (int i = 0; i < num; i++) {
          if (i % 10 == 0) {
             dc.nl();

@@ -87,7 +87,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
    public CoreUiCtx(IConfigCoreUI configUI, CoreDrawCtx cdc) {
       super(configUI, cdc.getBOC());
       this.cdc = cdc;
-      canvases = new IntToObjects(cdc.getUCtx(), 2);
+      canvases = new IntToObjects(cdc.getUC(), 2);
 
       boModule = new BOModuleCoreUi(this);
 
@@ -102,11 +102,11 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
    }
 
    /**
-    * {@link IBOTypesCoreUI#TYPE_5_TECH_CANVAS_HOST}
+    * {@link IBOTypesCoreUI#TYPE_5_CANVAS_HOST}
     * @return
     */
    public ByteObject createBOCanvasHostDefault() {
-      int type = IBOTypesCoreUI.TYPE_5_TECH_CANVAS_HOST;
+      int type = IBOTypesCoreUI.TYPE_5_CANVAS_HOST;
       int size = IBOCanvasHost.TCANVAS_BASIC_SIZE;
       ByteObject tech = cdc.getBOC().getByteObjectFactory().createByteObject(type, size);
       tech.set1(IBOCanvasHost.TCANVAS_OFFSET_02_WRAPPER_TYPE1, IBOCanvasHost.TCANVAS_TYPE_1_FRAME);
@@ -120,7 +120,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
    }
 
    public ApiManager getApiManager() {
-      return getUCtx().getApiManager();
+      return getUC().getApiManager();
    }
 
    /**
@@ -294,7 +294,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUI, ITechHo
    public CanvasHostAbstract[] getCanvasAt(int x, int y) {
       //TODO keep track of top most canvas
       //problem is that the z cannot be determ
-      IntToObjects itos = new IntToObjects(getUCtx(), canvases.nextempty);
+      IntToObjects itos = new IntToObjects(getUC(), canvases.nextempty);
       for (int i = 0; i < canvases.nextempty; i++) {
          CanvasHostAbstract ch = (CanvasHostAbstract) canvases.objects[i];
          int rx = ch.getICX();

@@ -15,7 +15,7 @@ public class EventCreator {
 
    public EventCreator(CoreUiCtx dd) {
       this.dd = dd;
-      pointersEmpty = new LinkedListDouble(dd.getUCtx());
+      pointersEmpty = new LinkedListDouble(dd.getUC());
       for (int i = 0; i < 10; i++) {
          GesturePointer gp = new GesturePointer(pointersEmpty, dd, -1);
          gp.addToList();

@@ -85,7 +85,7 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
       if (boCanvasHost == null) {
          boCanvasHost = cuc.createBOCanvasHostDefault();
       }
-      this.uc = cuc.getUCtx();
+      this.uc = cuc.getUC();
       canvasHost = cuc.createCanvasHost(boCanvasHost);
       if (canvasHost == null) {
          throw new NullPointerException();
@@ -108,7 +108,7 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
     */
    public void addDuplicate(ICanvasHost c) {
       if (dups == null) {
-         dups = new IntToObjects(cuc.getUCtx(), 1);
+         dups = new IntToObjects(cuc.getUC(), 1);
       }
       dups.add(c);
    }

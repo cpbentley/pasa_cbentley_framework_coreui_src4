@@ -28,7 +28,7 @@ public class GesturePath extends GestureEvent {
    }
 
    public void addPath(int v) {
-      arrayInt = fc.getUCtx().getIU().addIntToEndOf(arrayInt, v);
+      arrayInt = fc.getUC().getIU().addIntToEndOf(arrayInt, v);
    }
 
    /**

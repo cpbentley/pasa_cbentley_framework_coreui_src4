@@ -175,7 +175,7 @@ public class RepeatEvent extends BEvent implements IStringable {
 
    public void addCanceler(EventKey ek) {
       if (cancelers == null) {
-         cancelers = new LinkedListDouble(fc.getUCtx());
+         cancelers = new LinkedListDouble(fc.getUC());
       }
       cancelers.addFreeHolder(ek);
    }
@@ -186,7 +186,7 @@ public class RepeatEvent extends BEvent implements IStringable {
     */
    public void addFireCondition(EventKey ek) {
       if (fireConditions == null) {
-         fireConditions = new LinkedListDouble(fc.getUCtx());
+         fireConditions = new LinkedListDouble(fc.getUC());
       }
       fireConditions.addFreeHolder(ek);
    }

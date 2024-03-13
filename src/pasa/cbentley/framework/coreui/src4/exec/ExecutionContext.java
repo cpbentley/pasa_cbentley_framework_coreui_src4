@@ -88,7 +88,7 @@ public class ExecutionContext implements ITechExecutionContext, IStringable {
     */
    public ExecutionContext(CoreUiCtx cuc) {
       this.cuc = cuc;
-      UCtx uc = cuc.getUCtx();
+      UCtx uc = cuc.getUC();
       data = new IntToObjects(uc);
       types = new IntToObjects(uc);
       execEntries = new IntToObjects(uc);
@@ -183,7 +183,7 @@ public class ExecutionContext implements ITechExecutionContext, IStringable {
    }
 
    public UCtx toStringGetUCtx() {
-      return cuc.getUCtx();
+      return cuc.getUC();
    }
 
    private void toStringPrivate(Dctx dc) {

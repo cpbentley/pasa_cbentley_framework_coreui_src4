@@ -43,7 +43,7 @@ public abstract class AbstractExecutor implements IExecutor {
    }
 
    public UCtx toStringGetUCtx() {
-      return cuc.getUCtx();
+      return cuc.getUC();
    }
 
    //#enddebug

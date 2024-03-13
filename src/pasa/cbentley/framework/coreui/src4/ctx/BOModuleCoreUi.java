@@ -40,7 +40,7 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
          case TYPE_8_FRAME_POS:
             //merge 2 frame positions
             throw new RuntimeException();
-         case TYPE_5_TECH_CANVAS_HOST:
+         case TYPE_5_CANVAS_HOST:
       }
       return null;
    }
@@ -50,10 +50,10 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
    public boolean toString(Dctx dc, ByteObject bo) {
       int type = bo.getType();
       switch (type) {
-         case TYPE_5_TECH_CANVAS_HOST:
+         case TYPE_5_CANVAS_HOST:
             dc.append(toStringType(type));
             break;
-         case TYPE_7_FILECHOOSER_TECH:
+         case TYPE_7_FILECHOOSER:
             dc.append(toStringType(type));
             break;
          case TYPE_8_FRAME_POS:
@@ -70,10 +70,10 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
    public boolean toString1Line(Dctx dc, ByteObject bo) {
       int type = bo.getType();
       switch (type) {
-         case TYPE_5_TECH_CANVAS_HOST:
+         case TYPE_5_CANVAS_HOST:
             dc.append(toStringType(type));
             break;
-         case TYPE_7_FILECHOOSER_TECH:
+         case TYPE_7_FILECHOOSER:
             dc.append(toStringType(type));
             break;
          case TYPE_8_FRAME_POS:
@@ -88,9 +88,9 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
    public String toStringOffset(ByteObject bo, int offset) {
       int type = bo.getType();
       switch (type) {
-         case TYPE_5_TECH_CANVAS_HOST:
+         case TYPE_5_CANVAS_HOST:
             return null;
-         case TYPE_7_FILECHOOSER_TECH:
+         case TYPE_7_FILECHOOSER:
             return null;
          case TYPE_8_FRAME_POS:
          default:
@@ -100,9 +100,9 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
 
    public String toStringType(int type) {
       switch (type) {
-         case IBOTypesCoreUI.TYPE_5_TECH_CANVAS_HOST:
+         case IBOTypesCoreUI.TYPE_5_CANVAS_HOST:
             return "Canvas";
-         case IBOTypesCoreUI.TYPE_7_FILECHOOSER_TECH:
+         case IBOTypesCoreUI.TYPE_7_FILECHOOSER:
             return "FileChooser";
          case IBOTypesCoreUI.TYPE_8_FRAME_POS:
             return "FramePos";

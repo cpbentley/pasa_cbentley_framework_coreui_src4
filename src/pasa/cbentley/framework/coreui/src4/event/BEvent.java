@@ -77,14 +77,14 @@ public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes 
    protected int             type;
 
    public BEvent(CoreUiCtx fc) {
-      super(fc.getUCtx(), fc.getEventBus(), 0, 0);
+      super(fc.getUC(), fc.getEventBus(), 0, 0);
       if (fc == null)
          throw new NullPointerException();
       this.fc = fc;
    }
 
    public BEvent(CoreUiCtx fc, IEventCreator ec) {
-      super(fc.getUCtx(), fc.getEventBus(), 0, 0);
+      super(fc.getUC(), fc.getEventBus(), 0, 0);
       this.fc = fc;
    }
 
@@ -191,7 +191,7 @@ public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes 
    }
 
    public UCtx toStringGetUCtx() {
-      return fc.getUCtx();
+      return fc.getUC();
    }
 
    public void toStringSetDebugName(String str) {

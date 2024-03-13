@@ -100,7 +100,7 @@ public interface IBOCanvasHost extends IByteObject {
     */
    public static final int TCANVAS_OFFSET_14_FRAMEPOS2     = A_OBJECT_BASIC_SIZE + 24;
 
-   public static final int TCANVAS_TYPE                    = IBOTypesCoreUI.TYPE_5_TECH_CANVAS_HOST;
+   public static final int TCANVAS_TYPE                    = IBOTypesCoreUI.TYPE_5_CANVAS_HOST;
 
    /**
     * The wrapper decided by the launcher

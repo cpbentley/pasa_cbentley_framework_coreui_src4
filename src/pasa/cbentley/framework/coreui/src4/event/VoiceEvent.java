@@ -29,7 +29,7 @@ public class VoiceEvent extends BEvent {
    }
 
    public String getUserLineString() {
-      return "VoiceEvent " + fc.getUCtx().getStrU().getString(ar, ",");
+      return "VoiceEvent " + fc.getUC().getStrU().getString(ar, ",");
    }
 
    public void setMatches(String[] ar) {

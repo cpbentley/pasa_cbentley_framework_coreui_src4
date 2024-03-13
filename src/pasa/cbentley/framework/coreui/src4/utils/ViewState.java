@@ -207,7 +207,7 @@ public class ViewState {
    }
 
    public UCtx getUCtx() {
-      return boc.getUCtx();
+      return boc.getUC();
    }
 
    /**
