@@ -98,6 +98,14 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
       canvasHost.titleIconComesticUpdate();
    }
 
+   public int getScreenY(int y) {
+      return canvasHost.getScreenY(y);
+   }
+
+   public int getScreenX(int x) {
+      return canvasHost.getScreenX(x);
+   }
+
    public int getStatorableClassID() {
       throw new RuntimeException("Must be implemented by subclass" + this.getClass().getName());
    }
@@ -261,14 +269,13 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    /**
     */
    public void stateReadFrom(StatorReader state) {
-      
+
       //#debug
       toDLog().pStator("StatorReader", this, CanvasAppliAbstract.class, "stateReadFrom", LVL_05_FINE, true);
       //parameters were already read
-      
+
       StatorReaderBO stator = (StatorReaderBO) state;
 
-      
       state.checkInt(98765);
       canvasTitle = stator.getReader().readString();
       canvasIconPath = stator.getReader().readString();
@@ -283,9 +290,9 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
 
       //#debug
       toDLog().pStator("StatorWriter", this, CanvasAppliAbstract.class, "stateWriteTo", LVL_05_FINE, true);
-     
+
       stateWriteToParamSub(state);
-      
+
       //it might already be written... who knows
       state.writeInt(98765);
       state.getWriter().writeString(canvasTitle);
@@ -298,11 +305,11 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    protected void stateWriteToParamSub(StatorWriter state) {
       //Do the parameters for the constructor
       state.writeInt(ITechStator.MAGIC_WORD_OBJECT_PARAM);
-      StatorWriterBO swbo = (StatorWriterBO)state;
+      StatorWriterBO swbo = (StatorWriterBO) state;
       ByteObject boCanvasHost = this.getCanvasHost().getBOCanvasHost();
       swbo.writeByteObject(boCanvasHost);
    }
-   
+
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, CanvasAppliAbstract.class, 300);

@@ -40,23 +40,6 @@ public interface ICanvasHost extends IStringable, IStatorable {
    public void canvasHide();
 
    /**
-    * 
-    */
-   public void titleIconComesticUpdate();
-
-   /**
-    * 
-    * @param canvasAppli
-    */
-   public void setCanvasAppli(ICanvasAppli canvasAppli);
-
-   /**
-    * 
-    * @return
-    */
-   public ICanvasAppli getCanvasAppli();
-
-   /**
     * Ask the Canvas and its wrapper to show it
     */
    public void canvasShow();
@@ -65,6 +48,18 @@ public interface ICanvasHost extends IStringable, IStatorable {
     * 
     */
    public void flushGraphics();
+
+   /**
+    * {@link IBOCanvasHost} 
+    * @return not null
+    */
+   public ByteObject getBOCanvasHost();
+
+   /**
+    * 
+    * @return
+    */
+   public ICanvasAppli getCanvasAppli();
 
    /**
     * 
@@ -96,11 +91,14 @@ public interface ICanvasHost extends IStringable, IStatorable {
     */
    public int getICY();
 
+   public int getScreenX(int x);
+
    /**
-    * {@link IBOCanvasHost} 
-    * @return not null
+    * Maps the y into the screen coordinate
+    * @param y
+    * @return
     */
-   public ByteObject getBOCanvasHost();
+   public int getScreenY(int y);
 
    public void icRepaint();
 
@@ -155,6 +153,12 @@ public interface ICanvasHost extends IStringable, IStatorable {
    public boolean isShown();
 
    /**
+    * 
+    * @param canvasAppli
+    */
+   public void setCanvasAppli(ICanvasAppli canvasAppli);
+
+   /**
     * Activates a canvas feature. a System flag of the {@link ICanvasHost}.
     * <br>
     * <li> {@link ITechHost#SUP_ID_01_KEYBOARD}
@@ -177,6 +181,13 @@ public interface ICanvasHost extends IStringable, IStatorable {
    public boolean setCanvasFeature(int feature, Object mode);
 
    /**
+    * Sets/Resets the canvas to its default position on the screen.
+    * 
+    * Values are taken from the hard coded configuration
+    */
+   public void setDefaultStartPosition();
+
+   /**
     * Sets the Icon for the Canvas.
     * <br>
     * The display of the icon will depend on the wrapper hosting the {@link ICanvasHost}.
@@ -196,10 +207,8 @@ public interface ICanvasHost extends IStringable, IStatorable {
    public void setTitle(String string);
 
    /**
-    * Sets/Resets the canvas to its default position on the screen.
     * 
-    * Values are taken from the hard coded configuration
     */
-   public void setDefaultStartPosition();
+   public void titleIconComesticUpdate();
 
 }

@@ -13,6 +13,10 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
  */
 public interface IConfigCoreUI extends IConfigBO {
 
+   /**
+    * 
+    * @return
+    */
    public boolean isFullscreen();
 
    /**

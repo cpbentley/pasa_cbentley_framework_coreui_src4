@@ -37,35 +37,27 @@ import pasa.cbentley.framework.coreui.src4.tech.ITechHostUI;
  */
 public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHost, IEventConsumer, ITechHostUI, IEventsCoreUI {
 
-   /** 
-    * The Bentley Framework {@link ICanvasAppli}
-    */
-   protected ICanvasAppli    canvasAppli;
-
    /**
     * {@link IBOCanvasHost} definition
     */
    protected ByteObject      boCanvasHost;
 
+   /** 
+    * The Bentley Framework {@link ICanvasAppli}
+    */
+   protected ICanvasAppli    canvasAppli;
+
    protected WrapperAbstract wrapper;
 
    public CanvasHostAbstract(CoreUiCtx cac, ByteObject boCanvasHost) {
       super(cac);
-      if(boCanvasHost == null) {
+      if (boCanvasHost == null) {
          throw new NullPointerException();
       }
       this.boCanvasHost = boCanvasHost;
       //register for AppModule events
       cac.getEventBus().addConsumer(this, IEventsCoreUI.PID_01_DEVICE, IEventsCoreUI.PID_01_DEVICE_05_UPDATE);
       cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_00_ANY);
-   }
-
-   public int getStatorableClassID() {
-      throw new RuntimeException("Must be implemented by subclass " + this.getClass().getName());
-   }
-
-   public ICtx getCtxOwner() {
-      return cuc;
    }
 
    /**
@@ -82,98 +74,6 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
          de.setY(y);
          canvasAppli.event(de);
       }
-   }
-
-   /**
-    * TODO difference between Host Full screen and 
-    * How to set full screen mode in Swing?
-    * That's the job of the {@link DeviceDriver}. Similarly for vibration and light uses.
-    * <br>
-    * When Canvas is the sole owner of the JFrame.
-    * <br>
-    * In the case of a Mosaic, the fullscreen call does nothing
-    * @param mode
-    */
-   public void setFullScreenMode(boolean mode) {
-      wrapper.setFullScreenMode(mode);
-   }
-
-   /**
-    * Wrapper around {@link IBOCanvasHost#TCANVAS_OFFSET_03_ID2} 
-    * @return
-    */
-   public int getCanvasID() {
-      return boCanvasHost.get2(IBOCanvasHost.TCANVAS_OFFSET_03_ID2);
-   }
-
-   /**
-    * {@link IBOTypesCoreUI#TYPE_8_FRAME_POS} of the {@link IBOCanvasHost}
-    * 
-    * When and where was it set in the first place ?
-    * @return
-    */
-   public ByteObject getFramePOS() {
-      return boCanvasHost.getSubFirst(IBOTypesCoreUI.TYPE_8_FRAME_POS);
-   }
-
-
-   public void onExit() {
-      if(wrapper != null) {
-         wrapper.onExit();
-      }
-   }
-   
-   public ByteObject getFramePosNewWithXYWH() {
-      ByteObject framePos = cuc.createBOFrameDefault();
-      setXYWHToFramePos(framePos);
-      return framePos;
-   }
-
-   public void setXYWHToFramePos(ByteObject framePos) {
-      //sets current pos. This is the absolute position
-      int cx = this.getICX(); // what is this? the wrapper position or the component position which is 0
-      int cy = this.getICY();
-      int cw = this.getICWidth();
-      int ch = this.getICHeight();
-      framePos.set2(IBOFramePos.FPOS_OFFSET_02_X2, cx);
-      framePos.set2(IBOFramePos.FPOS_OFFSET_03_Y2, cy);
-      framePos.set2(IBOFramePos.FPOS_OFFSET_04_W2, cw);
-      framePos.set2(IBOFramePos.FPOS_OFFSET_05_H2, ch);
-
-   }
-
-   /**
-    * Path to icon in application package
-    * @param string
-    */
-   public void setIcon(String string) {
-      wrapper.setIcon(string);
-   }
-
-   /**
-    * Title of panel. If constrained in a Tab Panned, Title can be used as tab text.
-    * When inside a Frame/Window, Title is the name of the frame.
-    * @param string
-    */
-   public void setTitle(String string) {
-      wrapper.setTitle(string);
-   }
-
-   public void stateWriteTo(StatorWriter state) {
-      state.writerToStatorable(wrapper);
-      state.writerToStatorable(canvasAppli);
-   }
-
-   public void stateReadFrom(StatorReader state) {
-      if(state == null) {
-         //#debug
-         toDLog().pData("StatorReader is null for CanvasHostAbstract", this, CanvasHostAbstract.class, "stateReadFrom", LVL_05_FINE, true);
-         return;
-      }
-      StatorReaderBO statorBo = (StatorReaderBO) state;
-      wrapper = (WrapperAbstract) statorBo.readObject(wrapper);
-      canvasAppli = (ICanvasAppli) statorBo.readObject(canvasAppli);
-
    }
 
    /**
@@ -269,12 +169,56 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    }
 
+   public ByteObject getBOCanvasHost() {
+      return boCanvasHost;
+   }
+
    public ICanvasAppli getCanvasAppli() {
       return canvasAppli;
    }
 
-   public ByteObject getBOCanvasHost() {
-      return boCanvasHost;
+   /**
+    * Wrapper around {@link IBOCanvasHost#TCANVAS_OFFSET_03_ID2} 
+    * @return
+    */
+   public int getCanvasID() {
+      return boCanvasHost.get2(IBOCanvasHost.TCANVAS_OFFSET_03_ID2);
+   }
+
+   public ICtx getCtxOwner() {
+      return cuc;
+   }
+
+   /**
+    * {@link IBOTypesCoreUI#TYPE_8_FRAME_POS} of the {@link IBOCanvasHost}
+    * 
+    * When and where was it set in the first place ?
+    * @return
+    */
+   public ByteObject getFramePOS() {
+      return boCanvasHost.getSubFirst(IBOTypesCoreUI.TYPE_8_FRAME_POS);
+   }
+
+   public ByteObject getFramePosNewWithXYWH() {
+      ByteObject framePos = cuc.createBOFrameDefault();
+      setXYWHToFramePos(framePos);
+      return framePos;
+   }
+
+   public int getScreenY(int y) {
+      return y;
+   }
+
+   public int getScreenX(int x) {
+      return x;
+   }
+
+   public int getStatorableClassID() {
+      throw new RuntimeException("Must be implemented by subclass " + this.getClass().getName());
+   }
+
+   public String getTitle() {
+      return wrapper.getTitle();
    }
 
    public WrapperAbstract getWrapper() {
@@ -398,6 +342,12 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       }
    }
 
+   public void onExit() {
+      if (wrapper != null) {
+         wrapper.onExit();
+      }
+   }
+
    public void paintBridge(IGraphics g) {
       if (canvasAppli != null) {
          canvasAppli.paint(g);
@@ -411,6 +361,37 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    /**
+    * TODO difference between Host Full screen and 
+    * How to set full screen mode in Swing?
+    * That's the job of the {@link DeviceDriver}. Similarly for vibration and light uses.
+    * <br>
+    * When Canvas is the sole owner of the JFrame.
+    * <br>
+    * In the case of a Mosaic, the fullscreen call does nothing
+    * @param mode
+    */
+   public void setFullScreenMode(boolean mode) {
+      wrapper.setFullScreenMode(mode);
+   }
+
+   /**
+    * Path to icon in application package
+    * @param string
+    */
+   public void setIcon(String string) {
+      wrapper.setIcon(string);
+   }
+
+   /**
+    * Title of panel. If constrained in a Tab Panned, Title can be used as tab text.
+    * When inside a Frame/Window, Title is the name of the frame.
+    * @param string
+    */
+   public void setTitle(String string) {
+      wrapper.setTitle(string);
+   }
+
+   /**
     * Called by {@link CoreUiCtx} when creating a new {@link ICanvasHost}.
     * 
     * It needs to have a wrapper to be shown on the host platform.
@@ -418,6 +399,36 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void setWrapper(WrapperAbstract wrapper) {
       this.wrapper = wrapper;
+   }
+
+   public void setXYWHToFramePos(ByteObject framePos) {
+      //sets current pos. This is the absolute position
+      int cx = this.getICX(); // what is this? the wrapper position or the component position which is 0
+      int cy = this.getICY();
+      int cw = this.getICWidth();
+      int ch = this.getICHeight();
+      framePos.set2(IBOFramePos.FPOS_OFFSET_02_X2, cx);
+      framePos.set2(IBOFramePos.FPOS_OFFSET_03_Y2, cy);
+      framePos.set2(IBOFramePos.FPOS_OFFSET_04_W2, cw);
+      framePos.set2(IBOFramePos.FPOS_OFFSET_05_H2, ch);
+
+   }
+
+   public void stateReadFrom(StatorReader state) {
+      if (state == null) {
+         //#debug
+         toDLog().pData("StatorReader is null for CanvasHostAbstract", this, CanvasHostAbstract.class, "stateReadFrom", LVL_05_FINE, true);
+         return;
+      }
+      StatorReaderBO statorBo = (StatorReaderBO) state;
+      wrapper = (WrapperAbstract) statorBo.readObject(wrapper);
+      canvasAppli = (ICanvasAppli) statorBo.readObject(canvasAppli);
+
+   }
+
+   public void stateWriteTo(StatorWriter state) {
+      state.writerToStatorable(wrapper);
+      state.writerToStatorable(canvasAppli);
    }
 
    /**
@@ -451,7 +462,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, CanvasHostAbstract.class, 428);
+      dc.root(this, CanvasHostAbstract.class, 456);
       toStringPrivate(dc);
       super.toString(dc.sup());
 
@@ -459,14 +470,14 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       dc.nlLvl(wrapper, "Wrapper");
    }
 
-   private void toStringPrivate(Dctx dc) {
-
-   }
-
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "CanvasHostAbstract");
+      dc.root1Line(this, CanvasHostAbstract.class, 470);
       toStringPrivate(dc);
       super.toString1Line(dc.sup1Line());
+   }
+
+   private void toStringPrivate(Dctx dc) {
+
    }
 
    //#enddebug

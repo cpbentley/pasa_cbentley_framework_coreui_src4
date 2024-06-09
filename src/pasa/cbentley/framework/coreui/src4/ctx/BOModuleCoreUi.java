@@ -101,7 +101,7 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
    public String toStringType(int type) {
       switch (type) {
          case IBOTypesCoreUI.TYPE_5_CANVAS_HOST:
-            return "Canvas";
+            return "CanvasHost";
          case IBOTypesCoreUI.TYPE_7_FILECHOOSER:
             return "FileChooser";
          case IBOTypesCoreUI.TYPE_8_FRAME_POS:

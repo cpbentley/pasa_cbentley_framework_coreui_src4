@@ -110,11 +110,6 @@ public class CanvasHostEvent extends BEvent {
       toStringPrivate(dc);
       super.toString(dc.sup());
       
-      dc.appendVarWithSpace("x", x);
-      dc.appendVarWithSpace("y", y);
-      dc.appendVarWithSpace("w", w);
-      dc.appendVarWithSpace("h", h);
-      
       dc.nlLvl(tech, "tech");
       
       dc.nlLvl(canvasHost, "canvasHost");
@@ -123,7 +118,11 @@ public class CanvasHostEvent extends BEvent {
    private void toStringPrivate(Dctx dc) {
       dc.appendVarWithSpace("actionType", actionType);
       dc.appendBracketedWithSpace(ToStringStaticCoreUi.toStringAppliAction(actionType));
-      
+
+      dc.appendVarWithSpace("x", x);
+      dc.appendVarWithSpace("y", y);
+      dc.appendVarWithSpace("w", w);
+      dc.appendVarWithSpace("h", h);
    }
 
    public void toString1Line(Dctx dc) {
