@@ -9,6 +9,7 @@ import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.IConfigCoreUi;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
+import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.IWrapperManager;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechFeaturesCanvas;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
@@ -133,17 +134,24 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
    public abstract void setIcon(String str);
 
    /**
-    * Sets the size of the Wrapper containing the {@link CanvasHostAbstract} so that
-    * the {@link CanvasHostAbstract} is 
+    * Sets the position of the Wrapper containing the {@link CanvasHostAbstract}.
+    * 
+    * <p>
+    * Called by  {@link CanvasHostAbstract} on its wrapper when application call {@link ICanvasHost#icSetXY(int, int)}
+    * </p>
     * @param x
     * @param y
     */
    public abstract void setPosition(int x, int y);
 
    /**
+    * Sets the size of the Wrapper so that the containing the {@link CanvasHostAbstract} is exactly w,h in size.
     * 
-    * @param w
-    * @param h
+    * <p>
+    * Called by  {@link CanvasHostAbstract} on its wrapper when application call {@link ICanvasHost#icSetSize(int, int)}
+    * </p>
+    * @param x
+    * @param y
     */
    public abstract void setSize(int w, int h);
 

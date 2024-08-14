@@ -21,7 +21,7 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
       super(cdc.getBOC());
       this.cuc = cdc;
       //#debug
-      toDLog().pInit("", this, BOModuleCoreUi.class, "Created@25", LVL_04_FINER, true);
+      toDLog().pCreate("", this, BOModuleCoreUi.class, "Created@25", LVL_04_FINER, true);
    }
 
    public ByteObject getFlagOrderedBO(ByteObject bo, int offset, int flag) {

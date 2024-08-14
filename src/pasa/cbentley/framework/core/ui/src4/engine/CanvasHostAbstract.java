@@ -60,6 +60,10 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       //register for AppModule events
       cac.getEventBus().addConsumer(this, IEventsCoreUi.PID_01_DEVICE, IEventsCoreUi.PID_01_DEVICE_05_UPDATE);
       cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_00_ANY);
+      
+      //#debug
+      toDLog().pCreate("", this, CanvasHostAbstract.class, "Created@65", LVL_04_FINER, true);
+
    }
 
    /**
@@ -162,7 +166,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    public void focusGainedBridge() {
       //#debug
-      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge");
+      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge@165");
       if (canvasAppli != null) {
          AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_4_FOCUS_GAIN);
          canvasAppli.event(ge);
@@ -174,7 +178,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void focusLostBridge() {
       //#debug
-      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge");
+      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge@177");
       if (canvasAppli != null) {
          AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_5_FOCUS_LOSS);
          canvasAppli.event(ge);
@@ -283,7 +287,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    public void mouseEnteredBridge(int x, int y) {
       if (canvasAppli != null) {
          //#debug
-         toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseEnteredBridge");
+         toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseEnteredBridge@290");
          DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_1_ENTER, x, y);
          dex.setSource(canvasAppli);
          canvasAppli.event(dex);
@@ -299,7 +303,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    protected void mouseExitedBridge(int x, int y) {
       if (canvasAppli != null) {
          //#debug
-         toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseExitedBridge");
+         toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseExitedBridge@306");
          DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_2_EXIT, x, y);
          dex.setSource(canvasAppli);
          canvasAppli.event(dex);

@@ -57,10 +57,10 @@ public interface IWrapperManager extends IStringable {
     * it will create a Canvas within its own window, a panel, a new tab inside tabbed pane.
     * etc etc. 
     * <li> 
-    * @param tech {@link IBOCanvasHost}
+    * @param boCanvasHost {@link IBOCanvasHost}
     * @return
     */
-   public WrapperAbstract createNewWrapper(ByteObject tech);
+   public WrapperAbstract createNewWrapper(ByteObject boCanvasHost);
 
    public CanvasHostAbstract createCanvasHost(WrapperAbstract wrapper, ByteObject canvasTech);
       
