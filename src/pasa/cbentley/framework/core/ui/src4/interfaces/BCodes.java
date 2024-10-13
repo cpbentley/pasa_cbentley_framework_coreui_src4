@@ -14,6 +14,91 @@ public class BCodes implements ITechCodes, ITechGestures {
    public static int createLock(int key1, int key2, int key3) {
       return (key1 << 16) + (key2 << 8) + key3;
    }
+   
+   public static int mapAlphaKeyCode(char c) {
+      switch (c) {
+         case 'a':
+         case 'A':
+            return KB_065_A;
+         case 'b':
+         case 'B':
+            return KB_066_B;
+         case 'c':
+         case 'C':
+            return KB_067_C;
+         case 'd':
+         case 'D':
+            return KB_068_D;
+         case 'e':
+         case 'E':
+            return KB_069_E;
+         case 'f':
+         case 'F':
+            return KB_070_F;
+         case 'g':
+         case 'G':
+            return KB_071_G;
+         case 'h':
+         case 'H':
+            return KB_072_H;
+         case 'i':
+         case 'I':
+            return KB_073_I;
+         case 'j':
+         case 'J':
+            return KB_074_J;
+         case 'k':
+         case 'K':
+            return KB_075_K;
+         case 'l':
+         case 'L':
+            return KB_076_L;
+         case 'm':
+         case 'M':
+            return KB_077_M;
+         case 'n':
+         case 'N':
+            return KB_078_N;
+         case 'o':
+         case 'O':
+            return KB_079_O;
+         case 'p':
+         case 'P':
+            return KB_080_P;
+         case 'Q':
+         case 'q':
+            return KB_081_Q;
+         case 'r':
+         case 'R':
+            return KB_082_R;
+         case 's':
+         case 'S':
+            return KB_083_S;
+         case 't':
+         case 'T':
+            return KB_084_T;
+         case 'u':
+         case 'U':
+            return KB_085_U;
+         case 'v':
+         case 'V':
+            return KB_086_V;
+         case 'w':
+         case 'W':
+            return KB_087_W;
+         case 'x':
+         case 'X':
+            return KB_088_X;
+         case 'y':
+         case 'Y':
+            return KB_089_Y;
+         case 'z':
+         case 'Z':
+            return KB_090_Z;
+         default:
+            throw new IllegalArgumentException("unknown char "+ c);
+      }
+   }
 
    public static char getChar(int keyCode) {
       switch (keyCode) {

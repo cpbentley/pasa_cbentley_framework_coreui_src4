@@ -2,7 +2,6 @@ package pasa.cbentley.framework.core.ui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
-import pasa.cbentley.byteobjects.src4.stator.StatorWriterBO;
 import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
@@ -33,10 +32,10 @@ import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
  * Base implementation of {@link ICanvasAppli}. UI on the side of the Bentley framework.
  * <br>
  * 
- * Can a {@link CanvasAppliAbstract} be used without a {@link ICanvasHost} ?
- * Some kind of null host ? Why not. But it won't recieve any events from the host.
- * It will have to be managed by the Application
- * Some kind of CanvasHostAppli class ?
+ * <p>
+ *  Question : Can a {@link CanvasAppliAbstract} be used without a {@link ICanvasHost} ?
+ *  Answer : No. It is never null. You can create a dummy host to simulate a null host.
+ * </p>
  * @author Charles-Philip Bentley
  *
  */
@@ -45,7 +44,9 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    /**
    * Link to the Framework implementation of a Canvas.
    * <br>
-   * Used to request repaints,  query the width/height
+   * Used to request repaints,  query the width/height.
+   * 
+   * Never null by construction.
    */
    protected ICanvasHost         canvasHost;
 
@@ -87,7 +88,15 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    /**
     * Creates a {@link ICanvasHost} based on the given tech.
     * 
-    * At this stage, we don't know about the technicalities of the implementation
+    * At this stage, we don't know about the technicalities of the implementation.
+    * 
+    * <p>
+    * The application developer wants a Canvas. It does not create the CanvasHost of the host platform. He simply specifies
+    * some parameters that might be honored if the platform supports them.
+    * Reason why we ask the Code context {@link CoreUiCtx} to create the CanvasHost in this constructor.
+    * Why not injecting it later ? The initial reason was that we wanted the Canvas to have a width and height known
+    * inside its constructor.
+    * </p>
     * @param cuc
     * @param boCanvasHost {@link IBOCanvasHost}
     */
@@ -105,16 +114,6 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    }
 
    /**
-    * Canvas implementation provides a subclass of {@link InputState}
-    * @return
-    */
-   public abstract InputState createInputState();
-
-   public abstract OutputState createOutputState();
-
-   public abstract ExecutionContext createExecutionContext();
-
-   /**
     * A Duplicate is {@link ICanvasHost} that is linked to this Canvas.
     * @param c
     */
@@ -129,6 +128,16 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
       //force title after the link. afterwards when changed inside app, event will call it
       canvasHost.titleIconComesticUpdate();
    }
+
+   public abstract ExecutionContext createExecutionContext();
+
+   /**
+    * Canvas implementation provides a subclass of {@link InputState}
+    * @return
+    */
+   public abstract InputState createInputState();
+
+   public abstract OutputState createOutputState();
 
    public void event(BEvent g) {
       eventToCanvas(g);
@@ -161,13 +170,6 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
          int newButton = screenCtrl.rotationKeyChange(dex.getDeviceButton());
          dex.updateButton(newButton);
       }
-   }
-
-   public ScreenOrientationCtrl getScreenCtrl() {
-      if (screenCtrl == null) {
-         screenCtrl = new ScreenOrientationCtrl(cuc, this);
-      }
-      return screenCtrl;
    }
 
    /**
@@ -233,6 +235,13 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
 
    public CoreUiSettings getInputSettings() {
       return cuc.getInputSettings();
+   }
+
+   public ScreenOrientationCtrl getScreenCtrl() {
+      if (screenCtrl == null) {
+         screenCtrl = new ScreenOrientationCtrl(cuc, this);
+      }
+      return screenCtrl;
    }
 
    public int getScreenX(int x) {
@@ -338,21 +347,27 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    }
 
    /**
+    * Called by Stator Factory
     */
    public void stateReadFrom(StatorReader state) {
 
       //#debug
-      toDLog().pStator("StatorReader", this, CanvasAppliAbstract.class, "stateReadFrom", LVL_05_FINE, true);
+      toDLog().pStator("Reading", state, CanvasAppliAbstract.class, "stateReadFrom@345", LVL_05_FINE, true);
       //parameters were already read
 
       StatorReaderBO stator = (StatorReaderBO) state;
 
-      state.checkInt(98765);
+      //boCanvasHost was read in the factory just before creating this object instance
+      //remember, the canvas appli creates a canvashost when being created.
+
+      state.checkInt(ITechStator.MAGIC_WORD_SEPARATOR);
       canvasTitle = stator.getReader().readString();
       canvasIconPath = stator.getReader().readString();
 
-      canvasHost = (ICanvasHost) stator.readObject(cuc, canvasHost);
-      listener = (IBEventListener) stator.readObject(listener);
+      canvasHost = (ICanvasHost) stator.dataReadObject(cuc, canvasHost);
+      listener = (IBEventListener) stator.dataReadObject(listener);
+
+      canvasHost.titleIconComesticUpdate();
    }
 
    /**
@@ -360,25 +375,32 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
    public void stateWriteTo(StatorWriter state) {
 
       //#debug
-      toDLog().pStator("StatorWriter", this, CanvasAppliAbstract.class, "stateWriteTo", LVL_05_FINE, true);
+      toDLog().pStator("Writing", state, CanvasAppliAbstract.class, "stateWriteTo@363", LVL_05_FINE, true);
 
+      //Those calls is crucial to understand. 
+      //They front write parameters of CanvasAppliAbstract
+      //Subclass of CanvasAppliAbstract must also write its own specific parameters not passed up 
+      //to CanvasAppliAbstract constructor.
+      //constructor parameters must be written first before engine can call stator#read
+      //give opporotuinity to CanvasHost to do parameter stuff 
+      //first writing boCanvasHost
+      canvasHost.stateWriteToParamSub(state);
       stateWriteToParamSub(state);
 
       //it might already be written... who knows
-      state.writeInt(98765);
+      state.dataWriteInt(ITechStator.MAGIC_WORD_SEPARATOR);
       state.getWriter().writeString(canvasTitle);
       state.getWriter().writeString(canvasIconPath);
 
-      state.writerToStatorable(canvasHost);
-      state.writerToStatorable(listener);
+      state.dataWriterToStatorable(canvasHost);
+      state.dataWriterToStatorable(listener);
    }
 
-   protected void stateWriteToParamSub(StatorWriter state) {
-      //Do the parameters for the constructor
-      state.writeInt(ITechStator.MAGIC_WORD_OBJECT_PARAM);
-      StatorWriterBO swbo = (StatorWriterBO) state;
-      ByteObject boCanvasHost = this.getCanvasHost().getBOCanvasHost();
-      swbo.writeByteObject(boCanvasHost);
+   /**
+    * IMPORTANT: Subclass must write constructor parameters here.
+    * @param state
+    */
+   public void stateWriteToParamSub(StatorWriter state) {
    }
 
    //#mdebug

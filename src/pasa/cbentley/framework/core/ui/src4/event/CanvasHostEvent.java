@@ -10,7 +10,15 @@ import pasa.cbentley.framework.core.ui.src4.tech.IInput;
 
 /**
  * An action on the UI of the {@link ICanvasHost} is made.
- * <br>
+ * 
+ * <p>
+ * <li>{@link ITechEventHost#ACTION_01_CLOSE}
+ * <li>{@link ITechEventHost#ACTION_02_MOVED}
+ * <li>{@link ITechEventHost#ACTION_03_RESIZED}
+ * <li>{@link ITechEventHost#ACTION_04_FOCUS_GAIN}
+ * </p>
+ * 
+ * @see AppliEvent
  * @author Charles Bentley
  *
  */
@@ -33,8 +41,8 @@ public class CanvasHostEvent extends BEvent {
    private int         y;
 
    /**
-    * {@link ITechEventHost#ACTION_1_CLOSE}
-    * {@link ITechEventHost#ACTION_2_MOVED}
+    * {@link ITechEventHost#ACTION_01_CLOSE}
+    * {@link ITechEventHost#ACTION_02_MOVED}
     * {@link ITechEventHost#ACTION_10_DRAG_DROP}
     * @param cuc
     * @param actionType
@@ -65,9 +73,9 @@ public class CanvasHostEvent extends BEvent {
 
    public String getUserLineString() {
       String str = "";
-      if (actionType == ITechEventHost.ACTION_3_RESIZED) {
+      if (actionType == ITechEventHost.ACTION_03_RESIZED) {
          str = "Canvas resized to " + w + " " + h;
-      } else if (actionType == ITechEventHost.ACTION_2_MOVED) {
+      } else if (actionType == ITechEventHost.ACTION_02_MOVED) {
          str = "Canvas moved to " + x + " " + y;
       } else {
          str = "canvas " + actionType;
@@ -103,26 +111,15 @@ public class CanvasHostEvent extends BEvent {
       this.y = y;
    }
 
-
    //#mdebug
    public void toString(Dctx dc) {
       dc.root(this, CanvasHostEvent.class, 110);
       toStringPrivate(dc);
       super.toString(dc.sup());
-      
+
       dc.nlLvl(tech, "tech");
-      
+
       dc.nlLvl(canvasHost, "canvasHost");
-   }
-
-   private void toStringPrivate(Dctx dc) {
-      dc.appendVarWithSpace("actionType", actionType);
-      dc.appendBracketedWithSpace(ToStringStaticCoreUi.toStringAppliAction(actionType));
-
-      dc.appendVarWithSpace("x", x);
-      dc.appendVarWithSpace("y", y);
-      dc.appendVarWithSpace("w", w);
-      dc.appendVarWithSpace("h", h);
    }
 
    public void toString1Line(Dctx dc) {
@@ -131,7 +128,16 @@ public class CanvasHostEvent extends BEvent {
       super.toString1Line(dc.sup1Line());
    }
 
+   private void toStringPrivate(Dctx dc) {
+      dc.appendVarWithSpace("actionType", actionType);
+      dc.appendBracketedWithSpace(ToStringStaticCoreUi.toStringEventCanvas(actionType));
+
+      dc.appendVarWithSpace("x", x);
+      dc.appendVarWithSpace("y", y);
+      dc.appendVarWithSpace("w", w);
+      dc.appendVarWithSpace("h", h);
+   }
+
    //#enddebug
-   
 
 }

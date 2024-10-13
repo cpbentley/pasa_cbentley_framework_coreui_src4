@@ -23,17 +23,19 @@ import pasa.cbentley.core.src4.structs.IntToObjects;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasAppliAbstract;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasHostAbstract;
 import pasa.cbentley.framework.core.ui.src4.engine.KeyMapAbstract;
-import pasa.cbentley.framework.core.ui.src4.engine.WrapperAbstract;
 import pasa.cbentley.framework.core.ui.src4.event.AppliEvent;
 import pasa.cbentley.framework.core.ui.src4.event.BEvent;
 import pasa.cbentley.framework.core.ui.src4.event.GestureArea;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.IHostGestures;
+import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventApp;
 import pasa.cbentley.framework.core.ui.src4.interfaces.IWrapperManager;
 import pasa.cbentley.framework.core.ui.src4.tech.IBOCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.tech.IBOFramePos;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechWrapper;
 import pasa.cbentley.framework.core.ui.src4.utils.CoreUiSettings;
+import pasa.cbentley.framework.core.ui.src4.wrapper.WrapperAbstract;
 import pasa.cbentley.framework.coredraw.src4.ctx.CoreDrawCtx;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IFontFactory;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IImageFactory;
@@ -117,10 +119,10 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
     */
    public ByteObject createBOCanvasHostDefault() {
       int type = IBOTypesCoreUi.TYPE_5_CANVAS_HOST;
-      int size = IBOCanvasHost.TCANVAS_BASIC_SIZE;
+      int size = IBOCanvasHost.CANVAS_HOST_BASIC_SIZE;
       ByteObject tech = cdc.getBOC().getByteObjectFactory().createByteObject(type, size);
-      tech.set1(IBOCanvasHost.TCANVAS_OFFSET_02_WRAPPER_TYPE1, IBOCanvasHost.TCANVAS_TYPE_1_FRAME);
-      tech.set2(IBOCanvasHost.TCANVAS_OFFSET_14_FRAMEPOS2, 0);
+      tech.set1(IBOCanvasHost.CANVAS_HOST_OFFSET_10_WRAPPER_TYPE1, ITechWrapper.WRAPPER_TYPE_1_FRAME);
+      tech.set2(IBOCanvasHost.CANVAS_HOST_OFFSET_14_FRAMEPOS1, 0);
       return tech;
    }
 
@@ -179,6 +181,13 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
     * <li> Wraps the Canvas in its host owner.
     * <li> Add the canvas to this {@link CoreUiCtx} list of managed {@link CanvasHostAbstract}
     * <li> no linking to a {@link ICanvasAppli}.
+    * 
+    * <p>
+    * This method is final. It contains immutable logic
+    * </p>
+    * 
+    * KEYMETHOD for create a CanvasHost.
+    * 
     * @param boCanvasHost
     * @return
     */
@@ -189,20 +198,22 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
       //#debug
       boCanvasHost.checkType(IBOTypesCoreUi.TYPE_5_CANVAS_HOST);
 
-      IWrapperManager wrapperMan = getWrapperManager();
-      WrapperAbstract wrapper = wrapperMan.createNewWrapper(boCanvasHost);
+      IWrapperManager wrapperManager = getWrapperManager();
+      WrapperAbstract wrapper = wrapperManager.createNewWrapper(boCanvasHost);
+      wrapper.setWrapperManager(wrapperManager);
       if (wrapper == null) {
          throw new NullPointerException();
       }
 
       CanvasHostAbstract canvasHost = createCanvasHost(wrapper, boCanvasHost);
+      //if method forgot to set the wrapper
       if (canvasHost.getWrapper() == null) {
          canvasHost.setWrapper(wrapper);
       }
       wrapper.setCanvasHost(canvasHost);
 
       //now that the wrapper and canvas are packed together. 
-      canvasHost.setDefaultStartPosition();
+      canvasHost.setStartPositionAndSize();
 
       //where to host the canvas, in a new Frame?
       if (canvasRoot == null) {
@@ -233,7 +244,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
     * 
     * In the case of the launcher, the launcher decides which wrapper to use
     * 
-    * {@link IBOCanvasHost#TCANVAS_TYPE_0_DEFAULT}
+    * {@link ITechWrapper#WRAPPER_TYPE_0_DEFAULT}
     * {@link IBOCanvasHost}
     * 
     * Note: Canvas Icon is decided by the wrapper. (tabbed, frame)
@@ -280,7 +291,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
    public BOCtx getBOC() {
       return cdc.getBOC();
    }
-   
+
    public IExecutor getExecutor() {
       return getHost().getExecutor();
    }
@@ -363,15 +374,15 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
     * <p>
     * <li>It is an ID given consciously by the creator of the Canvas.
     * <li>This is NOT the array/order of creation kind of id.
-    * <li>Stored in {@link IBOCanvasHost#TCANVAS_OFFSET_03_ID2} 
+    * <li>Stored in {@link IBOCanvasHost#CANVAS_HOST_OFFSET_03_ID2} 
     * </p>
-    * @param id matched against {@link IBOCanvasHost#TCANVAS_OFFSET_03_ID2} 
+    * @param id matched against {@link IBOCanvasHost#CANVAS_HOST_OFFSET_03_ID2} 
     * @return
     */
    public CanvasHostAbstract getCanvasFromID(int id) {
       for (int i = 0; i < canvases.nextempty; i++) {
          CanvasHostAbstract c = (CanvasHostAbstract) canvases.getObjectAtIndex(i);
-         int cid = c.getBOCanvasHost().get2(IBOCanvasHost.TCANVAS_OFFSET_03_ID2);
+         int cid = c.getBOCanvasHost().get2(IBOCanvasHost.CANVAS_HOST_OFFSET_03_ID2);
          if (cid == id) {
             return c;
          }
@@ -420,7 +431,6 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
       }
       return eventBus;
    }
-
 
    public IFontFactory getFontFactory() {
       return cdc.getFontFactory();
@@ -601,6 +611,12 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
       canvasRoot.getCanvasAppli().event(be);
    }
 
+   public void publishMessageOnRoot(String msg) {
+      AppliEvent ae = new AppliEvent(this, ITechEventApp.ACTION_11_MESSAGE);
+      ae.setParamO1(msg);
+      this.publishEventOnRoot(ae);
+   }
+
    public void setMajOn(boolean b) {
 
    }
@@ -619,6 +635,15 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
             canvas.canvasShow();
          }
       }
+   }
+
+   public void showCanvasAppli(ICanvasAppli canvas) {
+      canvas.showNotify();
+      canvas.getCanvasHost().canvasShow();
+   }
+
+   public void showCanvasHost(ICanvasHost canvas) {
+      canvas.canvasShow();
    }
 
    //#mdebug

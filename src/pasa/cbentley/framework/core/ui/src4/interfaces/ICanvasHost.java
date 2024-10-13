@@ -181,9 +181,14 @@ public interface ICanvasHost extends IStringable, IStatorable {
    /**
     * Sets/Resets the canvas to its default position on the screen.
     * 
-    * Values are taken from the hard coded configuration
+    * Values are taken from the hard coded configuration.
+    * 
+    * <p>
+    * The result of this call depends on the {@link ICanvasHost} nature.
+    * Some Canvas cannot change their size and position from the inside
+    * </p>
     */
-   public void setDefaultStartPosition();
+   public void setStartPositionAndSize();
 
    /**
     * Sets the Icon for the Canvas.

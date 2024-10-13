@@ -4,22 +4,25 @@ import pasa.cbentley.core.src4.interfaces.ITech;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 
 /**
- * {@link ToStringStaticCoreUi#toStringAppliAction(int)}
+ * {@link ToStringStaticCoreUi#toStringEventCanvas(int)}
  * @author Charles Bentley
  *
  */
 public interface ITechEventHost extends ITech {
 
    /**
-    * When a Canvas is closed. Closing while a key modifier is
-    * press when activate a special command
+    * When a Canvas is closed. 
+    * 
+    * <p>
+    * Closing while a key modifier is pressed may activate a special command
+    * </p>
     */
-   public static final int ACTION_1_CLOSE         = 1;
+   public static final int ACTION_01_CLOSE         = 1;
 
    /**
     * 
     */
-   public static final int ACTION_2_MOVED         = 2;
+   public static final int ACTION_02_MOVED         = 2;
 
    /**
     * Gesture that occurs when a resize is made, a move or a fullscreen.
@@ -30,30 +33,33 @@ public interface ITechEventHost extends ITech {
     * 
     * Event sent after the resize has been executed on the canvas
     */
-   public static final int ACTION_3_RESIZED       = 3;
+   public static final int ACTION_03_RESIZED       = 3;
 
    /**
-    * Application event
+    * Application event when Host Canvas gains platform focus.
     */
-   public static final int ACTION_4_FOCUS_GAIN    = 4;
+   public static final int ACTION_04_FOCUS_GAIN    = 4;
 
-   public static final int ACTION_5_FOCUS_LOSS    = 5;
+   /**
+    * Application event when Host Canvas loses platform focus.
+    */
+   public static final int ACTION_05_FOCUS_LOSS    = 5;
 
    /**
     * Application event
     * {@link ICanvasAppli#showNotify()} TODO remove
     */
-   public static final int ACTION_6_NOTIFY_SHOW   = 6;
+   public static final int ACTION_06_NOTIFY_SHOW   = 6;
 
    /**
     * When appli's canvases are all hidden
     */
-   public static final int ACTION_7_NOTIFY_HIDE   = 7;
+   public static final int ACTION_07_NOTIFY_HIDE   = 7;
 
-   public static final int ACTION_10_DRAG_DROP    = 10;
+   /**
+    * 
+    */
+   public static final int ACTION_10_DRAG_DROP     = 10;
 
-   public static final int ACTION_8_APPLI_PAUSED  = 8;
-
-   public static final int ACTION_9_APPLI_STARTED = 9;
 
 }

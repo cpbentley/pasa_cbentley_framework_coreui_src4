@@ -2,11 +2,13 @@ package pasa.cbentley.framework.core.ui.src4.engine;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.byteobjects.src4.stator.StatorReaderBO;
+import pasa.cbentley.byteobjects.src4.stator.StatorWriterBO;
 import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.event.BusEvent;
 import pasa.cbentley.core.src4.event.IEventConsumer;
 import pasa.cbentley.core.src4.interfaces.IExecutor;
 import pasa.cbentley.core.src4.logging.Dctx;
+import pasa.cbentley.core.src4.stator.ITechStator;
 import pasa.cbentley.core.src4.stator.StatorReader;
 import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
@@ -28,6 +30,7 @@ import pasa.cbentley.framework.core.ui.src4.tech.IInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechFeaturesCanvas;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
+import pasa.cbentley.framework.core.ui.src4.wrapper.WrapperAbstract;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
 
 /**
@@ -60,7 +63,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       //register for AppModule events
       cac.getEventBus().addConsumer(this, IEventsCoreUi.PID_01_DEVICE, IEventsCoreUi.PID_01_DEVICE_05_UPDATE);
       cuc.getEventBus().addConsumer(this, PID_02_CANVAS, PID_02_CANVAS_00_ANY);
-      
+
       //#debug
       toDLog().pCreate("", this, CanvasHostAbstract.class, "Created@65", LVL_04_FINER, true);
 
@@ -75,7 +78,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void canvasPositionChangedBridge(int id, int x, int y) {
       if (canvasAppli != null) {
-         CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_2_MOVED, this);
+         CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_02_MOVED, this);
          de.setX(x);
          de.setY(y);
          canvasAppli.event(de);
@@ -83,13 +86,20 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    /**
-    * We create a system wide event. So that anyone can listen to this resize.
+    * The method creates a system wide event  {@link ITechEventHost#ACTION_03_RESIZED}. 
+    * 
+    * <p>
+    * Called by implementing class when it detects a change in size of the canvas.
+    * </p>
     * @param w
     * @param h
     */
    public void canvasSizeChangedBridge(int w, int h) {
+      //#debug
+      toDLog().pBridge("", this, CanvasHostAbstract.class, "canvasSizeChangedBridge@140", LVL_05_FINE, true);
+
       if (canvasAppli != null) {
-         CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_3_RESIZED, this);
+         CanvasHostEvent de = new CanvasHostEvent(cuc, ITechEventHost.ACTION_03_RESIZED, this);
          de.setW(w);
          de.setH(h);
          canvasAppli.event(de);
@@ -168,7 +178,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       //#debug
       toDLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge@165");
       if (canvasAppli != null) {
-         AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_4_FOCUS_GAIN);
+         AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_04_FOCUS_GAIN);
          canvasAppli.event(ge);
       }
    }
@@ -180,7 +190,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       //#debug
       toDLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge@177");
       if (canvasAppli != null) {
-         AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_5_FOCUS_LOSS);
+         AppliEvent ge = new AppliEvent(cuc, ITechEventHost.ACTION_05_FOCUS_LOSS);
          canvasAppli.event(ge);
       }
 
@@ -195,11 +205,11 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    /**
-    * Wrapper around {@link IBOCanvasHost#TCANVAS_OFFSET_03_ID2} 
+    * Wrapper around {@link IBOCanvasHost#CANVAS_HOST_OFFSET_03_ID2} 
     * @return
     */
    public int getCanvasID() {
-      return boCanvasHost.get2(IBOCanvasHost.TCANVAS_OFFSET_03_ID2);
+      return boCanvasHost.get2(IBOCanvasHost.CANVAS_HOST_OFFSET_03_ID2);
    }
 
    public ICtx getCtxOwner() {
@@ -238,6 +248,11 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       return wrapper.getTitle();
    }
 
+   /**
+    * Null if none was set using {@link CanvasHostAbstract#setWrapper(WrapperAbstract)}
+    * 
+    * @return {@link WrapperAbstract} 
+    */
    public WrapperAbstract getWrapper() {
       return wrapper;
    }
@@ -432,20 +447,38 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    public void stateReadFrom(StatorReader state) {
+      //#debug
+      toDLog().pStator("Reading...", state, CanvasHostAbstract.class, "stateReadFrom@436", LVL_04_FINER, true);
       if (state == null) {
          //#debug
          toDLog().pData("StatorReader is null for CanvasHostAbstract", this, CanvasHostAbstract.class, "stateReadFrom", LVL_05_FINE, true);
          return;
       }
+      //boCanvasHost was read before creating the object.
       StatorReaderBO statorBo = (StatorReaderBO) state;
-      wrapper = (WrapperAbstract) statorBo.readObject(wrapper);
-      canvasAppli = (ICanvasAppli) statorBo.readObject(canvasAppli);
+      wrapper = (WrapperAbstract) statorBo.dataReadObject(wrapper);
+      canvasAppli = (ICanvasAppli) statorBo.dataReadObject(canvasAppli);
 
    }
 
+   /**
+    * See {@link CanvasAppliAbstract#stateWriteTo(StatorWriter)}
+    */
    public void stateWriteTo(StatorWriter state) {
-      state.writerToStatorable(wrapper);
-      state.writerToStatorable(canvasAppli);
+      //very important to check if boCanvasHost has been written
+      //canvas host is written inside the canvasAppli call
+      //why ? because canvasHost belongs to canvasAppli 
+      //canvasHost is created by canvasAppli constructor.
+      state.dataWriterToStatorable(wrapper);
+      state.dataWriterToStatorable(canvasAppli);
+   }
+   
+   public void stateWriteToParamSub(StatorWriter state) {
+      state.dataWriteInt(ITechStator.MAGIC_WORD_OBJECT_PARAM);
+      StatorWriterBO swbo = (StatorWriterBO) state;
+      ByteObject boCanvasHost = this.getBOCanvasHost();
+      //add a framepos ? Or is it computed whenever there is a change ?
+      swbo.dataWriteByteObject(boCanvasHost);
    }
 
    /**

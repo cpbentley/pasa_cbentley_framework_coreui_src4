@@ -2,7 +2,8 @@ package pasa.cbentley.framework.core.ui.src4.tech;
 
 import pasa.cbentley.byteobjects.src4.core.interfaces.IByteObject;
 import pasa.cbentley.framework.core.ui.src4.ctx.IBOTypesCoreUi;
-import pasa.cbentley.framework.core.ui.src4.engine.WrapperAbstract;
+import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
+import pasa.cbentley.framework.core.ui.src4.wrapper.WrapperAbstract;
 
 /**
  * Defines a Frame/Windows positioning in Host environment.
@@ -36,11 +37,6 @@ public interface IBOFramePos extends IByteObject {
    public static final int FPOS_BASIC_SIZE             = A_OBJECT_BASIC_SIZE + 13;
 
    /**
-    * One of the 256 framework types
-    */
-   public static final int FPOS_TYPE                   = IBOTypesCoreUi.TYPE_8_FRAME_POS;
-
-   /**
     * Is the Frame in a full screen configuration
     */
    public static final int FPOS_FLAG_1_FULLSCREEN      = 1 << 0;
@@ -63,6 +59,8 @@ public interface IBOFramePos extends IByteObject {
     */
    public static final int FPOS_FLAG_4_RELATIVE        = 1 << 3;
 
+   public static final int FPOS_FLAG_5_ALWAYS_ON_TOP   = 1 << 4;
+
    public static final int FPOS_OFFSET_01_FLAG         = A_OBJECT_BASIC_SIZE;
 
    /**
@@ -83,7 +81,14 @@ public interface IBOFramePos extends IByteObject {
 
    /**
     * Screen identification.
+    * 
+    * In a multiscreen environment, 
     */
    public static final int FPOS_OFFSET_07_SCREEN2      = A_OBJECT_BASIC_SIZE + 11;
+
+   /**
+    * One of the 256 framework types
+    */
+   public static final int FPOS_TYPE                   = IBOTypesCoreUi.TYPE_8_FRAME_POS;
 
 }

@@ -105,7 +105,7 @@ public interface ICanvasAppli extends IStringable, IStatorable {
 
    /**
     * The Host implementation of the {@link ICanvasAppli}.
-    * @return possibly null
+    * @return {@link ICanvasHost} never null
     */
    public ICanvasHost getCanvasHost();
 

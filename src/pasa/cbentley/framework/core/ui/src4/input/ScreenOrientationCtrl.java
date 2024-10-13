@@ -6,6 +6,8 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasAppliAbstract;
+import pasa.cbentley.framework.core.ui.src4.event.CanvasHostEvent;
+import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
 
@@ -25,6 +27,11 @@ public class ScreenOrientationCtrl extends ObjectCUC implements IStringable {
       this.canvas = canvas;
    }
 
+   /**
+    * Paint method
+    * 
+    * @return
+    */
    public int getOrientation() {
       return screenConfig;
    }
@@ -46,22 +53,22 @@ public class ScreenOrientationCtrl extends ObjectCUC implements IStringable {
       }
       //canvas.postRotation();
       
-//      int oldw = canvas.getWidth();
-//      int oldh = canvas.getHeight();
-//      //size for the image layer
-//      int w = 0;
-//      int h = 0;
-//      if (newConfig == ITechHostUI.SCREEN_1_BOT_UPSIDEDOWN || newConfig == ITechHostUI.SCREEN_0_TOP_NORMAL) {
-//         w = canvas.getWidth();
-//         h = canvas.getHeight();
-//      } else {
-//         w = canvas.getHeight();
-//         h = canvas.getWidth();
-//      }
-//      CanvasHostEvent ch = new CanvasHostEvent(ic.getCUC(), ITechEventHost.ACTION_3_RESIZED, canvas.getCanvasHost());
-//      ch.setW(w);
-//      ch.setH(h);
-//      canvas.event(ch);
+      int oldw = canvas.getWidth();
+      int oldh = canvas.getHeight();
+      //size for the image layer
+      int w = 0;
+      int h = 0;
+      if (newConfig == ITechHostUI.SCREEN_1_BOT_UPSIDEDOWN || newConfig == ITechHostUI.SCREEN_0_TOP_NORMAL) {
+         w = canvas.getWidth();
+         h = canvas.getHeight();
+      } else {
+         w = canvas.getHeight();
+         h = canvas.getWidth();
+      }
+      CanvasHostEvent ch = new CanvasHostEvent(cuc, ITechEventHost.ACTION_03_RESIZED, canvas.getCanvasHost());
+      ch.setW(w);
+      ch.setH(h);
+      canvas.event(ch);
 
    }
 

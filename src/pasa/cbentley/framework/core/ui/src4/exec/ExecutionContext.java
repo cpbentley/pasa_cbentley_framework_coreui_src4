@@ -11,12 +11,14 @@ import pasa.cbentley.framework.core.ui.src4.event.BEvent;
 import pasa.cbentley.framework.core.ui.src4.input.InputState;
 
 /**
- * An {@link ExecutionContext} records and queue state changes during the process of a command.
+ * An {@link ExecutionContext} tracks state changes during the process of an event or command. It also provides a reference to the input {@link InputState}.
  * 
+ * <p>
  * <li>It belongs to one thread. 
  * <li>It exists to allow multi threading.
  * <li>Atomise changes into chunks
- * 
+ * </p>
+ * <br>
  * <p>
  * At the end of the command execution, the state changes records are acted upon.
  * <li>Events are processed first
@@ -42,7 +44,7 @@ import pasa.cbentley.framework.core.ui.src4.input.InputState;
  * Each thread must have one.
  * <br>
  * 
- * The events and Runnable will be execute asynchronously and do not return values.
+ * The events and Runnable will execute asynchronously and do not return values.
  * <br>
  * When the update thread receive an Event, it generates a command.
  * That command makes state changes, those changes generates events.

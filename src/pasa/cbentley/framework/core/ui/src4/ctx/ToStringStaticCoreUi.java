@@ -2,6 +2,7 @@ package pasa.cbentley.framework.core.ui.src4.ctx;
 
 import pasa.cbentley.core.src4.logging.ToStringStaticBase;
 import pasa.cbentley.framework.core.ui.src4.event.ITechEventKey;
+import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventApp;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechSenses;
 import pasa.cbentley.framework.core.ui.src4.tech.IInput;
@@ -306,33 +307,41 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
       }
    }
 
-   /**
-    * {@link ITechEventHost}
-    * @param subtype
-    * @return
-    */
-   public static String toStringAppliAction(int subtype) {
-      switch (subtype) {
-         case ITechEventHost.ACTION_1_CLOSE:
-            return "Closed";
-         case ITechEventHost.ACTION_2_MOVED:
-            return "Moved";
-         case ITechEventHost.ACTION_3_RESIZED:
-            return "Resized";
-         case ITechEventHost.ACTION_4_FOCUS_GAIN:
-            return "FocusGain";
-         case ITechEventHost.ACTION_5_FOCUS_LOSS:
-            return "FocusLoss";
-         case ITechEventHost.ACTION_6_NOTIFY_SHOW:
-            return "NotifyShow";
-         case ITechEventHost.ACTION_7_NOTIFY_HIDE:
-            return "NotifyHide";
-         case ITechEventHost.ACTION_8_APPLI_PAUSED:
+   public static String toStringEventAppli(int ev) {
+      switch (ev) {
+         case ITechEventApp.ACTION_03_APPLI_RESUMED:
+            return "AppliResumed";
+         case ITechEventApp.ACTION_02_APPLI_PAUSED:
             return "AppliPaused";
-         case ITechEventHost.ACTION_9_APPLI_STARTED:
+         case ITechEventApp.ACTION_01_APPLI_STARTED:
             return "AppliStarted";
          default:
-            return "UnknownAction" + subtype;
+            return "UnknownEventAppli" + ev;
+      }
+   }
+   /**
+    * {@link ITechEventHost}
+    * @param ev
+    * @return
+    */
+   public static String toStringEventCanvas(int ev) {
+      switch (ev) {
+         case ITechEventHost.ACTION_01_CLOSE:
+            return "Closed";
+         case ITechEventHost.ACTION_02_MOVED:
+            return "Moved";
+         case ITechEventHost.ACTION_03_RESIZED:
+            return "Resized";
+         case ITechEventHost.ACTION_04_FOCUS_GAIN:
+            return "FocusGain";
+         case ITechEventHost.ACTION_05_FOCUS_LOSS:
+            return "FocusLoss";
+         case ITechEventHost.ACTION_06_NOTIFY_SHOW:
+            return "NotifyShow";
+         case ITechEventHost.ACTION_07_NOTIFY_HIDE:
+            return "NotifyHide";
+         default:
+            return "UnknownEventCanvas" + ev;
       }
    }
 

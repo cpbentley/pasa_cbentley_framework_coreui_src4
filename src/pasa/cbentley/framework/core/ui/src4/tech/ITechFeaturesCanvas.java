@@ -2,7 +2,6 @@ package pasa.cbentley.framework.core.ui.src4.tech;
 
 import pasa.cbentley.core.src4.interfaces.IHostFeature;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
-import pasa.cbentley.framework.coredraw.src4.interfaces.ITechHostDataDraw;
 import pasa.cbentley.framework.coredraw.src4.interfaces.ITechHostFeatureDraw;
 
 /**
@@ -34,12 +33,6 @@ public interface ITechFeaturesCanvas {
    public static final int SUP_ID_26_CANVAS_RESIZE_MOVE = 26;
 
 
-   /**
-    * Goes into full single screen
-    */
-   public static final int SUP_ID_40_FULLSCREEN         = 40;
-   public static final int SUP_ID_42_FULL_HEIGHT         = 42;
-   public static final int SUP_ID_41_FULL_WIDTH         = 41;
    public static final int SUP_ID_27_FULLSCREEN         = 27;
    /**
     * Should the canvas behave like a window always on top of other windows.
@@ -51,14 +44,20 @@ public interface ITechFeaturesCanvas {
     * {@link ITechFeaturesCanvas#}
     */
    public static final int SUP_ID_28_ALWAYS_ON_TOP      = 28;
-
    public static final int SUP_ID_29_UNDECORATED        = 29;
-
    /**
     * When true, frame is minimize. when false, normal
     */
    public static final int SUP_ID_30_MINIMIZE           = 30;
-
    public static final int SUP_ID_31_ACTIVATE_FRONT     = 31;
+
+   /**
+    * Goes into full single screen
+    */
+   public static final int SUP_ID_40_FULLSCREEN         = 40;
+
+   public static final int SUP_ID_41_FULL_WIDTH         = 41;
+
+   public static final int SUP_ID_42_FULL_HEIGHT         = 42;
 
 }

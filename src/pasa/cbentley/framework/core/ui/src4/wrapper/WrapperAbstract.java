@@ -1,4 +1,4 @@
-package pasa.cbentley.framework.core.ui.src4.engine;
+package pasa.cbentley.framework.core.ui.src4.wrapper;
 
 import pasa.cbentley.core.src4.ctx.ICtx;
 import pasa.cbentley.core.src4.logging.Dctx;
@@ -9,10 +9,10 @@ import pasa.cbentley.core.src4.stator.StatorWriter;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.IConfigCoreUi;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
+import pasa.cbentley.framework.core.ui.src4.engine.CanvasHostAbstract;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.IWrapperManager;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechFeaturesCanvas;
-import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
 
 /**
  * A Wrapper controls only 1 {@link CanvasHostAbstract}
@@ -37,6 +37,8 @@ import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
  */
 public abstract class WrapperAbstract extends ObjectCUC implements IStringable, IStatorable, ITechFeaturesCanvas {
 
+   protected IWrapperManager manager;
+
    protected WrapperAbstract(CoreUiCtx cac) {
       super(cac);
    }
@@ -55,8 +57,24 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
     */
    public abstract void canvasShow();
 
-   public void onExit() {
+   public ICtx getCtxOwner() {
+      return cuc;
+   }
 
+   public int getStatorableClassID() {
+      throw new RuntimeException("Must be implemented by subclass" + getClass().getName());
+   }
+
+   /**
+    * 
+    * @return
+    */
+   public String getTitle() {
+      throw new RuntimeException();
+   }
+
+   public IWrapperManager getWrapperManager() {
+      return manager;
    }
 
    /**
@@ -77,10 +95,13 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
    public abstract boolean isContained();
 
    /**
-    * Called when the {@link CanvasHostAbstract} implementation is using a host wrapper
-    * and its that wrapper that can answer the question to
+    * Called when the {@link CanvasHostAbstract} implementation is using a host wrapper and
+    * its the wrapper that can answer the question to
     * {@link CanvasHostAbstract#isCanvasFeatureEnabled(int)}.
     * 
+    * <p>
+    * The wrapper may also in turn delegate the answer to its {@link IWrapperManager}.
+    * </p>
     * @param feature
     * @return
     */
@@ -88,17 +109,14 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
       return false;
    }
 
-   public ICtx getCtxOwner() {
-      return cuc;
-   }
+   public void onExit() {
 
-   public int getStatorableClassID() {
-      throw new RuntimeException("Must be implemented by subclass" + getClass().getName());
    }
 
    /** 
-    * Initialize the wrapper with the Canvas.
-    * <br><br>
+    * Initialize the wrapper with the {@link CanvasHostAbstract}.
+    * 
+    * 
     * The {@link SwingManager} when requested to create a new canvas does the following
     * <li> Asks its {@link IWrapperManager} which wrapper to create.
     * <li> Creates a {@link CanvasAbstractSwing} with requested capabilities (OpenGL, Active Rendering etc)
@@ -161,19 +179,18 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
     */
    public abstract void setTitle(String str);
 
-   /**
-    * 
-    * @return
-    */
-   public String getTitle() {
-      throw new RuntimeException();
+   public void setWrapperManager(IWrapperManager manager) {
+      this.manager = manager;
    }
 
    public void stateReadFrom(StatorReader state) {
-
    }
 
    public void stateWriteTo(StatorWriter state) {
+
+   }
+
+   public void stateWriteToParamSub(StatorWriter state) {
 
    }
 
@@ -184,14 +201,14 @@ public abstract class WrapperAbstract extends ObjectCUC implements IStringable, 
       super.toString(dc.sup());
    }
 
-   private void toStringPrivate(Dctx dc) {
-
-   }
-
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, WrapperAbstract.class);
       toStringPrivate(dc);
       super.toString1Line(dc.sup1Line());
+   }
+
+   private void toStringPrivate(Dctx dc) {
+
    }
 
    //#enddebug

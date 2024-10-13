@@ -38,6 +38,7 @@ import pasa.cbentley.framework.core.ui.src4.event.ITechEventKey;
 import pasa.cbentley.framework.core.ui.src4.event.RepeatEvent;
 import pasa.cbentley.framework.core.ui.src4.event.SenseEvent;
 import pasa.cbentley.framework.core.ui.src4.event.VoiceEvent;
+import pasa.cbentley.framework.core.ui.src4.interfaces.BCodes;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.tech.IInput;
@@ -180,7 +181,7 @@ import pasa.cbentley.framework.core.ui.src4.utils.CoreUiSettings;
  * @author Charles-Philip Bentley
  *
  */
-public abstract class InputState extends ObjectCUC implements IInput, ITechGestures, IStringable {
+public abstract class InputState extends ObjectCUC implements IInput, ITechGestures, IStringable, ITechCodes {
 
    private static final int      MAX_HISTORY            = 100;
 
@@ -476,7 +477,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
 
    private boolean addEventAction(AppliEvent ae) {
       int mode = ae.getAction();
-      if (mode == ITechEventHost.ACTION_5_FOCUS_LOSS) {
+      if (mode == ITechEventHost.ACTION_05_FOCUS_LOSS) {
          resetPresses();
       }
       lastActionEvent = ae;
@@ -2841,6 +2842,37 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       return isSequencedPressed(key1, key2, key3, 0, DEVICE_0_KEYBOARD);
    }
 
+   public boolean isStringPressedKB0(String str) {
+      int len = str.length();
+      if (len == 2) {
+         char c0 = str.charAt(0);
+         char c1 = str.charAt(1);
+         int key1 = BCodes.mapAlphaKeyCode(c0);
+         int key2 = BCodes.mapAlphaKeyCode(c1);
+         return isSequencedPressedKeyboard0(key1, key2);
+      } else if (len == 3) {
+         char c0 = str.charAt(0);
+         char c1 = str.charAt(1);
+         char c2 = str.charAt(2);
+         int key0 = BCodes.mapAlphaKeyCode(c0);
+         int key1 = BCodes.mapAlphaKeyCode(c1);
+         int key2 = BCodes.mapAlphaKeyCode(c2);
+         return isSequencedPressedKB0(key0, key1, key2);
+      } else if (len == 4) {
+         char c0 = str.charAt(0);
+         char c1 = str.charAt(1);
+         char c2 = str.charAt(2);
+         char c3 = str.charAt(3);
+         int key0 = BCodes.mapAlphaKeyCode(c0);
+         int key1 = BCodes.mapAlphaKeyCode(c1);
+         int key2 = BCodes.mapAlphaKeyCode(c2);
+         int key3 = BCodes.mapAlphaKeyCode(c3);
+         return isSequencedPressedKB0(key0, key1, key2, key3);
+      } else {
+         throw new IllegalArgumentException();
+      }
+   }
+
    public boolean isSequencedPressedKB0(int key1, int key2, int key3, int key4) {
       return isSequencedPressed(key1, key2, key3, key4, 0, DEVICE_0_KEYBOARD);
    }
@@ -2886,6 +2918,16 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          }
       }
       return false;
+   }
+
+   public boolean isCtrlFastTyped(int key) {
+      boolean b = this.isSequencedPressedKeyboard0(KEY_CTRL, key) && this.isLastKeyFastTyped(key);
+      return b;
+   }
+
+   public boolean isCtrlPressed(int key) {
+      boolean b = this.isSequencedPressedKeyboard0(KEY_CTRL, key);
+      return b;
    }
 
    /**

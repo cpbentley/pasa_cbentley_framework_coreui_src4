@@ -4,6 +4,7 @@ import pasa.cbentley.byteobjects.src4.core.BOModuleAbstract;
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IDebugStringable;
+import pasa.cbentley.framework.core.ui.src4.tech.IBOFramePos;
 
 /**
  * Managed all the Types of this Business Model module.
@@ -48,7 +49,6 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
       super.toString(dc.sup());
    }
 
-
    public boolean toString(Dctx dc, ByteObject bo) {
       int type = bo.getType();
       switch (type) {
@@ -67,7 +67,6 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
       return true;
    }
 
-
    public void toString1Line(Dctx dc) {
       dc.root1Line(this, BOModuleCoreUi.class);
       toStringPrivate(dc);
@@ -84,12 +83,21 @@ public class BOModuleCoreUi extends BOModuleAbstract implements IDebugStringable
             dc.append(toStringType(type));
             break;
          case TYPE_8_FRAME_POS:
-            dc.append(toStringType(type));
+            toString1LineFramePos(dc,bo);
             break;
          default:
             return false;
       }
       return true;
+   }
+
+   private void toString1LineFramePos(Dctx dc, ByteObject bo) {
+      dc.rootN1Line(bo, "BOFramePos", BOModuleCoreUi.class, 94);
+      dc.append("->");
+      dc.appendVarWithSpace("x", bo.get2Signed(IBOFramePos.FPOS_OFFSET_02_X2));
+      dc.appendVarWithSpace("y", bo.get2Signed(IBOFramePos.FPOS_OFFSET_03_Y2));
+      dc.appendVarWithSpace("w", bo.get2(IBOFramePos.FPOS_OFFSET_04_W2));
+      dc.appendVarWithSpace("h", bo.get2(IBOFramePos.FPOS_OFFSET_05_H2));
    }
 
    public String toStringGetDIDString(int did, int value) {

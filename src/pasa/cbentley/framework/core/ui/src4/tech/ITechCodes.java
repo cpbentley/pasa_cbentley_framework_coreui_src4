@@ -284,6 +284,8 @@ public interface ITechCodes {
 
    public static final int  KEY_MINUS                      = 109;
 
+   public static final int  KEY_HOME                       = 109;
+
    public static final int  KEY_NUM0                       = 48;
 
    public static final int  KEY_NUM1                       = 49;

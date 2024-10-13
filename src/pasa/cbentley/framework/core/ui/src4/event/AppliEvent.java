@@ -8,54 +8,73 @@ import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.tech.IInput;
 
 /**
- * Event such as
+ * Class for {@link BEvent} at the application manager level. 
  * 
- * {@link IInput#TYPE_6_APPLI}
- * <br>
- * Event has the function of activityResult.
+ * <p>
  * 
+ * </p>
+ * Type is {@link IInput#TYPE_6_APPLI}
+ * 
+ * 
+ * Event has the function of activityResult principles used in Android.
+ * 
+ * <p>
  * Appli events can be used as command triggers.
- * <br>
+ * </p>
  * 
  * @author Charles Bentley
  *
  */
 public class AppliEvent extends BEvent {
 
-   private int mode;
+   private int action;
 
-   public AppliEvent(CoreUiCtx fc, int mode) {
-      super(fc);
+   /**
+    * Creates a new {@link AppliEvent}.
+    * 
+    * @param cuc
+    * @param action
+    * <li> {@link ITechEventHost#ACTION_01_CLOSE}
+    * <li> {@link ITechEventHost#ACTION_2_EXIT} 
+    * <li> {@link ITechEventHost#ACTION_3_ENTER} 
+    * <li> {@link ITechEventHost#ACTION_04_FOCUS_GAIN} 
+    * <li> {@link ITechEventHost#ACTION_05_FOCUS_LOSS}
+    * <li> {@link ITechEventHost#ACTION_03_RESIZED}
+    * 
+    */
+   public AppliEvent(CoreUiCtx cuc, int action) {
+      super(cuc);
       this.type = TYPE_6_APPLI;
-      this.mode = mode;
+      this.action = action;
    }
+
    /**
     * Explicit actions made by the user
-    * <li> {@link ITechEventHost#ACTION_1_CLOSE} when they use the host UI to close a {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_01_CLOSE} when they use the host UI to close a {@link ICanvasHost}
     * <li> {@link ITechEventHost#ACTION_2_EXIT} when a pointer exits the {@link ICanvasHost}
     * <li> {@link ITechEventHost#ACTION_3_ENTER} when a pointer exits the {@link ICanvasHost}
-    * <li> {@link ITechEventHost#ACTION_4_FOCUS_GAIN} when Host UI gives the focus to the {@link ICanvasHost}
-    * <li> {@link ITechEventHost#ACTION_5_FOCUS_LOSS} when Host UI take away the focus from the {@link ICanvasHost}
-    * <li> {@link ITechEventHost#ACTION_3_RESIZED} when the {@link ICanvasHost} is (user,implicitly) resized, moved, fullscreened
+    * <li> {@link ITechEventHost#ACTION_04_FOCUS_GAIN} when Host UI gives the focus to the {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_05_FOCUS_LOSS} when Host UI take away the focus from the {@link ICanvasHost}
+    * <li> {@link ITechEventHost#ACTION_03_RESIZED} when the {@link ICanvasHost} is (user,implicitly) resized, moved, fullscreened
     * 
     */
    public int getAction() {
-      return mode;
+      return action;
    }
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, "AppliEvent");
-      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringAppliAction(mode));
+      dc.root(this, AppliEvent.class, 48);
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringEventAppli(action));
    }
 
    public String getUserLineString() {
-      return "Appli " + ToStringStaticCoreUi.toStringAppliAction(getAction());
+      return "Appli " + ToStringStaticCoreUi.toStringEventAppli(getAction());
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, "AppliEvent");
-      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringAppliAction(mode));
+      dc.root1Line(this, AppliEvent.class, 57);
+      dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringEventAppli(action));
    }
    //#enddebug
 }
