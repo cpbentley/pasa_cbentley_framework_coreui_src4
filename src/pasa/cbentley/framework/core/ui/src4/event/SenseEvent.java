@@ -57,6 +57,13 @@ public class SenseEvent extends DeviceEvent {
       this.sensorType = sensorType;
    }
 
+   /**
+    * 
+    * @param fc
+    * @param sensorType
+    * @param sensorSubType
+    * @param deviceID
+    */
    public SenseEvent(CoreUiCtx fc, int sensorType, int sensorSubType, int deviceID) {
       super(fc, IInput.DEVICE_7_SENSOR, deviceID, IInput.MOD_4_SENSED, 0);
       this.sensorType = sensorType;

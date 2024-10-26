@@ -1,7 +1,7 @@
 package pasa.cbentley.framework.core.ui.src4.tech;
 
 import pasa.cbentley.core.src4.interfaces.C;
-import pasa.cbentley.framework.core.ui.src4.event.CanvasHostEvent;
+import pasa.cbentley.framework.core.ui.src4.event.EventCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEvent;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEventGroup;
 import pasa.cbentley.framework.core.ui.src4.event.GestureEvent;
@@ -225,7 +225,7 @@ public interface IInput {
    public static final int TYPE_2_GESTURE          = 2;
 
    /**
-    * Event type for {@link CanvasHostEvent}
+    * Event type for {@link EventCanvasHost}
     */
    public static final int TYPE_3_CANVAS           = 3;
 

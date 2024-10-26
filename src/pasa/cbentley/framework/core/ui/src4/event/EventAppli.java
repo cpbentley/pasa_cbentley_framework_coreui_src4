@@ -25,12 +25,12 @@ import pasa.cbentley.framework.core.ui.src4.tech.IInput;
  * @author Charles Bentley
  *
  */
-public class AppliEvent extends BEvent {
+public class EventAppli extends BEvent {
 
    private int action;
 
    /**
-    * Creates a new {@link AppliEvent}.
+    * Creates a new {@link EventAppli}.
     * 
     * @param cuc
     * @param action
@@ -42,7 +42,7 @@ public class AppliEvent extends BEvent {
     * <li> {@link ITechEventHost#ACTION_03_RESIZED}
     * 
     */
-   public AppliEvent(CoreUiCtx cuc, int action) {
+   public EventAppli(CoreUiCtx cuc, int action) {
       super(cuc);
       this.type = TYPE_6_APPLI;
       this.action = action;
@@ -64,7 +64,7 @@ public class AppliEvent extends BEvent {
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, AppliEvent.class, 48);
+      dc.root(this, EventAppli.class, 48);
       dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringEventAppli(action));
    }
 
@@ -73,7 +73,7 @@ public class AppliEvent extends BEvent {
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, AppliEvent.class, 57);
+      dc.root1Line(this, EventAppli.class, 57);
       dc.appendVarWithSpace("Sub", ToStringStaticCoreUi.toStringEventAppli(action));
    }
    //#enddebug

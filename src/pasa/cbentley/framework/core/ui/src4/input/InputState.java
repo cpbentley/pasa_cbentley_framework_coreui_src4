@@ -17,9 +17,9 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasAppliAbstract;
-import pasa.cbentley.framework.core.ui.src4.event.AppliEvent;
+import pasa.cbentley.framework.core.ui.src4.event.EventAppli;
 import pasa.cbentley.framework.core.ui.src4.event.BEvent;
-import pasa.cbentley.framework.core.ui.src4.event.CanvasHostEvent;
+import pasa.cbentley.framework.core.ui.src4.event.EventCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEvent;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEventGroup;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEventXY;
@@ -285,9 +285,9 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
 
    private LinkedListDouble      keysEmptyList;
 
-   private AppliEvent            lastActionEvent;
+   private EventAppli            lastActionEvent;
 
-   private CanvasHostEvent       lastCanvasEvent;
+   private EventCanvasHost       lastCanvasEvent;
 
    private DeviceEvent           lastDeviceEvent;
 
@@ -432,7 +432,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     */
    public boolean addEvent(BEvent be, CanvasAppliAbstract canvas) {
       //#debug
-      toDLog().pFlow("", be, InputState.class, "addEvent@434", LVL_03_FINEST, DEV_0_1LINE_THREAD);
+      toDLog().pFlow("", be, InputState.class, "addEvent@435", LVL_03_FINEST, DEV_X_ONELINE_THRE);
       //time the event here
       timePointerEvent();
       long time = cuc.getTimeCtrl().getNowClock();
@@ -450,13 +450,13 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          RepeatEvent tu = (RepeatEvent) be;
          res = addEventRepeat(tu);
       } else if (eventType == TYPE_6_APPLI) {
-         AppliEvent ae = (AppliEvent) be;
+         EventAppli ae = (EventAppli) be;
          res = addEventAction(ae);
       } else if (eventType == TYPE_7_GROUP) {
          DeviceEventGroup ae = (DeviceEventGroup) be;
          res = addEventGroup(ae);
       } else if (eventType == TYPE_3_CANVAS) {
-         CanvasHostEvent ae = (CanvasHostEvent) be;
+         EventCanvasHost ae = (EventCanvasHost) be;
          res = addEventCanvas(ae);
       } else {
          res = false;
@@ -475,7 +475,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       return res;
    }
 
-   private boolean addEventAction(AppliEvent ae) {
+   private boolean addEventAction(EventAppli ae) {
       int mode = ae.getAction();
       if (mode == ITechEventHost.ACTION_05_FOCUS_LOSS) {
          resetPresses();
@@ -484,7 +484,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       return true;
    }
 
-   private boolean addEventCanvas(CanvasHostEvent ae) {
+   private boolean addEventCanvas(EventCanvasHost ae) {
       lastCanvasEvent = ae;
       setEventID(ITechEvent.EVID_40_CANVAS);
       return true;
@@ -989,7 +989,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          RepeatEvent tu = (RepeatEvent) be;
       } else if (eventType == TYPE_5_CTX_CHANGE) {
       } else if (eventType == TYPE_6_APPLI) {
-         AppliEvent ae = (AppliEvent) be;
+         EventAppli ae = (EventAppli) be;
       } else if (eventType == TYPE_7_GROUP) {
          DeviceEventGroup ae = (DeviceEventGroup) be;
       } else {
@@ -1779,7 +1779,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       return -1;
    }
 
-   public AppliEvent getLastActionEvent() {
+   public EventAppli getLastActionEvent() {
       return lastActionEvent;
    }
 
@@ -2998,8 +2998,8 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
                return true;
             }
          } else if (eventCurrent.getType() == IInput.TYPE_3_CANVAS) {
-            CanvasHostEvent che = (CanvasHostEvent) eventCurrent;
-            CanvasHostEvent cheP = (CanvasHostEvent) eventPrevious;
+            EventCanvasHost che = (EventCanvasHost) eventCurrent;
+            EventCanvasHost cheP = (EventCanvasHost) eventPrevious;
             if (che.getActionType() == cheP.getActionType()) {
                return true;
             }

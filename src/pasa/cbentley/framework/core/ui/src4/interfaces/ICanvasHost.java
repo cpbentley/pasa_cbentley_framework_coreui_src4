@@ -158,6 +158,12 @@ public interface ICanvasHost extends IStringable, IStatorable {
    public void setCanvasAppli(ICanvasAppli canvasAppli);
 
    /**
+    * Activate/Deactivate the canvas
+    * @param b
+    */
+   public void setCanvasAppliActive(boolean b);
+
+   /**
     * 
     * Activates a canvas feature. a System flag of the {@link ICanvasHost}.
     * <li> {@link ITechFeaturesCanvas#SUP_ID_16_CUSTOM_CURSORS}

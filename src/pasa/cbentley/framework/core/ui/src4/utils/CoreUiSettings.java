@@ -183,7 +183,7 @@ public class CoreUiSettings extends ObjectCUC implements IInput, IEventConsumer,
     * @return
     */
    public int getNumStartPointers() {
-      int v = cuc.getHostDataInt(DATA_ID_06_POINTER_FAST_TYPE_TIMEOUT);
+      int v = cuc.getHostDataInt(DATA_ID_07_NUM_START_POINTERS);
       if (v == 0) {
          v = 1;
       }

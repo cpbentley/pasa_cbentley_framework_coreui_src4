@@ -27,6 +27,9 @@ public interface ITechHostDataDrawUi extends ITechHostDataDraw {
     */
    public static final int DATA_ID_03_POINTER_NUPLE_TIMEOUT      = 3;
 
+   /**
+    * 
+    */
    public static final int DATA_ID_04_POINTER_DRAG_SLOP          = 4;
 
    public static final int DATA_ID_06_POINTER_FAST_TYPE_TIMEOUT  = 6;

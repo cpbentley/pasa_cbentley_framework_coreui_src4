@@ -6,7 +6,7 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasAppliAbstract;
-import pasa.cbentley.framework.core.ui.src4.event.CanvasHostEvent;
+import pasa.cbentley.framework.core.ui.src4.event.EventCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
@@ -65,7 +65,7 @@ public class ScreenOrientationCtrl extends ObjectCUC implements IStringable {
          w = canvas.getHeight();
          h = canvas.getWidth();
       }
-      CanvasHostEvent ch = new CanvasHostEvent(cuc, ITechEventHost.ACTION_03_RESIZED, canvas.getCanvasHost());
+      EventCanvasHost ch = new EventCanvasHost(cuc, ITechEventHost.ACTION_03_RESIZED, canvas.getCanvasHost());
       ch.setW(w);
       ch.setH(h);
       canvas.event(ch);

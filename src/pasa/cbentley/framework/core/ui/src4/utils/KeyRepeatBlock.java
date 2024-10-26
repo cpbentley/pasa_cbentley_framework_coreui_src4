@@ -7,12 +7,16 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
 
+/**
+ * 
+ * @author Charles Bentley
+ *
+ */
 public class KeyRepeatBlock extends ObjectCUC implements IStringable {
 
-   protected int             pressedKeyCounter;
+   protected int   pressedKeyCounter;
 
-   protected int[]           pressedKeys = new int[20];
-
+   protected int[] pressedKeys = new int[20];
 
    public KeyRepeatBlock(CoreUiCtx cuc) {
       super(cuc);

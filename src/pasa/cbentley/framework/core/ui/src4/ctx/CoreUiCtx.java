@@ -23,7 +23,7 @@ import pasa.cbentley.core.src4.structs.IntToObjects;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasAppliAbstract;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasHostAbstract;
 import pasa.cbentley.framework.core.ui.src4.engine.KeyMapAbstract;
-import pasa.cbentley.framework.core.ui.src4.event.AppliEvent;
+import pasa.cbentley.framework.core.ui.src4.event.EventAppli;
 import pasa.cbentley.framework.core.ui.src4.event.BEvent;
 import pasa.cbentley.framework.core.ui.src4.event.GestureArea;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasAppli;
@@ -304,6 +304,8 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
     * Return an array of {@link ICanvasHost} located at that coordinate.
     * <br>
     * The first being the topmost canvas
+    * what about the Z coordinate ? Impossible to get from Swing.
+    * 
     * @param x
     * @param y
     * @return empty array if none
@@ -573,6 +575,8 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
    public void linkCanvasAppliToHost(ICanvasAppli canvasAppli, ICanvasHost canvasHost) {
       //registers the relevant events/listeners/observers
       canvasHost.setCanvasAppli(canvasAppli);
+      //activate
+      canvasHost.setCanvasAppliActive(true);
    }
 
    /**
@@ -596,7 +600,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
     * Publish the Event on all knows Canvas.
     * 
     * <li> Gamepads events use this method, as they cannot know which Canvas has its focus
-    * <li> Most {@link AppliEvent} will use this entry point since we want pauses to be forwarded to all Canvases.
+    * <li> Most {@link EventAppli} will use this entry point since we want pauses to be forwarded to all Canvases.
     * @param se
     */
    public void publishEventOnAllCanvas(BEvent se) {
@@ -612,7 +616,7 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
    }
 
    public void publishMessageOnRoot(String msg) {
-      AppliEvent ae = new AppliEvent(this, ITechEventApp.ACTION_11_MESSAGE);
+      EventAppli ae = new EventAppli(this, ITechEventApp.ACTION_11_MESSAGE);
       ae.setParamO1(msg);
       this.publishEventOnRoot(ae);
    }
@@ -626,12 +630,14 @@ public abstract class CoreUiCtx extends ABOCtx implements IEventsCoreUi, IBOCtxS
    }
 
    public void showAllCanvases() {
-      canvasRoot.getCanvasAppli().showNotify();
+      ICanvasAppli canvasAppli = canvasRoot.getCanvasAppli();
+      canvasAppli.showNotify();
       canvasRoot.canvasShow();
       for (int i = 0; i < canvases.nextempty; i++) {
          if (canvases.objects[i] != canvasRoot) {
             CanvasHostAbstract canvas = (CanvasHostAbstract) canvases.objects[i];
-            canvas.getCanvasAppli().showNotify();
+            ICanvasAppli canvasAppli2 = canvas.getCanvasAppli();
+            canvasAppli2.showNotify();
             canvas.canvasShow();
          }
       }

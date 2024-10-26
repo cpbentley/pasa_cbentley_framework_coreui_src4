@@ -2,7 +2,6 @@ package pasa.cbentley.framework.core.ui.src4.exec;
 
 import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
-import pasa.cbentley.core.src4.logging.IDLog;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.structs.IntToObjects;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
@@ -70,7 +69,6 @@ public class ExecutionContext extends ObjectCUC implements ITechExecutionContext
 
    protected IntToObjects execEntries;
 
-   private Object         pending;
 
    private int            pointer;
 
@@ -94,9 +92,6 @@ public class ExecutionContext extends ObjectCUC implements ITechExecutionContext
       execEntries = new IntToObjects(uc);
    }
 
-   public void setPending(Object pending) {
-      this.pending = pending;
-   }
 
    /**
     * On which thread should an Event run? 
@@ -185,6 +180,12 @@ public class ExecutionContext extends ObjectCUC implements ITechExecutionContext
       dc.root(this, ExecutionContext.class, 180);
       toStringPrivate(dc);
       super.toString(dc.sup());
+      
+      dc.nlLvl(is, "is");
+      dc.nlLvl(os, "os");
+      dc.nlLvl(execEntries, "execEntries");
+      dc.nlLvl(types, "types");
+      dc.nlLvl(data, "data");
    }
 
    public void toString1Line(Dctx dc) {

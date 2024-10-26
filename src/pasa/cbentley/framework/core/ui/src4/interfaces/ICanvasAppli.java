@@ -5,7 +5,7 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.core.src4.stator.IStatorable;
 import pasa.cbentley.framework.core.ui.src4.engine.CanvasHostAbstract;
 import pasa.cbentley.framework.core.ui.src4.event.BEvent;
-import pasa.cbentley.framework.core.ui.src4.event.CanvasHostEvent;
+import pasa.cbentley.framework.core.ui.src4.event.EventCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEvent;
 import pasa.cbentley.framework.core.ui.src4.event.GestureEvent;
 import pasa.cbentley.framework.core.ui.src4.event.SenseEvent;
@@ -65,7 +65,7 @@ public interface ICanvasAppli extends IStringable, IStatorable {
     * <li>host will decide it
     * <li>the state of the appli will.
     * <br>
-    * The Host generates {@link CanvasHostEvent} for notify to size changes.
+    * The Host generates {@link EventCanvasHost} for notify to size changes.
     * <br>
     * @return
     */

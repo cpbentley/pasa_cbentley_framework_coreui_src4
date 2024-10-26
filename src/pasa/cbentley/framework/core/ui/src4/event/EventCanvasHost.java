@@ -18,11 +18,11 @@ import pasa.cbentley.framework.core.ui.src4.tech.IInput;
  * <li>{@link ITechEventHost#ACTION_04_FOCUS_GAIN}
  * </p>
  * 
- * @see AppliEvent
+ * @see EventAppli
  * @author Charles Bentley
  *
  */
-public class CanvasHostEvent extends BEvent {
+public class EventCanvasHost extends BEvent {
    /**
     * 
     */
@@ -48,7 +48,7 @@ public class CanvasHostEvent extends BEvent {
     * @param actionType
     * @param canvasHot
     */
-   public CanvasHostEvent(CoreUiCtx cuc, int actionType, ICanvasHost canvasHot) {
+   public EventCanvasHost(CoreUiCtx cuc, int actionType, ICanvasHost canvasHot) {
       super(cuc);
       this.type = IInput.TYPE_3_CANVAS;
       this.actionType = actionType;
@@ -113,7 +113,7 @@ public class CanvasHostEvent extends BEvent {
 
    //#mdebug
    public void toString(Dctx dc) {
-      dc.root(this, CanvasHostEvent.class, 110);
+      dc.root(this, EventCanvasHost.class, toStringGetLine(116));
       toStringPrivate(dc);
       super.toString(dc.sup());
 
@@ -123,7 +123,7 @@ public class CanvasHostEvent extends BEvent {
    }
 
    public void toString1Line(Dctx dc) {
-      dc.root1Line(this, CanvasHostEvent.class);
+      dc.root1Line(this, EventCanvasHost.class, toStringGetLine(126));
       toStringPrivate(dc);
       super.toString1Line(dc.sup1Line());
    }
