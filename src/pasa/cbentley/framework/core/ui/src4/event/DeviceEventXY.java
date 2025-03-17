@@ -3,7 +3,7 @@ package pasa.cbentley.framework.core.ui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 
 /**
@@ -71,11 +71,11 @@ public class DeviceEventXY extends DeviceEvent {
 
    public String getUserLineString() {
       String str = "";
-      if (deviceType == IInput.DEVICE_1_MOUSE) {
+      if (deviceType == ITechInput.DEVICE_1_MOUSE) {
          //depends on the mouse
-         if (mode == IInput.MOD_3_MOVED) {
+         if (mode == ITechInput.MOD_3_MOVED) {
             str = "Mouse " + deviceID + " Moved";
-         } else if (mode == IInput.MOD_5_WHEELED) {
+         } else if (mode == ITechInput.MOD_5_WHEELED) {
             if(y == ITechCodes.PBUTTON_3_WHEEL_UP) {
                str = "Mouse wheeled up "+ x;
             } else {
@@ -84,7 +84,7 @@ public class DeviceEventXY extends DeviceEvent {
          } else {
             str = "Mouse " + ToStringStaticCoreUi.toStringButtonShort(deviceButton) + " " + ToStringStaticCoreUi.toStringMod(mode);
          }
-      } else if (deviceType == IInput.DEVICE_3_FINGER) {
+      } else if (deviceType == ITechInput.DEVICE_3_FINGER) {
          str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.toStringMod(mode);
       }
       str += " " + getX() + "," + getY();

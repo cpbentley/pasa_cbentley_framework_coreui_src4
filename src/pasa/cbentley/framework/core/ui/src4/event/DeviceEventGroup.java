@@ -3,7 +3,7 @@ package pasa.cbentley.framework.core.ui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Event generated when a group of {@link DeviceEvent} match a pattern.
@@ -88,12 +88,12 @@ public class DeviceEventGroup extends BEvent implements IStringable {
          DeviceEvent deviceEvent = deviceEvents[i];
          if (de.getDeviceButton() == deviceEvent.getDeviceButton() && de.getDeviceType() == de.getDeviceType()) {
             if (de.getDeviceID() == deviceEvent.getDeviceID()) {
-               if (de.getDeviceMode() == IInput.MOD_0_PRESSED) {
-                  if (deviceEvent.getDeviceMode() == IInput.MOD_1_RELEASED) {
+               if (de.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
+                  if (deviceEvent.getDeviceMode() == ITechInput.MOD_1_RELEASED) {
                      return true;
                   }
-               } else if (de.getDeviceMode() == IInput.MOD_1_RELEASED) {
-                  if (deviceEvent.getDeviceMode() == IInput.MOD_0_PRESSED) {
+               } else if (de.getDeviceMode() == ITechInput.MOD_1_RELEASED) {
+                  if (deviceEvent.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
                      return true;
                   }
                }

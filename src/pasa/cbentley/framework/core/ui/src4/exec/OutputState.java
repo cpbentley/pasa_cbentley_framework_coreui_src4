@@ -5,9 +5,9 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.core.ui.src4.event.BEvent;
 import pasa.cbentley.framework.core.ui.src4.event.RepeatEvent;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
-public abstract class OutputState extends ObjectCUC implements IInput {
+public abstract class OutputState extends ObjectCUC implements ITechInput {
 
    public OutputState(CoreUiCtx cuc) {
       super(cuc);

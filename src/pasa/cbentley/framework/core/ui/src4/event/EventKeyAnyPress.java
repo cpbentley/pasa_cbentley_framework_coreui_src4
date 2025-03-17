@@ -4,7 +4,7 @@ import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Actives when any press
@@ -35,9 +35,9 @@ public class EventKeyAnyPress extends EventKey implements IStringable {
     * @return
     */
    public boolean isKeyActivated(BEvent be) {
-      if (be.getType() == IInput.TYPE_1_DEVICE) {
+      if (be.getType() == ITechInput.TYPE_1_DEVICE) {
          DeviceEvent de = (DeviceEvent) be;
-         if (de.getDeviceMode() == IInput.MOD_0_PRESSED) {
+         if (de.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
             return true;
          }
       }

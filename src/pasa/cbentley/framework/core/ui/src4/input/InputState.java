@@ -41,7 +41,7 @@ import pasa.cbentley.framework.core.ui.src4.event.VoiceEvent;
 import pasa.cbentley.framework.core.ui.src4.interfaces.BCodes;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechEvent;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechGestures;
@@ -181,7 +181,7 @@ import pasa.cbentley.framework.core.ui.src4.utils.CoreUiSettings;
  * @author Charles-Philip Bentley
  *
  */
-public abstract class InputState extends ObjectCUC implements IInput, ITechGestures, IStringable, ITechCodes {
+public abstract class InputState extends ObjectCUC implements ITechInput, ITechGestures, IStringable, ITechCodes {
 
    private static final int      MAX_HISTORY            = 100;
 
@@ -362,10 +362,10 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       pointers = new Pointer[] { new Pointer(cuc, 0) };
       lastPointer = pointers[0];
       lastPointerEvents = new DeviceEventXY[10];
-      deviceKeyMainKeyboard = new DeviceKeys(cuc, this, IInput.DEVICE_0_KEYBOARD, 0);
+      deviceKeyMainKeyboard = new DeviceKeys(cuc, this, ITechInput.DEVICE_0_KEYBOARD, 0);
       //make it null but check when first created
-      deviceKeyMainPointer = new DeviceKeys(cuc, this, IInput.DEVICE_1_MOUSE, 0);
-      deviceKeyMainTouchScreen = new DeviceKeys(cuc, this, IInput.DEVICE_4_SCREEN, 0);
+      deviceKeyMainPointer = new DeviceKeys(cuc, this, ITechInput.DEVICE_1_MOUSE, 0);
+      deviceKeyMainTouchScreen = new DeviceKeys(cuc, this, ITechInput.DEVICE_4_SCREEN, 0);
 
       beEventsHistory = new CircularObjects(uc, 10);
       ignoreTooFastKeyEvents = 10;
@@ -432,7 +432,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     */
    public boolean addEvent(BEvent be, CanvasAppliAbstract canvas) {
       //#debug
-      toDLog().pFlow("", be, InputState.class, "addEvent@435", LVL_03_FINEST, DEV_X_ONELINE_THRE);
+      toDLog().pFlow("", be, InputState.class, "addEvent@435", LVL_03_FINEST, DEV_X_ONELINE_THREAD);
       //time the event here
       timePointerEvent();
       long time = cuc.getTimeCtrl().getNowClock();
@@ -440,7 +440,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       eventCanvas = canvas;
       boolean res = true;
       int eventType = be.getType();
-      if (eventType == IInput.TYPE_2_GESTURE) {
+      if (eventType == ITechInput.TYPE_2_GESTURE) {
          GestureEvent tu = (GestureEvent) be;
          res = addEventGesture(tu);
       } else if (eventType == TYPE_1_DEVICE) {
@@ -494,14 +494,14 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       int mode = tu.getDeviceMode();
       int deviceType = tu.getDeviceType();
       boolean res = false;
-      if (deviceType == IInput.DEVICE_0_KEYBOARD) {
+      if (deviceType == ITechInput.DEVICE_0_KEYBOARD) {
          eventCanvas.fixRotationKey(tu); //update up/down left/right keys relative to rotated screen
          if (mode == MOD_0_PRESSED) {
             res = addPressedKeyboard(tu);
          } else if (mode == MOD_1_RELEASED) {
             res = addKeyReleased(tu);
          }
-      } else if (deviceType == IInput.DEVICE_1_MOUSE) {
+      } else if (deviceType == ITechInput.DEVICE_1_MOUSE) {
          //check for first time event
          DeviceEventXY dex = (DeviceEventXY) tu;
          eventCanvas.fixRotation(dex);
@@ -514,13 +514,13 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          } else if (mode == MOD_3_MOVED) {
             res = addMouseMoved(dex);
          }
-      } else if (deviceType == IInput.DEVICE_2_GAMEPAD) {
+      } else if (deviceType == ITechInput.DEVICE_2_GAMEPAD) {
          if (mode == MOD_0_PRESSED) {
             res = addPadPressed(tu);
          } else if (mode == MOD_1_RELEASED) {
             res = addPadReleased(tu);
          }
-      } else if (deviceType == IInput.DEVICE_4_SCREEN) {
+      } else if (deviceType == ITechInput.DEVICE_4_SCREEN) {
          DeviceEventXYTouch dex = (DeviceEventXYTouch) tu;
          if (mode == MOD_0_PRESSED) {
             res = addFingerPressed(dex);
@@ -529,7 +529,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          } else if (mode == MOD_3_MOVED) {
             res = addFingerMoved(dex);
          }
-      } else if (deviceType == IInput.DEVICE_7_SENSOR) {
+      } else if (deviceType == ITechInput.DEVICE_7_SENSOR) {
          SenseEvent se = (SenseEvent) tu;
          res = addSenseEvent(se);
       } else {
@@ -968,19 +968,19 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
 
    private void checkType(BEvent be) {
       int eventType = be.getType();
-      if (eventType == IInput.TYPE_2_GESTURE) {
+      if (eventType == ITechInput.TYPE_2_GESTURE) {
          GestureEvent tu = (GestureEvent) be;
       } else if (eventType == TYPE_1_DEVICE) {
          DeviceEvent tu = (DeviceEvent) be;
          int deviceType = tu.getDeviceType();
-         if (deviceType == IInput.DEVICE_0_KEYBOARD) {
+         if (deviceType == ITechInput.DEVICE_0_KEYBOARD) {
 
-         } else if (deviceType == IInput.DEVICE_1_MOUSE) {
+         } else if (deviceType == ITechInput.DEVICE_1_MOUSE) {
             DeviceEventXY dex = (DeviceEventXY) tu;
-         } else if (deviceType == IInput.DEVICE_2_GAMEPAD) {
-         } else if (deviceType == IInput.DEVICE_3_FINGER) {
+         } else if (deviceType == ITechInput.DEVICE_2_GAMEPAD) {
+         } else if (deviceType == ITechInput.DEVICE_3_FINGER) {
             DeviceEventXY dex = (DeviceEventXY) tu;
-         } else if (deviceType == IInput.DEVICE_4_SCREEN) {
+         } else if (deviceType == ITechInput.DEVICE_4_SCREEN) {
             DeviceEventXYTouch dex = (DeviceEventXYTouch) tu;
          } else {
             throw new IllegalStateException("Unknown deviceType " + deviceType);
@@ -1342,10 +1342,10 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
             int id = press.getDeviceID();
             int button = press.getDeviceButton();
             if (press instanceof DeviceEventXY) {
-               DeviceEventXY de = new DeviceEventXY(cuc, type, id, IInput.MOD_1_RELEASED, button, 0, 0);
+               DeviceEventXY de = new DeviceEventXY(cuc, type, id, ITechInput.MOD_1_RELEASED, button, 0, 0);
                queuePost(de);
             } else {
-               DeviceEvent de = new DeviceEvent(cuc, type, id, IInput.MOD_1_RELEASED, button);
+               DeviceEvent de = new DeviceEvent(cuc, type, id, ITechInput.MOD_1_RELEASED, button);
                queuePost(de);
             }
          }
@@ -1488,7 +1488,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     */
    private DeviceKeys getDeviceKeyGamePads(int deviceID) {
       //make sure the array is ok
-      DeviceKeys[] dks = appDeviceKeys(deviceKeysGamePads, deviceID, IInput.DEVICE_2_GAMEPAD);
+      DeviceKeys[] dks = appDeviceKeys(deviceKeysGamePads, deviceID, ITechInput.DEVICE_2_GAMEPAD);
       if (deviceKeysGamePads != dks) {
          deviceKeysGamePads = dks;
       }
@@ -1499,7 +1499,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       if (deviceID == 0) { //fast check
          return deviceKeyMainKeyboard;
       } else {
-         DeviceKeys[] dks = appDeviceKeys(deviceKeysKeyboard, deviceID, IInput.DEVICE_0_KEYBOARD);
+         DeviceKeys[] dks = appDeviceKeys(deviceKeysKeyboard, deviceID, ITechInput.DEVICE_0_KEYBOARD);
          if (deviceKeysKeyboard != dks) {
             deviceKeysKeyboard = dks;
          }
@@ -1522,7 +1522,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       if (pointerID == 0) {
          return deviceKeyMainPointer;
       } else {
-         DeviceKeys[] dks = appDeviceKeys(deviceKeysPointers, pointerID, IInput.DEVICE_1_MOUSE);
+         DeviceKeys[] dks = appDeviceKeys(deviceKeysPointers, pointerID, ITechInput.DEVICE_1_MOUSE);
          if (deviceKeysPointers != dks) {
             deviceKeysPointers = dks;
          }
@@ -1540,7 +1540,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       if (screenID == 0) {
          return deviceKeyMainTouchScreen;
       } else {
-         DeviceKeys[] dks = appDeviceKeys(deviceKeysScreens, screenID, IInput.DEVICE_4_SCREEN);
+         DeviceKeys[] dks = appDeviceKeys(deviceKeysScreens, screenID, ITechInput.DEVICE_4_SCREEN);
          if (deviceKeysScreens != dks) {
             deviceKeysScreens = dks;
          }
@@ -1549,7 +1549,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    private DeviceKeys getDKeys(int deviceID, int deviceType) {
-      if (deviceType == IInput.DEVICE_0_KEYBOARD) {
+      if (deviceType == ITechInput.DEVICE_0_KEYBOARD) {
          return getDeviceKeysKeyboard(deviceID);
       } else if (deviceType == DEVICE_1_MOUSE) {
          return getDeviceKeysPointer(deviceID);
@@ -2046,7 +2046,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
       IntToObjects ito = new IntToObjects(uc);
       for (int i = 0; i < pointers.length; i++) {
          if (pointers[i].isFinger()) {
-            if (pointers[i].getLastPointerEvent().getDeviceMode() == IInput.MOD_0_PRESSED) {
+            if (pointers[i].getLastPointerEvent().getDeviceMode() == ITechInput.MOD_0_PRESSED) {
                ito.add(pointers[i]);
             }
          }
@@ -2159,7 +2159,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          }
          int diff = (int) (refTime - d.getTime());
          if (diff <= simulTimeOut) {
-            if (d.getDeviceMode() == IInput.MOD_1_RELEASED || d.getDeviceMode() == IInput.MOD_0_PRESSED) {
+            if (d.getDeviceMode() == ITechInput.MOD_1_RELEASED || d.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
                if (ib == null) {
                   ib = new IntToObjects(uc);
                   ib.add(root);
@@ -2242,7 +2242,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
          DeviceEvent d = ar.getEvent();
          int diff = (int) (refTime - d.getTime());
          if (diff <= simulTimeOut) {
-            if (d.getDeviceMode() == IInput.MOD_1_RELEASED) {
+            if (d.getDeviceMode() == ITechInput.MOD_1_RELEASED) {
                if (ib == null) {
                   ib = new IntToObjects(uc);
                   ib.add(lastDeviceKeyRelease);
@@ -2388,11 +2388,11 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    public boolean isCtxChange() {
-      return getLastDeviceType() == IInput.TYPE_5_CTX_CHANGE;
+      return getLastDeviceType() == ITechInput.TYPE_5_CTX_CHANGE;
    }
 
    public boolean isDeviceTypeGamePad() {
-      return getLastDeviceType() == IInput.DEVICE_2_GAMEPAD;
+      return getLastDeviceType() == ITechInput.DEVICE_2_GAMEPAD;
    }
 
    /**
@@ -2455,7 +2455,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    public boolean isFingerPressed(int finger1) {
       for (int i = 0; i < pointers.length; i++) {
          if (pointers[i].isFinger()) {
-            if (pointers[i].getLastPointerEvent().getDeviceMode() == IInput.MOD_0_PRESSED) {
+            if (pointers[i].getLastPointerEvent().getDeviceMode() == ITechInput.MOD_0_PRESSED) {
                if (pointers[i].getLastPointerEvent().getDeviceButton() == finger1) {
                   return true;
                }
@@ -2533,7 +2533,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    public boolean isLongPress() {
-      if (lastRepeatEvent.getRepeatType() == IInput.REPEAT_2_LONG) {
+      if (lastRepeatEvent.getRepeatType() == ITechInput.REPEAT_2_LONG) {
          return true;
       }
       return false;
@@ -2544,7 +2544,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    public boolean isModMoved() {
-      return getMode() == IInput.MOD_3_MOVED;
+      return getMode() == ITechInput.MOD_3_MOVED;
    }
 
    /**
@@ -2552,7 +2552,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     * @return
     */
    public boolean isModPressed() {
-      return getMode() == IInput.MOD_0_PRESSED;
+      return getMode() == ITechInput.MOD_0_PRESSED;
    }
 
    /**
@@ -2562,7 +2562,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     * @return
     */
    public boolean isModReleased() {
-      return getMode() == IInput.MOD_1_RELEASED;
+      return getMode() == ITechInput.MOD_1_RELEASED;
    }
 
    /**
@@ -2570,7 +2570,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     * @return
     */
    public boolean isModSensed() {
-      return getMode() == IInput.MOD_4_SENSED;
+      return getMode() == ITechInput.MOD_4_SENSED;
    }
 
    public boolean isNavKey() {
@@ -2660,10 +2660,10 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
 
    public boolean isPointerPPrimary() {
       if (lastDeviceEvent == lastDeviceEventXY) {
-         if (lastDeviceEventXY.getDeviceMode() == IInput.MOD_0_PRESSED) {
-            if (lastDeviceEventXY.getDeviceType() == IInput.DEVICE_1_MOUSE) {
+         if (lastDeviceEventXY.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
+            if (lastDeviceEventXY.getDeviceType() == ITechInput.DEVICE_1_MOUSE) {
                return lastDeviceEventXY.getDeviceButton() == ITechCodes.PBUTTON_0_DEFAULT;
-            } else if (lastDeviceEventXY.getDeviceType() == IInput.DEVICE_4_SCREEN) {
+            } else if (lastDeviceEventXY.getDeviceType() == ITechInput.DEVICE_4_SCREEN) {
                return lastDeviceEventXY.getDeviceButton() == ITechCodes.FINGER_1;
             }
          }
@@ -2673,10 +2673,10 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
 
    public boolean isPointerPSecondary() {
       if (lastDeviceEvent == lastDeviceEventXY) {
-         if (lastDeviceEventXY.getDeviceMode() == IInput.MOD_0_PRESSED) {
-            if (lastDeviceEventXY.getDeviceType() == IInput.DEVICE_1_MOUSE) {
+         if (lastDeviceEventXY.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
+            if (lastDeviceEventXY.getDeviceType() == ITechInput.DEVICE_1_MOUSE) {
                return lastDeviceEventXY.getDeviceButton() == ITechCodes.PBUTTON_1_RIGHT;
-            } else if (lastDeviceEventXY.getDeviceType() == IInput.DEVICE_4_SCREEN) {
+            } else if (lastDeviceEventXY.getDeviceType() == ITechInput.DEVICE_4_SCREEN) {
                return lastDeviceEventXY.getDeviceButton() == ITechCodes.FINGER_2;
             }
          }
@@ -2760,7 +2760,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     * @return
     */
    public boolean isPressedDouble() {
-      return getMode() == IInput.MOD_0_PRESSED && isDoubleTapPointer0Button0();
+      return getMode() == ITechInput.MOD_0_PRESSED && isDoubleTapPointer0Button0();
    }
 
    /**
@@ -2771,7 +2771,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     * @return
     */
    public boolean isPressedKeyboard0(int key) {
-      KeyEventListed ke = getKeyEventPressed(key, 0, IInput.DEVICE_0_KEYBOARD);
+      KeyEventListed ke = getKeyEventPressed(key, 0, ITechInput.DEVICE_0_KEYBOARD);
       return ke != null;
    }
 
@@ -2780,7 +2780,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     * @return
     */
    public boolean isPressedReleasedDouble() {
-      return getMode() == IInput.MOD_1_RELEASED && isDoubleTapPointer0Button0();
+      return getMode() == ITechInput.MOD_1_RELEASED && isDoubleTapPointer0Button0();
    }
 
    /**
@@ -2983,21 +2983,21 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
     */
    public boolean isSimilar() {
       if (eventCurrent.getType() == eventPrevious.getType()) {
-         if (eventCurrent.getType() == IInput.TYPE_1_DEVICE) {
+         if (eventCurrent.getType() == ITechInput.TYPE_1_DEVICE) {
             DeviceEvent de = (DeviceEvent) eventCurrent;
             DeviceEvent dEventPrevious = (DeviceEvent) eventPrevious;
-            if (de.getDeviceMode() == IInput.MOD_3_MOVED && de.isModeEqual(dEventPrevious)) {
+            if (de.getDeviceMode() == ITechInput.MOD_3_MOVED && de.isModeEqual(dEventPrevious)) {
                if (de.getDeviceID() == dEventPrevious.getDeviceID()) {
                   return true;
                }
             }
-         } else if (eventCurrent.getType() == IInput.TYPE_4_REPEAT) {
+         } else if (eventCurrent.getType() == ITechInput.TYPE_4_REPEAT) {
             RepeatEvent re = (RepeatEvent) eventCurrent;
             RepeatEvent dEventPrevious = (RepeatEvent) eventPrevious;
             if (re.getSource() == dEventPrevious.getSource()) {
                return true;
             }
-         } else if (eventCurrent.getType() == IInput.TYPE_3_CANVAS) {
+         } else if (eventCurrent.getType() == ITechInput.TYPE_3_CANVAS) {
             EventCanvasHost che = (EventCanvasHost) eventCurrent;
             EventCanvasHost cheP = (EventCanvasHost) eventPrevious;
             if (che.getActionType() == cheP.getActionType()) {
@@ -3072,7 +3072,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    /**
-    * True when current event is of type {@link IInput#TYPE_1_DEVICE}
+    * True when current event is of type {@link ITechInput#TYPE_1_DEVICE}
     * <br>
     * @return
     */
@@ -3128,7 +3128,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    /**
-    * True when we have a {@link IInput#TYPE_4_REPEAT} event
+    * True when we have a {@link ITechInput#TYPE_4_REPEAT} event
     * @return
     */
    public boolean isTypeRepeat() {
@@ -3159,7 +3159,7 @@ public abstract class InputState extends ObjectCUC implements IInput, ITechGestu
    }
 
    public boolean isWheeled() {
-      return getMode() == IInput.MOD_5_WHEELED;
+      return getMode() == ITechInput.MOD_5_WHEELED;
    }
 
    public boolean isWheelUp() {

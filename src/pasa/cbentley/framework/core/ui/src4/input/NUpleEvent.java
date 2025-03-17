@@ -5,7 +5,7 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.event.BEvent;
 import pasa.cbentley.framework.core.ui.src4.event.EventKey;
 import pasa.cbentley.framework.core.ui.src4.event.RepeatEvent;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * {@link NUpleEvent} is an active repetition of a event pattern by the user.
@@ -49,7 +49,7 @@ public class NUpleEvent extends RepeatEvent {
     * @param kef
     */
    public NUpleEvent(CoreUiCtx cuc, EventKey evKey, InputState is) {
-      super(cuc, IInput.REPEAT_4_PATTERN);
+      super(cuc, ITechInput.REPEAT_4_PATTERN);
 
       this.kef = evKey;
       this.is = is;

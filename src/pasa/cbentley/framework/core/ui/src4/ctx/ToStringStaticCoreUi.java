@@ -5,7 +5,7 @@ import pasa.cbentley.framework.core.ui.src4.event.ITechEventKey;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventApp;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechSenses;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechGestures;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
@@ -14,15 +14,15 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
 
    public static String toStringRepeatType(int type) {
       switch (type) {
-         case IInput.REPEAT_0_INFINITE:
+         case ITechInput.REPEAT_0_INFINITE:
             return "Infinite";
-         case IInput.REPEAT_1_FINITE:
+         case ITechInput.REPEAT_1_FINITE:
             return "Finite";
-         case IInput.REPEAT_2_LONG:
+         case ITechInput.REPEAT_2_LONG:
             return "Long";
-         case IInput.REPEAT_3_TRAIL_FUNCTION:
+         case ITechInput.REPEAT_3_TRAIL_FUNCTION:
             return "Trail";
-         case IInput.REPEAT_4_PATTERN:
+         case ITechInput.REPEAT_4_PATTERN:
             return "Pattern";
          default:
             return "UnknownType " + type;
@@ -238,15 +238,15 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
 
    public static String toStringMod(int mod) {
       switch (mod) {
-         case IInput.MOD_0_PRESSED:
+         case ITechInput.MOD_0_PRESSED:
             return "Pressed";
-         case IInput.MOD_1_RELEASED:
+         case ITechInput.MOD_1_RELEASED:
             return "Released";
-         case IInput.MOD_3_MOVED:
+         case ITechInput.MOD_3_MOVED:
             return "Moved";
-         case IInput.MOD_4_SENSED:
+         case ITechInput.MOD_4_SENSED:
             return "Sensed";
-         case IInput.MOD_5_WHEELED:
+         case ITechInput.MOD_5_WHEELED:
             return "Wheeled";
          default:
             return "MOD_UNKNOWN" + mod;
@@ -364,21 +364,21 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
 
    public static String toStringDeviceType(int devType) {
       switch (devType) {
-         case IInput.DEVICE_0_KEYBOARD:
+         case ITechInput.DEVICE_0_KEYBOARD:
             return "Keyboard";
-         case IInput.DEVICE_1_MOUSE:
+         case ITechInput.DEVICE_1_MOUSE:
             return "Mouse";
-         case IInput.DEVICE_2_GAMEPAD:
+         case ITechInput.DEVICE_2_GAMEPAD:
             return "Gamepad";
-         case IInput.DEVICE_3_FINGER:
+         case ITechInput.DEVICE_3_FINGER:
             return "Finger";
-         case IInput.DEVICE_4_SCREEN:
+         case ITechInput.DEVICE_4_SCREEN:
             return "Screen";
-         case IInput.DEVICE_5_OTHER:
+         case ITechInput.DEVICE_5_OTHER:
             return "Other";
-         case IInput.DEVICE_6_POINTER:
+         case ITechInput.DEVICE_6_POINTER:
             return "Pointer";
-         case IInput.DEVICE_7_SENSOR:
+         case ITechInput.DEVICE_7_SENSOR:
             return "Sensor";
          default:
             return "UnknownDeviceType" + devType;
@@ -387,19 +387,19 @@ public class ToStringStaticCoreUi extends ToStringStaticBase implements ITechCod
 
    public static String toStringEventType(int t) {
       switch (t) {
-         case IInput.TYPE_0_OTHER:
+         case ITechInput.TYPE_0_OTHER:
             return "Other";
-         case IInput.TYPE_1_DEVICE:
+         case ITechInput.TYPE_1_DEVICE:
             return "Device";
-         case IInput.TYPE_2_GESTURE:
+         case ITechInput.TYPE_2_GESTURE:
             return "Gesture";
-         case IInput.TYPE_3_CANVAS:
+         case ITechInput.TYPE_3_CANVAS:
             return "Canvas";
-         case IInput.TYPE_4_REPEAT:
+         case ITechInput.TYPE_4_REPEAT:
             return "Repeat";
-         case IInput.TYPE_5_CTX_CHANGE:
+         case ITechInput.TYPE_5_CTX_CHANGE:
             return "CtxChange";
-         case IInput.TYPE_6_APPLI:
+         case ITechInput.TYPE_6_APPLI:
             return "Appli";
          default:
             return "Unknown" + t;

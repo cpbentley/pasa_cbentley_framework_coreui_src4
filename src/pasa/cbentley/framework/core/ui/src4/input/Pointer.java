@@ -11,7 +11,7 @@ import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEventXY;
 import pasa.cbentley.framework.core.ui.src4.event.GestureArea;
 import pasa.cbentley.framework.core.ui.src4.event.GesturePointer;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * 
@@ -169,7 +169,7 @@ public class Pointer extends ObjectCUC implements IStringable {
    }
 
    public boolean isFinger() {
-      return lastPointerEvent.getDeviceType() == IInput.DEVICE_4_SCREEN;
+      return lastPointerEvent.getDeviceType() == ITechInput.DEVICE_4_SCREEN;
    }
 
    public boolean isInside(GestureArea ga) {
@@ -186,7 +186,7 @@ public class Pointer extends ObjectCUC implements IStringable {
    }
 
    public boolean isMouse() {
-      return lastPointerEvent.getDeviceType() == IInput.DEVICE_1_MOUSE;
+      return lastPointerEvent.getDeviceType() == ITechInput.DEVICE_1_MOUSE;
    }
 
    void setLastPointerEvent(DeviceEventXY dex) {

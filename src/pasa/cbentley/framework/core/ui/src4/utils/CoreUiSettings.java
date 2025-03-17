@@ -7,7 +7,7 @@ import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.IEventsCoreUi;
 import pasa.cbentley.framework.core.ui.src4.ctx.ObjectCUC;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostDataDrawUi;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechInputConstants;
@@ -32,7 +32,7 @@ import pasa.cbentley.framework.core.ui.src4.tech.ITechInputConstants;
  * @author Charles Bentley
  *
  */
-public class CoreUiSettings extends ObjectCUC implements IInput, IEventConsumer, ITechHostDataDrawUi, IStringable {
+public class CoreUiSettings extends ObjectCUC implements ITechInput, IEventConsumer, ITechHostDataDrawUi, IStringable {
 
    private int allerRetourMinAmplitude;
 

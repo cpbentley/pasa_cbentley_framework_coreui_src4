@@ -4,7 +4,7 @@ import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.interfaces.IExternalDevice;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Input Event from an Input Device.
@@ -40,26 +40,26 @@ public class DeviceEvent extends BEvent {
 
    /**
     * Any device type may have wheels
-    * {@link IInput#DEVICE_0_KEYBOARD}
-    * {@link IInput#DEVICE_1_MOUSE}
-    * {@link IInput#DEVICE_2_GAMEPAD}
-    * {@link IInput#DEVICE_3_FINGER}
-    * {@link IInput#DEVICE_4_OTHER}
+    * {@link ITechInput#DEVICE_0_KEYBOARD}
+    * {@link ITechInput#DEVICE_1_MOUSE}
+    * {@link ITechInput#DEVICE_2_GAMEPAD}
+    * {@link ITechInput#DEVICE_3_FINGER}
+    * {@link ITechInput#DEVICE_4_OTHER}
     */
    protected int           deviceType;
 
    /**
     * The mode 
     * pressed or released, wheel
-    * <li> {@link IInput#MOD_0_PRESSED} Device Button pressed
-    * <li> {@link IInput#MOD_1_RELEASED} Device Button
-    * <li> {@link IInput#MOD_5_WHEELED} Device Wheel Turned
+    * <li> {@link ITechInput#MOD_0_PRESSED} Device Button pressed
+    * <li> {@link ITechInput#MOD_1_RELEASED} Device Button
+    * <li> {@link ITechInput#MOD_5_WHEELED} Device Wheel Turned
     */
    protected int           mode;
 
    public DeviceEvent(CoreUiCtx fc, int deviceType, int deviceID, int mode, int deviceButton) {
       super(fc);
-      this.type = IInput.TYPE_1_DEVICE;
+      this.type = ITechInput.TYPE_1_DEVICE;
       this.deviceType = deviceType;
       this.mode = mode;
       this.deviceID = deviceID;
@@ -72,10 +72,10 @@ public class DeviceEvent extends BEvent {
 
    /**
     * Differentiate devices within a device class type and user space.
-    * <li> {@link IInput#DEVICE_0_KEYBOARD}. Each keyboard will be given an ID
-    * <li> {@link IInput#DEVICE_1_MOUSE} Each mouse within the User Space
-    * <li> {@link IInput#DEVICE_2_GAMEPAD}. Each gamepad will be given an ID
-    * <li> {@link IInput#DEVICE_4_SCREEN} what if 2 screens give different
+    * <li> {@link ITechInput#DEVICE_0_KEYBOARD}. Each keyboard will be given an ID
+    * <li> {@link ITechInput#DEVICE_1_MOUSE} Each mouse within the User Space
+    * <li> {@link ITechInput#DEVICE_2_GAMEPAD}. Each gamepad will be given an ID
+    * <li> {@link ITechInput#DEVICE_4_SCREEN} what if 2 screens give different
     * fingers? Don't we want different IDs?
     * @return
     */
@@ -84,11 +84,11 @@ public class DeviceEvent extends BEvent {
    }
 
    /**
-    * <li> {@link IInput#MOD_0_PRESSED} Device Button pressed
-    * <li> {@link IInput#MOD_1_RELEASED} Device Button released
-    * <li> {@link IInput#MOD_3_MOVED} Device Moved
-    * <li> {@link IInput#MOD_4_SENSED} Device Sensed something
-    * <li> {@link IInput#MOD_5_WHEELED} Device Wheel Turned
+    * <li> {@link ITechInput#MOD_0_PRESSED} Device Button pressed
+    * <li> {@link ITechInput#MOD_1_RELEASED} Device Button released
+    * <li> {@link ITechInput#MOD_3_MOVED} Device Moved
+    * <li> {@link ITechInput#MOD_4_SENSED} Device Sensed something
+    * <li> {@link ITechInput#MOD_5_WHEELED} Device Wheel Turned
     * @return
     */
    public int getDeviceMode() {
@@ -112,17 +112,17 @@ public class DeviceEvent extends BEvent {
 
    public String getUserLineString() {
       String str = "";
-      if (deviceType == IInput.DEVICE_0_KEYBOARD) {
+      if (deviceType == ITechInput.DEVICE_0_KEYBOARD) {
          str = "Key";
          if (deviceID != 0) {
             str += " " + deviceID;
          }
          str += " " + ToStringStaticCoreUi.toStringKey(deviceButton);
-      } else if (deviceType == IInput.DEVICE_1_MOUSE) {
+      } else if (deviceType == ITechInput.DEVICE_1_MOUSE) {
          //depends on the mouse
-      } else if (deviceType == IInput.DEVICE_3_FINGER) {
+      } else if (deviceType == ITechInput.DEVICE_3_FINGER) {
          return "Finger " + deviceButton;
-      } else if (deviceType == IInput.DEVICE_2_GAMEPAD) {
+      } else if (deviceType == ITechInput.DEVICE_2_GAMEPAD) {
          //gamepad is always in def
          if (getParamO1() != null) {
             IExternalDevice ed = (IExternalDevice) this.getParamO1();
@@ -142,12 +142,12 @@ public class DeviceEvent extends BEvent {
     * @return
     */
    public String getUserStringButton() {
-      if (deviceType == IInput.DEVICE_0_KEYBOARD) {
+      if (deviceType == ITechInput.DEVICE_0_KEYBOARD) {
          return ToStringStaticCoreUi.toStringKey(deviceButton);
-      } else if (deviceType == IInput.DEVICE_1_MOUSE) {
+      } else if (deviceType == ITechInput.DEVICE_1_MOUSE) {
          //depends on the mouse
          return ToStringStaticCoreUi.toStringButtonShort(deviceButton);
-      } else if (deviceType == IInput.DEVICE_3_FINGER) {
+      } else if (deviceType == ITechInput.DEVICE_3_FINGER) {
          return "Finger#" + deviceButton;
       } else {
          return "" + deviceButton;

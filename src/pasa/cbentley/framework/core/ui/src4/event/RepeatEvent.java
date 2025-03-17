@@ -6,7 +6,7 @@ import pasa.cbentley.core.src4.structs.listdoublelink.LinkedListDouble;
 import pasa.cbentley.core.src4.structs.listdoublelink.ListElementHolder;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * The event object travelling through the event pipes.
@@ -129,11 +129,11 @@ public class RepeatEvent extends BEvent implements IStringable {
    protected int              repeatState;
 
    /**
-    * <li> {@link IInput#REPEAT_0_INFINITE}
-    * <li> {@link IInput#REPEAT_1_FINITE}
-    * <li> {@link IInput#REPEAT_2_LONG}
-    * <li> {@link IInput#REPEAT_3_TRAIL_FUNCTION}
-    * <li> {@link IInput#REPEAT_4_PATTERN}
+    * <li> {@link ITechInput#REPEAT_0_INFINITE}
+    * <li> {@link ITechInput#REPEAT_1_FINITE}
+    * <li> {@link ITechInput#REPEAT_2_LONG}
+    * <li> {@link ITechInput#REPEAT_3_TRAIL_FUNCTION}
+    * <li> {@link ITechInput#REPEAT_4_PATTERN}
     * 
     */
    protected int              repeatType;
@@ -144,13 +144,13 @@ public class RepeatEvent extends BEvent implements IStringable {
 
    public RepeatEvent(CoreUiCtx cac) {
       super(cac);
-      type = IInput.TYPE_4_REPEAT;
+      type = ITechInput.TYPE_4_REPEAT;
 
    }
 
    public RepeatEvent(CoreUiCtx k, int repeatType) {
       super(k);
-      type = IInput.TYPE_4_REPEAT;
+      type = ITechInput.TYPE_4_REPEAT;
       this.repeatType = repeatType;
       //target is unknown
       //set starting state
@@ -255,10 +255,10 @@ public class RepeatEvent extends BEvent implements IStringable {
 
    /**
     * 
-    * <li> {@link IInput#REPEAT_0_INFINITE}
-    * <li> {@link IInput#REPEAT_1_FINITE}
-    * <li> {@link IInput#REPEAT_2_LONG}
-    * <li> {@link IInput#REPEAT_3_TRAIL_FUNCTION}
+    * <li> {@link ITechInput#REPEAT_0_INFINITE}
+    * <li> {@link ITechInput#REPEAT_1_FINITE}
+    * <li> {@link ITechInput#REPEAT_2_LONG}
+    * <li> {@link ITechInput#REPEAT_3_TRAIL_FUNCTION}
     * 
     * @return
     */
@@ -405,7 +405,7 @@ public class RepeatEvent extends BEvent implements IStringable {
    }
 
    /**
-    * This value is ignored when type is {@link IInput#REPEAT_0_INFINITE}
+    * This value is ignored when type is {@link ITechInput#REPEAT_0_INFINITE}
     * @param value
     */
    public void setRepeatTarget(int value) {
@@ -413,10 +413,10 @@ public class RepeatEvent extends BEvent implements IStringable {
    }
 
    /**
-    * <li> {@link IInput#REPEAT_0_INFINITE}
-    * <li> {@link IInput#REPEAT_1_FINITE}
-    * <li> {@link IInput#REPEAT_2_LONG}
-    * <li> {@link IInput#REPEAT_3_TRAIL_FUNCTION}
+    * <li> {@link ITechInput#REPEAT_0_INFINITE}
+    * <li> {@link ITechInput#REPEAT_1_FINITE}
+    * <li> {@link ITechInput#REPEAT_2_LONG}
+    * <li> {@link ITechInput#REPEAT_3_TRAIL_FUNCTION}
     * @param type
     */
    public void setRepeatType(int type) {

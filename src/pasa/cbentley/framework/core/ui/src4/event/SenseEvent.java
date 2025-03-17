@@ -6,11 +6,11 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.interfaces.IExternalDevice;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechSenses;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * 
- * Sensor is of type {@link IInput#DEVICE_7_SENSOR}
+ * Sensor is of type {@link ITechInput#DEVICE_7_SENSOR}
  * <br>
  * <br>
  * Sensor Type:<br>
@@ -53,7 +53,7 @@ public class SenseEvent extends DeviceEvent {
     * @param sensorType
     */
    public SenseEvent(CoreUiCtx fc, int sensorType) {
-      super(fc, IInput.DEVICE_7_SENSOR, 0, IInput.MOD_4_SENSED, 0);
+      super(fc, ITechInput.DEVICE_7_SENSOR, 0, ITechInput.MOD_4_SENSED, 0);
       this.sensorType = sensorType;
    }
 
@@ -65,7 +65,7 @@ public class SenseEvent extends DeviceEvent {
     * @param deviceID
     */
    public SenseEvent(CoreUiCtx fc, int sensorType, int sensorSubType, int deviceID) {
-      super(fc, IInput.DEVICE_7_SENSOR, deviceID, IInput.MOD_4_SENSED, 0);
+      super(fc, ITechInput.DEVICE_7_SENSOR, deviceID, ITechInput.MOD_4_SENSED, 0);
       this.sensorType = sensorType;
       this.sensorSubType = sensorSubType;
    }

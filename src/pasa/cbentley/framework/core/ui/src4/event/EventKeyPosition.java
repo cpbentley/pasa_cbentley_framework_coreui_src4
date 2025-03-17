@@ -3,7 +3,7 @@ package pasa.cbentley.framework.core.ui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.utils.CircleArea;
 
 /**
@@ -91,7 +91,7 @@ public class EventKeyPosition extends EventKey {
    public boolean isKeyActivated(BEvent be) {
       if (be instanceof DeviceEventXY) {
          DeviceEventXY de = (DeviceEventXY) be;
-         if (de.getDeviceMode() == IInput.MOD_3_MOVED) {
+         if (de.getDeviceMode() == ITechInput.MOD_3_MOVED) {
             boolean is = ga.isInside(de.getX(), de.getY());
             if (isInside) {
                if (is) {

@@ -1,12 +1,13 @@
 package pasa.cbentley.framework.core.ui.src4.event;
 
 import pasa.cbentley.byteobjects.src4.core.ByteObject;
+import pasa.cbentley.core.src4.ctx.IToStringFlagsUC;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * An action on the UI of the {@link ICanvasHost} is made.
@@ -50,7 +51,7 @@ public class EventCanvasHost extends BEvent {
     */
    public EventCanvasHost(CoreUiCtx cuc, int actionType, ICanvasHost canvasHot) {
       super(cuc);
-      this.type = IInput.TYPE_3_CANVAS;
+      this.type = ITechInput.TYPE_3_CANVAS;
       this.actionType = actionType;
       this.canvasHost = canvasHot;
    }
@@ -118,8 +119,9 @@ public class EventCanvasHost extends BEvent {
       super.toString(dc.sup());
 
       dc.nlLvl(tech, "tech");
-
-      dc.nlLvl(canvasHost, "canvasHost");
+      
+      dc.nlLvlSuccint(canvasHost, "canvasHost");
+      
    }
 
    public void toString1Line(Dctx dc) {

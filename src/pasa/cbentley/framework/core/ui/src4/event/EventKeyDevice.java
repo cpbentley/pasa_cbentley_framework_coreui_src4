@@ -4,7 +4,7 @@ import pasa.cbentley.core.src4.ctx.UCtx;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Describes a range of events based on a {@link DeviceEvent}
@@ -86,14 +86,14 @@ public class EventKeyDevice extends EventKey {
     * <br>
     */
    public boolean isKeyActivated(BEvent be) {
-      if (be.getType() == IInput.TYPE_1_DEVICE) {
+      if (be.getType() == ITechInput.TYPE_1_DEVICE) {
          DeviceEvent deviceEventInput = (DeviceEvent) be;
          if (deviceEventInput.getDeviceType() == myDeviceEvent.getDeviceType() && deviceEventInput.getDeviceID() == myDeviceEvent.getDeviceID() && deviceEventInput.getDeviceButton() == myDeviceEvent.getDeviceButton()) {
             if (modeType == ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_0_INVERSE) {
-               if (myDeviceEvent.getDeviceMode() == IInput.MOD_0_PRESSED) {
-                  return deviceEventInput.getDeviceMode() == IInput.MOD_1_RELEASED;
-               } else if (myDeviceEvent.getDeviceMode() == IInput.MOD_1_RELEASED) {
-                  return deviceEventInput.getDeviceMode() == IInput.MOD_0_PRESSED;
+               if (myDeviceEvent.getDeviceMode() == ITechInput.MOD_0_PRESSED) {
+                  return deviceEventInput.getDeviceMode() == ITechInput.MOD_1_RELEASED;
+               } else if (myDeviceEvent.getDeviceMode() == ITechInput.MOD_1_RELEASED) {
+                  return deviceEventInput.getDeviceMode() == ITechInput.MOD_0_PRESSED;
                }
             } else if (modeType == ITechEventKey.EVENT_KEY_DEVICE_MODE_TYPE_1_SAME) {
                return deviceEventInput.getDeviceMode() == myDeviceEvent.getDeviceMode();
@@ -107,7 +107,7 @@ public class EventKeyDevice extends EventKey {
    }
 
    public boolean isKeyMatched(BEvent be) {
-      if (be.getType() == IInput.TYPE_1_DEVICE) {
+      if (be.getType() == ITechInput.TYPE_1_DEVICE) {
          DeviceEvent d = (DeviceEvent) be;
          if (d.getDeviceType() == myDeviceEvent.getDeviceType() && d.getDeviceID() == myDeviceEvent.getDeviceID() && d.getDeviceButton() == myDeviceEvent.getDeviceButton()) {
             return myDeviceEvent.getDeviceMode() == d.getDeviceMode();

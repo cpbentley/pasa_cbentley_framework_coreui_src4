@@ -5,7 +5,7 @@ import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Class for {@link BEvent} at the application manager level. 
@@ -13,7 +13,7 @@ import pasa.cbentley.framework.core.ui.src4.tech.IInput;
  * <p>
  * 
  * </p>
- * Type is {@link IInput#TYPE_6_APPLI}
+ * Type is {@link ITechInput#TYPE_6_APPLI}
  * 
  * 
  * Event has the function of activityResult principles used in Android.

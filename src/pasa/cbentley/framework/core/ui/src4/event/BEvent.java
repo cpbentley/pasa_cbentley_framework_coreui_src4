@@ -10,7 +10,7 @@ import pasa.cbentley.core.src4.utils.DateUtils;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasAppli;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechGestures;
 
@@ -30,7 +30,7 @@ import pasa.cbentley.framework.core.ui.src4.tech.ITechGestures;
  * @author Charles Bentley
  *
  */
-public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes {
+public class BEvent extends BusEvent implements IStringable, ITechInput, ITechCodes {
 
    public static final int   EVENT_FLAG_1_VIRTUAL    = 1;
 
@@ -54,9 +54,9 @@ public class BEvent extends BusEvent implements IStringable, IInput, ITechCodes 
 
    /**
     * type of event. Some type are hardware. 
-    * <li> {@link IInput#TYPE_1_DEVICE} Device
-    * <li> {@link IInput#TYPE_2_GESTURE} Compute
-    * <li> {@link IInput#TYPE_5_CTX_CHANGE} Framework.
+    * <li> {@link ITechInput#TYPE_1_DEVICE} Device
+    * <li> {@link ITechInput#TYPE_2_GESTURE} Compute
+    * <li> {@link ITechInput#TYPE_5_CTX_CHANGE} Framework.
     * 
     * {@link ITechGestures#GESTURE_DOUBLE_TYPE_1_PINCH}
     * 

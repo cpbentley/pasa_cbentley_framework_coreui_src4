@@ -23,7 +23,7 @@ import pasa.cbentley.framework.core.ui.src4.interfaces.IBEventListener;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasAppli;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.tech.IBOCanvasHost;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
 import pasa.cbentley.framework.core.ui.src4.utils.CoreUiSettings;
 import pasa.cbentley.framework.coredraw.src4.interfaces.IGraphics;
@@ -156,7 +156,7 @@ public abstract class CanvasAppliAbstract extends ObjectCUC implements ICanvasAp
 
    public void fixRotation(DeviceEventXY dex) {
       if (screenCtrl != null) {
-         if (dex.getDeviceMode() != IInput.MOD_5_WHEELED) {
+         if (dex.getDeviceMode() != ITechInput.MOD_5_WHEELED) {
             int x = dex.getX();
             int y = dex.getY();
             dex.updateX(screenCtrl.rotationXChange(x, y));

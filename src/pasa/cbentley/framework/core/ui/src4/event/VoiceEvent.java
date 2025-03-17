@@ -2,7 +2,7 @@ package pasa.cbentley.framework.core.ui.src4.event;
 
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Mouth Gesture.. coming from a microphone
@@ -17,7 +17,7 @@ public class VoiceEvent extends BEvent {
 
    public VoiceEvent(CoreUiCtx fc) {
       super(fc);
-      this.type = IInput.TYPE_0_OTHER;
+      this.type = ITechInput.TYPE_0_OTHER;
    }
 
    public String[] getMatches() {

@@ -26,7 +26,7 @@ import pasa.cbentley.framework.core.ui.src4.interfaces.ICanvasHost;
 import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
 import pasa.cbentley.framework.core.ui.src4.tech.IBOCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.tech.IBOFramePos;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechCodes;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechFeaturesCanvas;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechHostUI;
@@ -76,7 +76,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    /**
     * Event generated when the screen window is moved.
-    * <br>
+    * 
     * @param id
     * @param x
     * @param y
@@ -122,10 +122,10 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
    }
 
    public void eventBridgeGuiLater(final BEvent e) {
-      
+
       //#debug
       toDLog().pFlow("Runnable", e, toStringGetLine(CanvasHostAbstract.class, "eventBridgeGuiLater", 127), LVL_05_FINE, true);
-      
+
       IExecutor exec = cuc.getExecutor();
       exec.executeMainLater(new Runnable() {
 
@@ -156,7 +156,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void fingerMovedBridge(int x, int y, int screenID, int fingerID, float size, float pressure) {
       if (canvasAppli != null) {
-         DeviceEvent de = new DeviceEventXYTouch(cuc, screenID, IInput.MOD_3_MOVED, fingerID, x, y, size, pressure);
+         DeviceEvent de = new DeviceEventXYTouch(cuc, screenID, ITechInput.MOD_3_MOVED, fingerID, x, y, size, pressure);
          canvasAppli.event(de);
       }
    }
@@ -167,7 +167,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    public void fingerPressedBridge(int x, int y, int screenID, int fingerID, float size, float pressure) {
       if (canvasAppli != null) {
-         DeviceEvent de = new DeviceEventXYTouch(cuc, screenID, IInput.MOD_0_PRESSED, fingerID, x, y, size, pressure);
+         DeviceEvent de = new DeviceEventXYTouch(cuc, screenID, ITechInput.MOD_0_PRESSED, fingerID, x, y, size, pressure);
          canvasAppli.event(de);
       }
    }
@@ -178,16 +178,19 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    public void fingerReleasedBridge(int x, int y, int screenID, int fingerID, float size, float pressure) {
       if (canvasAppli != null) {
-         DeviceEvent de = new DeviceEventXYTouch(cuc, screenID, IInput.MOD_1_RELEASED, fingerID, x, y, size, pressure);
+         DeviceEvent de = new DeviceEventXYTouch(cuc, screenID, ITechInput.MOD_1_RELEASED, fingerID, x, y, size, pressure);
          canvasAppli.event(de);
       }
    }
 
+   /**
+    * Called when
+    */
    public void focusGainedBridge() {
       //#debug
-      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge@165");
+      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusGainedBridge@"+toStringGetLine(190));
       if (canvasAppli != null) {
-         EventAppli ge = new EventAppli(cuc, ITechEventHost.ACTION_04_FOCUS_GAIN);
+         EventCanvasHost ge = new EventCanvasHost(cuc, ITechEventHost.ACTION_04_FOCUS_GAIN, this);
          canvasAppli.event(ge);
       }
    }
@@ -197,9 +200,9 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void focusLostBridge() {
       //#debug
-      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge@177");
+      toDLog().pBridge("", null, CanvasHostAbstract.class, "focusLostBridge@"+toStringGetLine(200));
       if (canvasAppli != null) {
-         EventAppli ge = new EventAppli(cuc, ITechEventHost.ACTION_05_FOCUS_LOSS);
+         EventCanvasHost ge = new EventCanvasHost(cuc, ITechEventHost.ACTION_05_FOCUS_LOSS, this);
          canvasAppli.event(ge);
       }
 
@@ -275,7 +278,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
 
    public void keyPressedBridge(int keyCode) {
       if (canvasAppliActive != null) {
-         DeviceEvent de = new DeviceEvent(cuc, IInput.DEVICE_0_KEYBOARD, 0, IInput.MOD_0_PRESSED, keyCode);
+         DeviceEvent de = new DeviceEvent(cuc, ITechInput.DEVICE_0_KEYBOARD, 0, ITechInput.MOD_0_PRESSED, keyCode);
          canvasAppliActive.event(de);
       }
    }
@@ -286,7 +289,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void keyReleasedBridge(int keyCode) {
       if (canvasAppliActive != null) {
-         DeviceEvent de = new DeviceEvent(cuc, IInput.DEVICE_0_KEYBOARD, 0, IInput.MOD_1_RELEASED, keyCode);
+         DeviceEvent de = new DeviceEvent(cuc, ITechInput.DEVICE_0_KEYBOARD, 0, ITechInput.MOD_1_RELEASED, keyCode);
          canvasAppliActive.event(de);
       }
    }
@@ -312,7 +315,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       if (canvasAppliActive != null) {
          //#debug
          toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseEnteredBridge@290");
-         DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_1_ENTER, x, y);
+         DeviceEventXY dex = new DeviceEventXY(cuc, ITechInput.DEVICE_1_MOUSE, 0, ITechInput.MOD_3_MOVED, ITechInput.MOVE_1_ENTER, x, y);
          dex.setSource(canvasAppliActive);
          canvasAppliActive.event(dex);
       }
@@ -328,7 +331,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
       if (canvasAppliActive != null) {
          //#debug
          toDLog().pBridge("x=" + x + " y=" + y, null, CanvasHostAbstract.class, "mouseExitedBridge@306");
-         DeviceEventXY dex = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_3_MOVED, IInput.MOVE_2_EXIT, x, y);
+         DeviceEventXY dex = new DeviceEventXY(cuc, ITechInput.DEVICE_1_MOUSE, 0, ITechInput.MOD_3_MOVED, ITechInput.MOVE_2_EXIT, x, y);
          dex.setSource(canvasAppliActive);
          canvasAppliActive.event(dex);
       }
@@ -344,21 +347,21 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
     */
    public void mouseMovedBridge(int x, int y, int id) {
       if (canvasAppliActive != null) {
-         DeviceEvent de = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, id, IInput.MOD_3_MOVED, 0, x, y);
+         DeviceEvent de = new DeviceEventXY(cuc, ITechInput.DEVICE_1_MOUSE, id, ITechInput.MOD_3_MOVED, 0, x, y);
          canvasAppliActive.event(de);
       }
    }
 
    public void mousePressedBridge(int x, int y, int pointerID, int button) {
       if (canvasAppliActive != null) {
-         DeviceEvent de = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, pointerID, IInput.MOD_0_PRESSED, button, x, y);
+         DeviceEvent de = new DeviceEventXY(cuc, ITechInput.DEVICE_1_MOUSE, pointerID, ITechInput.MOD_0_PRESSED, button, x, y);
          canvasAppliActive.event(de);
       }
    }
 
    public void mouseReleasedBridge(int x, int y, int pointerID, int button) {
       if (canvasAppliActive != null) {
-         DeviceEvent de = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, pointerID, IInput.MOD_1_RELEASED, button, x, y);
+         DeviceEvent de = new DeviceEventXY(cuc, ITechInput.DEVICE_1_MOUSE, pointerID, ITechInput.MOD_1_RELEASED, button, x, y);
          canvasAppliActive.event(de);
       }
    }
@@ -378,7 +381,7 @@ public abstract class CanvasHostAbstract extends ObjectCUC implements ICanvasHos
             //down
             code = ITechCodes.PBUTTON_4_WHEEL_DOWN;
          }
-         DeviceEvent de = new DeviceEventXY(cuc, IInput.DEVICE_1_MOUSE, 0, IInput.MOD_5_WHEELED, 0, scrollAmount, code);
+         DeviceEvent de = new DeviceEventXY(cuc, ITechInput.DEVICE_1_MOUSE, 0, ITechInput.MOD_5_WHEELED, 0, scrollAmount, code);
          canvasAppliActive.event(de);
       }
    }

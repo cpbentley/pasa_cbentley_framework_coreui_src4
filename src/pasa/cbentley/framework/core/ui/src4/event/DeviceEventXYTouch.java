@@ -3,12 +3,12 @@ package pasa.cbentley.framework.core.ui.src4.event;
 import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Events for touches on a screen.
  * <br>
- * <li>DeviceType will be {@link IInput#DEVICE_4_SCREEN}
+ * <li>DeviceType will be {@link ITechInput#DEVICE_4_SCREEN}
  * <li> DeviceID is the screen #
  * <li> Mode is press/moved/released
  * <li> deviceButton is the point ID
@@ -52,7 +52,7 @@ public class DeviceEventXYTouch extends DeviceEventXY {
    }
 
    public DeviceEventXYTouch(CoreUiCtx fc, int deviceID, int mode, int deviceButton, int x, int y, float size, float pressure) {
-      super(fc, IInput.DEVICE_4_SCREEN, deviceID, mode, deviceButton, x, y);
+      super(fc, ITechInput.DEVICE_4_SCREEN, deviceID, mode, deviceButton, x, y);
       this.size = size;
       this.pressure = pressure;
    }
@@ -75,7 +75,7 @@ public class DeviceEventXYTouch extends DeviceEventXY {
 
    public String getUserLineString() {
       String str = "";
-      if (deviceType == IInput.DEVICE_4_SCREEN) {
+      if (deviceType == ITechInput.DEVICE_4_SCREEN) {
          str = "Finger#" + +deviceButton + " " + ToStringStaticCoreUi.toStringMod(mode);
       } else {
          return super.getUserLineString();

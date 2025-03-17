@@ -1,6 +1,7 @@
 package pasa.cbentley.framework.core.ui.src4.tech;
 
 import pasa.cbentley.core.src4.interfaces.C;
+import pasa.cbentley.core.src4.interfaces.ITech;
 import pasa.cbentley.framework.core.ui.src4.event.EventCanvasHost;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEvent;
 import pasa.cbentley.framework.core.ui.src4.event.DeviceEventGroup;
@@ -16,24 +17,24 @@ import pasa.cbentley.framework.core.ui.src4.interfaces.ITechEventHost;
  * @author Charles-Philip
  *
  */
-public interface IInput {
+public interface ITechInput extends ITech {
 
    /**
     * 4 bits for 8 different devices
     * TODO what about multiple keyboard?
     * 
     * Accept the following mod
-    * <li> {@link IInput#MOD_0_PRESSED}
-    * <li> {@link IInput#MOD_1_RELEASED}
+    * <li> {@link ITechInput#MOD_0_PRESSED}
+    * <li> {@link ITechInput#MOD_1_RELEASED}
     */
    public static final int DEVICE_0_KEYBOARD       = 0;
 
    /**
     * Accept the following mod
-    * <li> {@link IInput#MOD_0_PRESSED}
-    * <li> {@link IInput#MOD_1_RELEASED}
-    * <li> {@link IInput#MOD_3_MOVED}
-    * <li> {@link IInput#MOD_5_WHEELED}
+    * <li> {@link ITechInput#MOD_0_PRESSED}
+    * <li> {@link ITechInput#MOD_1_RELEASED}
+    * <li> {@link ITechInput#MOD_3_MOVED}
+    * <li> {@link ITechInput#MOD_5_WHEELED}
     * <br>
     * Each pointer has button options
     * <li> {@link ITechCodes#PBUTTON_0_DEFAULT}
@@ -60,11 +61,16 @@ public interface IInput {
     */
    public static final int DEVICE_3_FINGER         = 3;
 
+   /**
+    * Represents a Monitor/Screen. Some screen can generate events
+    */
    public static final int DEVICE_4_SCREEN         = 4;
 
    public static final int DEVICE_5_OTHER          = 5;
 
    /**
+    * Any pointer such as
+    * 
     * <li> real mouse
     * <li> real finger
     * <li> virtual mouse moved with fingers
@@ -80,22 +86,22 @@ public interface IInput {
 
    /**
     * MOD type for
-    * <li> {@link IInput#TYPE_0_KEYBOARD}
-    * <li> {@link IInput#TYPE_6_POINTER}
+    * <li> {@link ITechInput#TYPE_0_KEYBOARD}
+    * <li> {@link ITechInput#TYPE_6_POINTER}
     */
    public static final int MOD_0_PRESSED           = 0;
 
    /**
     * MOD type for
-    * <li> {@link IInput#TYPE_0_KEYBOARD}
-    * <li> {@link IInput#TYPE_6_POINTER} Pointer Button
+    * <li> {@link ITechInput#TYPE_0_KEYBOARD}
+    * <li> {@link ITechInput#TYPE_6_POINTER} Pointer Button
     */
    public static final int MOD_1_RELEASED          = 1;
 
    /**
-    * Mod type for {@link IInput#TYPE_6_POINTER}.
+    * Mod type for {@link ITechInput#TYPE_6_POINTER}.
     * For axis, throttle up down with a middle (released non active state)
-    * When released, the axis active button is {@link IInput#MOD_1_RELEASED}
+    * When released, the axis active button is {@link ITechInput#MOD_1_RELEASED}
     */
    public static final int MOD_3_MOVED             = 3;
 
@@ -109,7 +115,7 @@ public interface IInput {
     * <br>
     * There is no pressed/release state associated.
     * They just happen.
-    * Wheel is of type {@link IInput#TYPE_6_POINTER}.
+    * Wheel is of type {@link ITechInput#TYPE_6_POINTER}.
     * <br>
     * It could be another hardware. They have up/down left/right
     * and an amplitude.

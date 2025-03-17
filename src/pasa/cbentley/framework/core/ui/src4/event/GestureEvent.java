@@ -4,7 +4,7 @@ import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 import pasa.cbentley.framework.core.ui.src4.tech.ITechGestures;
 
 /**
@@ -40,7 +40,7 @@ public class GestureEvent extends BEvent implements IStringable, ITechGestures {
          throw new NullPointerException();
       }
       this.gp = gp;
-      this.type = IInput.TYPE_2_GESTURE;
+      this.type = ITechInput.TYPE_2_GESTURE;
       this.gestureType = gestureType;
    }
 

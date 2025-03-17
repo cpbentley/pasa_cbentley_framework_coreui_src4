@@ -4,7 +4,7 @@ import pasa.cbentley.core.src4.logging.Dctx;
 import pasa.cbentley.core.src4.logging.IStringable;
 import pasa.cbentley.framework.core.ui.src4.ctx.CoreUiCtx;
 import pasa.cbentley.framework.core.ui.src4.ctx.ToStringStaticCoreUi;
-import pasa.cbentley.framework.core.ui.src4.tech.IInput;
+import pasa.cbentley.framework.core.ui.src4.tech.ITechInput;
 
 /**
  * Actives when {@link DeviceEvent} is part of incoming group
@@ -35,7 +35,7 @@ public class EventKeyInGroup extends EventKey implements IStringable {
     * @return
     */
    public boolean isKeyActivated(BEvent be) {
-      if (be.getType() == IInput.TYPE_7_GROUP) {
+      if (be.getType() == ITechInput.TYPE_7_GROUP) {
          DeviceEventGroup deg = (DeviceEventGroup) be;
          if (isSimul && !deg.isSimulGroup()) {
             //we only accept simul groups
